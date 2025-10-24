@@ -1,9 +1,7 @@
 <script setup>
 import { StarFilled } from '@element-plus/icons-vue'
 
-const handleLike = () => {
-    alert('좋아요!');
-}
+const handleLike = () => alert('좋아요!')
 </script>
 
 <template>
