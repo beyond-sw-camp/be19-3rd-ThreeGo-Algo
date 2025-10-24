@@ -1,11 +1,12 @@
-<script setup></script>
+<script setup>
+import ButtonDemo from './components/demo/ButtonDemo.vue';
+</script>
 
 <template>
-  <h1>You did it!</h1>
-  <p>
-    Visit <a href="https://vuejs.org/" target="_blank" rel="noopener">vuejs.org</a> to read the
-    documentation
-  </p>
+  <div id="app">
+    <h3>CustomButton 테스트</h3>
+    <ButtonDemo />
+  </div>
 </template>
 
 <style scoped></style>
