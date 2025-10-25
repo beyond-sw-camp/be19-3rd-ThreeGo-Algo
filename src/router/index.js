@@ -39,7 +39,8 @@ const routes = [
   { path: '/demo/comment', component: CommentDemoPage },
   { path: '/demo/twobuttonpopup', component: TwoButtonPopupDemo },
   { path: '/demo/onebuttonpopup', component: OneButtonPopupDemo},
-  
+  { path: '/demo/input', component: InputDemoPage},
+
 ]
 
 const router = createRouter({
