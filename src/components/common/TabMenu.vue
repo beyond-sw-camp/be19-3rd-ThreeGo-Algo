@@ -9,7 +9,7 @@ const props = defineProps({
   onClick: Function,
 })
 
-const selectedValue = ref(null)
+const selectedValue = ref(props.items[0]?.value || null)
 
 function handleClick(item) {
   selectedValue.value = item.value
