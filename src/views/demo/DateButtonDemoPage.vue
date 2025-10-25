@@ -5,10 +5,6 @@
     </div>
 </template>
 
-<script setup>
-import DateRangeButton from '@/components/common/DateRangeButton.vue'
-</script>
-
 <style scoped>
 .demo-container {
     display: flex;
