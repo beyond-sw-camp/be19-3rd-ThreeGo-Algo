@@ -30,8 +30,6 @@ function handleClick(item) {
         <span>{{ item.label }}</span>
       </div>
     </div>
-
-    <div class="underline"></div>
   </div>
 </template>
 
@@ -67,25 +65,8 @@ function handleClick(item) {
   color: black;
 }
 
-.item.selected::after {
-  content: '';
-  position: absolute;
-  bottom: -6px; 
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background-color: #383838;
-  border-radius: 2px;
-
-}
-
 .item:hover span {
   font-weight: 500;
 }
 
-.underline {
-  height: 2px;
-  width: 120%;
-  background-color: #d9d9d9;
-}
 </style>
