@@ -53,6 +53,7 @@ const teamMembers = reactive([
   background-color: #F1EFEE;
   padding: 40px;
   color: #383838;
+  font-family: 'Noto Sans KR', sans-serif;
 }
 
 .footer-grid {

@@ -25,6 +25,7 @@ const rankImage = computed(() => rankImages[props.rankName]);
     align-items: center;
     gap: 4px;
     font-size: 14px;
+    font-family: 'Noto Sans KR', sans-serif;
 }
 
 .mini-profile-img {

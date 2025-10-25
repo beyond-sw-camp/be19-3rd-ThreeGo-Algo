@@ -28,6 +28,7 @@ const emojiType = computed(() => emojiImages[props.type]);
 .emoji-text span {
     color: #838383;
     font-size: 13px;
+    font-family: 'Noto Sans KR', sans-serif;
 }
 
 .emoji-text img {
