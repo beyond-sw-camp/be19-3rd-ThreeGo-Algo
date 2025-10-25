@@ -26,16 +26,49 @@
 </template>
 
 <script setup>
-import { ref, nextTick } from 'vue'
+import { ref, nextTick, watch } from 'vue'
 
-const startDate = ref('')
-const endDate = ref('')
+const props = defineProps({
+  startDate: {
+    type: String,
+    default: ''
+  },
+  endDate: {
+    type: String,
+    default: ''
+  }
+})
+
+const emit = defineEmits(['update:startDate', 'update:endDate'])
+
+const startDate = ref(props.startDate)
+const endDate = ref(props.endDate)
 const startPicker = ref(null)
 const endPicker = ref(null)
+
+// Props 변경 감지
+watch(() => props.startDate, (newVal) => {
+  startDate.value = newVal
+})
+
+watch(() => props.endDate, (newVal) => {
+  endDate.value = newVal
+})
+
+// 날짜 변경 시 emit
+watch(startDate, (newVal) => {
+  emit('update:startDate', newVal)
+})
+
+watch(endDate, (newVal) => {
+  emit('update:endDate', newVal)
+})
 
 const resetDates = () => {
     startDate.value = ''
     endDate.value = ''
+    emit('update:startDate', '')
+    emit('update:endDate', '')
 }
 
 const openPicker = async (type) => {

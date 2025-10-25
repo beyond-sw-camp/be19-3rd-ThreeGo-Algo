@@ -19,6 +19,7 @@ import CommentDemoPage from '@/views/demo/CommentDemoPage.vue';
 import TwoButtonPopupDemo from '@/views/demo/TwoButtonPopupDemo.vue';
 import OneButtonPopupDemo from '@/views/demo/OneButtonPopupDemo.vue';
 import StudyRecruitMain from '@/components/study-recruit/StudyRecruitMain.vue';
+import StudyRecruitPost from '@/components/study-recruit/StudyRecruitPost.vue'
 
 const routes = [
   // 기본 홈
@@ -26,6 +27,7 @@ const routes = [
 
   // 스터디 모집
   { path: '/study-recruit', name: 'StudyRecruit', component: StudyRecruitMain },
+  { path: '/study-recruit/post', name: 'StudyRecruitPost', component: StudyRecruitPost },
 
   // 데모 페이지 라우트 (main 브랜치)
   { path: '/demo/button', component: ButtonDemoPage },

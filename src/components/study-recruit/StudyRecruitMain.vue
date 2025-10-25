@@ -1,90 +1,92 @@
 <template>
-  <div class="study-recruit-main">
-    <!-- ✅ 페이지 타이틀 -->
-    {{'&nbsp;'}}<TabTitle title="스터디 모집" />
-    <br>
-    <!-- ✅ 배너 영역 -->
-    <div class="banner-wrapper">
-      <PageInfoBanner
-        title="함께할 코알라를 찾아 성장하세요 🐨🌱"
-        subtitle="코딩, 면접 준비해야 하는데… 의지가 부족하신가요?
-        동료들을 찾아 같이 열심히 준비해보세요!"
-        :image="bannerImage"
-        bgColor="#f8fbff"
-      />
-    </div>
-
-    <!-- ✅ 필터 / 검색 / 버튼 (한 줄) -->
-    <div class="filter-search-action">
-      <!-- 왼쪽: 필터 탭 -->
-      <div class="filter-tabs">
-        <button
-          v-for="tab in filterTabs"
-          :key="tab.id"
-          :class="['filter-tab', { active: activeFilter === tab.id }]"
-          @click="handleFilterChange(tab.id)"
-        >
-          {{ tab.label }}
-        </button>
-      </div>
-
-      <!-- 중앙: 검색창 -->
-      <div class="search-center">
-        <SearchBar
-          v-model="searchKeyword"
-          placeholder="스터디명, 내용을 검색해보세요"
-          buttonText="검색"
-          @search="handleSearch"
+  <div class="study-recruit-page">
+    <div class="study-recruit-main">
+      <!-- ✅ 페이지 타이틀 -->
+      <TabTitle title="스터디 모집" />
+      <br>
+      <!-- ✅ 배너 영역 -->
+      <div class="banner-wrapper">
+        <PageInfoBanner
+          title="함께할 코알라를 찾아 성장하세요 🐨🌱"
+          subtitle="코딩, 면접 준비해야 하는데… 의지가 부족하신가요?
+          동료들을 찾아 같이 열심히 준비해보세요!"
+          :image="bannerImage"
+          bgColor="#f8fbff"
         />
       </div>
 
-      <!-- 오른쪽: 모집 버튼 -->
-      <CustomButton
-        text="+ 스터디 모집하기"
-        variant="primary"
-        size="md"
-        @click="goToCreatePage"
-      />
-    </div>
+      <!-- ✅ 필터 / 검색 / 버튼 (한 줄) -->
+      <div class="filter-search-action">
+        <!-- 왼쪽: 필터 탭 -->
+        <div class="filter-tabs">
+          <button
+            v-for="tab in filterTabs"
+            :key="tab.id"
+            :class="['filter-tab', { active: activeFilter === tab.id }]"
+            @click="handleFilterChange(tab.id)"
+          >
+            {{ tab.label }}
+          </button>
+        </div>
 
-    <!-- ✅ 구분선 -->
-    <div class="divider"></div>
+        <!-- 중앙: 검색창 -->
+        <div class="search-center">
+          <SearchBar
+            v-model="searchKeyword"
+            placeholder="스터디명, 내용을 검색해보세요"
+            buttonText="검색"
+            @search="handleSearch"
+          />
+        </div>
 
-    <!-- ✅ 카드 리스트 -->
-    <div class="cards-container">
-      <div v-if="displayedStudies.length > 0" class="card-grid">
-        <StudyRecruitCard
-          v-for="study in displayedStudies"
-          :key="study.id"
-          :status="study.status"
-          :title="study.title"
-          :period="study.period"
-          :authorName="study.authorName"
-          :rankName="study.rankName"
-          :members="study.members"
-          :comments="study.comments"
-          @click="handleCardClick(study.id)"
+        <!-- 오른쪽: 모집 버튼 -->
+        <CustomButton
+          text="+ 스터디 모집하기"
+          variant="primary"
+          size="md"
+          @click="goToCreatePage"
         />
       </div>
 
-      <!-- 데이터 없을 때 -->
-      <div v-else class="empty-state">
-        <p>검색 결과가 없습니다.</p>
+      <!-- ✅ 구분선 -->
+      <div class="divider"></div>
+
+      <!-- ✅ 카드 리스트 -->
+      <div class="cards-container">
+        <div v-if="displayedStudies.length > 0" class="card-grid">
+          <StudyRecruitCard
+            v-for="study in displayedStudies"
+            :key="study.id"
+            :status="study.status"
+            :title="study.title"
+            :period="study.period"
+            :authorName="study.authorName"
+            :rankName="study.rankName"
+            :members="study.members"
+            :comments="study.comments"
+            @click="handleCardClick(study.id)"
+          />
+        </div>
+
+        <!-- 데이터 없을 때 -->
+        <div v-else class="empty-state">
+          <p>검색 결과가 없습니다.</p>
+        </div>
+      </div>
+
+      <!-- ✅ 무한 스크롤 로딩 -->
+      <div v-if="isLoading" class="loading-indicator">
+        <div class="spinner"></div>
+        <p>로딩 중...</p>
+      </div>
+
+      <!-- ✅ 데이터 끝 -->
+      <div v-if="!hasMore && displayedStudies.length > 0" class="end-message">
+        <p>모든 스터디를 확인했습니다.</p>
       </div>
     </div>
 
-    <!-- ✅ 무한 스크롤 로딩 -->
-    <div v-if="isLoading" class="loading-indicator">
-      <div class="spinner"></div>
-      <p>로딩 중...</p>
-    </div>
-
-    <!-- ✅ 데이터 끝 -->
-    <div v-if="!hasMore && displayedStudies.length > 0" class="end-message">
-      <p>모든 스터디를 확인했습니다.</p>
-    </div>
-
-    <!-- ✅ Footer -->
+    <!-- ✅ Footer (전체 너비) -->
     <Footer />
   </div>
 </template>
@@ -276,6 +278,10 @@ const handleCardClick = (studyId) => {
   router.push(`/study-recruit/${studyId}`)
 }
 
+const goToCreatePage = () => {
+  router.push('/study-recruit/post')
+}
+
 onMounted(() => {
   window.addEventListener('scroll', handleScroll)
 })
@@ -285,18 +291,29 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.study-recruit-main {
+.study-recruit-page {
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
+}
+
+.study-recruit-main {
+  flex: 1;
   background-color: #fff;
-  padding: 50px 20px 100px;
+  padding: 50px 20px 60px;
   max-width: 1200px;
   margin: 0 auto;
+  width: 100%;
 }
 
 /* ✅ 배너 */
 .banner-wrapper {
   margin-top: 12px;
   margin-bottom: 36px;
+  max-width: 1200px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* ✅ 필터 / 검색 / 버튼 (한 줄) */
@@ -305,8 +322,11 @@ onUnmounted(() => {
   justify-content: space-between;
   align-items: center;
   gap: 16px;
-  max-width: 1022px;
+  max-width: 1200px;
+  width: 100%;
   margin: 0 auto 24px;
+  padding: 0 20px;
+  box-sizing: border-box;
 }
 
 .filter-tabs {
@@ -351,13 +371,20 @@ onUnmounted(() => {
   height: 1px;
   background-color: #e6e6e6;
   margin-bottom: 30px;
+  max-width: 1200px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* ✅ 카드 영역 */
 .cards-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex: 1;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto 60px;
+  padding: 0 20px;
+  box-sizing: border-box;
 }
 
 .card-grid {
