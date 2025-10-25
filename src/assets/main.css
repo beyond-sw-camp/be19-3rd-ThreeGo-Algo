@@ -1,0 +1,24 @@
+/* 공통 스타일 초기화 */
+* {
+  box-sizing: border-box;
+}
+
+html, body, #app {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: 'Noto Sans KR', sans-serif;
+  background-color: #f5f6f8;
+  color: #333;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
