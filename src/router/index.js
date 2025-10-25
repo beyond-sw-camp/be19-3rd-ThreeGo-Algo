@@ -18,10 +18,14 @@ import BannerDemoPage from '@/views/demo/BannerDemoPage.vue';
 import CommentDemoPage from '@/views/demo/CommentDemoPage.vue';
 import TwoButtonPopupDemo from '@/views/demo/TwoButtonPopupDemo.vue';
 import OneButtonPopupDemo from '@/views/demo/OneButtonPopupDemo.vue';
+import StudyRecruitMain from '@/components/study-recruit/StudyRecruitMain.vue';
 
 const routes = [
   // 기본 홈
   { path: '/', component: HomeView },
+
+  // 스터디 모집
+  { path: '/study-recruit', name: 'StudyRecruit', component: StudyRecruitMain },
 
   // 데모 페이지 라우트 (main 브랜치)
   { path: '/demo/button', component: ButtonDemoPage },
@@ -39,7 +43,7 @@ const routes = [
   { path: '/demo/comment', component: CommentDemoPage },
   { path: '/demo/twobuttonpopup', component: TwoButtonPopupDemo },
   { path: '/demo/onebuttonpopup', component: OneButtonPopupDemo},
-  
+
 ]
 
 const router = createRouter({
