@@ -58,16 +58,20 @@ const openPicker = async (type) => {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    width: 130px;
-    height: 48px;
+    gap: 8px;
+    padding: 10px 18px;
     background: #ffffff;
     border: 1px solid #d9d9d9;
     border-radius: 10px;
     cursor: pointer;
     font-weight: 400;
     color: #898989;
+    font-size: 16px;
+    line-height: 1.4;
     transition: 0.2s ease;
+    box-sizing: border-box;
+    white-space: nowrap;
+    min-height: 42px;
 }
 
 .date-btn:hover {
@@ -77,7 +81,7 @@ const openPicker = async (type) => {
 
 .separator {
     font-size: 20px;
-    font-weight: 600;
+    font-weight: 400;
     color: #898989;
 }
 
