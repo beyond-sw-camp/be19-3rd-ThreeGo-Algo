@@ -12,9 +12,9 @@
     <!-- 등급업 완료 팝업 -->
     <OneButtonCommonPopup
       v-model="popup.levelUp"
-      title="축하합니다! 🎉"
+      title="축하합니다!"
       subtitle="새로운 등급으로 승급하셨습니다."
-      image="/src/assets/images/level_up1.png"
+      image="/src/assets/images/level_up1_1.png"
       confirmText="확인"
       confirmVariant="primary"
       :showCancel="false"
@@ -24,7 +24,7 @@
     <!-- 출석 완료 팝업 -->
     <OneButtonCommonPopup
       v-model="popup.attendance"
-      title="출석 완료 ✅"
+      title="출석 완료"
       subtitle="오늘도 한 걸음 성장했어요!"
       image="/src/assets/images/default_koala.png"
       confirmText="확인"
@@ -36,9 +36,9 @@
     <!-- 신고 완료 팝업 -->
     <OneButtonCommonPopup
       v-model="popup.reportComplete"
-      title="신고 완료 ⚠️"
+      title="신고 완료"
       subtitle="관리자에게 신고가 정상적으로 접수되었습니다."
-      image="/src/assets/images/report_koala.png"
+      image="/src/assets/images/report_koala2.png"
       confirmText="확인"
       confirmVariant="primary"
       :showCancel="false"
