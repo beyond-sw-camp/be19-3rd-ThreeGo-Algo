@@ -1,3 +1,4 @@
+
 // src/router/index.js
 import { createRouter, createWebHistory } from 'vue-router'
 
@@ -13,6 +14,10 @@ import TabMenuDemoPage from '@/views/demo/TabMenuDemoPage.vue'
 import PageIndicatorDemoPage from '@/views/demo/PageIndicatorDemoPage.vue'
 import MarkdownEditorDemoPage from '@/views/demo/MarkdownEditorDemoPage.vue'
 import CommonTestView from '@/views/demo/CommonTestView.vue'
+import BannerDemoPage from '@/views/demo/BannerDemoPage.vue';
+import CommentDemoPage from '@/views/demo/CommentDemoPage.vue';
+import TwoButtonPopupDemo from '@/views/demo/TwoButtonPopupDemo.vue';
+import OneButtonPopupDemo from '@/views/demo/OneButtonPopupDemo.vue';
 
 const routes = [
   // 기본 홈
@@ -30,6 +35,11 @@ const routes = [
   { path: '/demo/page', component: PageIndicatorDemoPage },
   { path: '/demo/markdown', component: MarkdownEditorDemoPage },
   { path: '/common-test', name: 'CommonTest', component: CommonTestView },
+  { path: '/demo/infobanner', component: BannerDemoPage },
+  { path: '/demo/comment', component: CommentDemoPage },
+  { path: '/demo/twobuttonpopup', component: TwoButtonPopupDemo },
+  { path: '/demo/onebuttonpopup', component: OneButtonPopupDemo},
+  
 ]
 
 const router = createRouter({
