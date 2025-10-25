@@ -6,10 +6,6 @@ import router from './router'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 
-// Markdown Editor
-import { MdEditor } from 'md-editor-v3'
-import 'md-editor-v3/lib/style.css'
-
 // Element Plus 아이콘
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
@@ -27,6 +23,6 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 // 플러그인 등록
 app.use(ElementPlus)
 app.use(router)
-app.component('MdEditor', MdEditor)
+
 // 마운트
 app.mount('#app')
