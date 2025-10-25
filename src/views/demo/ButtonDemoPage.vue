@@ -7,13 +7,14 @@ const handleLike = () => alert('좋아요!')
         <h2>🎨 CustomButton 전체 예시</h2>
 
         <!-- 기본 스타일 -->
-        <div class="section"> danger
+        <div class="section">
             <h3>기본 버튼</h3>
             <CustomButton>기본</CustomButton>
-            <CustomButton variant="secondary">Secondary</CustomButton>
-            <CustomButton variant="gray1">Gray1</CustomButton>
-            <CustomButton variant="gray2">Gray2</CustomButton>
-            <CustomButton variant="danger">Danger</CustomButton>
+            <CustomButton variant="secondary">secondary</CustomButton>
+            <CustomButton variant="gray1">gray1</CustomButton>
+            <CustomButton variant="gray2">gray2</CustomButton>
+            <CustomButton variant="danger">danger</CustomButton>
+            <CustomButton variant="admin">admin</CustomButton>
         </div>
 
         <!-- 높이(Height) 조절 -->

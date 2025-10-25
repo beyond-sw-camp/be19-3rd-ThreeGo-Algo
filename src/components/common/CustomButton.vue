@@ -11,7 +11,7 @@ import { computed } from 'vue'
 
 const emit = defineEmits(['click'])
 const props = defineProps({
-    variant: { type: String, default: 'primary' }, // 버튼 종류: primary | secondary | gray1 | gray2 | danger
+    variant: { type: String, default: 'primary' }, // 버튼 종류: primary | secondary | gray1 | gray2 | danger | admin
     height: { type: String, default: 'md' }, // 높이: sm | md | lg
     width: { type: [String, Number], default: null },
     disabled: Boolean,
@@ -98,7 +98,7 @@ const iconStyle = computed(() => ({
 
 .btn--gray2 {
     background: #f1efee;
-    color: #cfcfcf;
+    color: #000000;
 }
 
 .btn--gray2:not(.is-disabled):hover {
@@ -112,6 +112,15 @@ const iconStyle = computed(() => ({
 
 .btn--danger:not(.is-disabled):hover {
     background: #e02222;
+}
+
+.btn--admin {
+    background: #1F2D3D;
+    color: #ffffff;
+}
+
+.btn--admin:not(.is-disabled):hover {
+    background: #16222f;
 }
 
 /* === Height === */
