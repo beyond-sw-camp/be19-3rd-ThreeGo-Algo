@@ -25,9 +25,10 @@ watchEffect(() => {
 <style scoped>
 .mini-profile {
     display: flex;
+    flex-direction: row;
     align-items: center;
-    gap: 8px;
-    font-weight: bold;
+    gap: 4px;
+    font-size: 14px;
 }
 
 .mini-profile-img {
