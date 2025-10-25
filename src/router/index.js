@@ -20,12 +20,14 @@ import TwoButtonPopupDemo from '@/views/demo/TwoButtonPopupDemo.vue';
 import OneButtonPopupDemo from '@/views/demo/OneButtonPopupDemo.vue';
 import SignupPage from '@/views/login/SignupPage.vue'
 import InputDemoPage from '@/views/demo/InputDemoPage.vue'
+import LoginPage from '@/views/login/LoginPage.vue'
 
 const routes = [
   // 기본 홈
   { path: '/', component: HomeView },
 
   { path: '/signup', component: SignupPage },
+  { path: '/login', component: LoginPage },
 
 
   // 데모 페이지 라우트 (main 브랜치)
