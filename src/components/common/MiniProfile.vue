@@ -6,7 +6,7 @@
 </template>
 
 <script setup>
-import { defineProps, ref, watchEffect } from 'vue';
+import { defineProps, computed } from 'vue';
 import { rankImages } from '@/constants/rankImages.js';
 
 const props = defineProps({
@@ -14,11 +14,7 @@ const props = defineProps({
     rankName: String
 });
 
-const rankImage = ref('');
-
-watchEffect(() => {
-    rankImage.value = rankImages[props.rankName];
-});
+const rankImage = computed(() => rankImages[props.rankName]);
 
 </script>
 
@@ -32,7 +28,7 @@ watchEffect(() => {
 }
 
 .mini-profile-img {
-    width: 25px;
+    width: 20px;
     border-radius: 50%;
     box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
 }
