@@ -27,9 +27,11 @@ onMounted(async () => {
       theme: 'dracula'
     }
   })
+  
+  // $(editor.value).summernote('disable') 보기 전용(내용 수정 불가)
 
-  $(editor.value).summernote('code', '<p>Hello Summernote</p>')
 })
+
 
 onBeforeUnmount(() => {
   $(editor.value).summernote('destroy')
