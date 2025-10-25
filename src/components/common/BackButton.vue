@@ -36,7 +36,10 @@ const handleClick = () => {
   display: flex;
   align-items: center;
   font-weight: 600;
-  color: #008CFF;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 13px;
+  font-weight: bold;
+  color: #0AA2EB;
   cursor: pointer;
   transition: 0.2s;
 }
