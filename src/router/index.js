@@ -1,10 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from '@/views/HomeView.vue';
-import ButtonDemoPage from '@/views/demo/ButtonDemoPage.vue';
-
+import SelectDemoPage from '@/views/demo/SelectDemoPage.vue';
 const routes = [
     { path: '/', component: HomeView },
-    { path: '/demo/button', component: ButtonDemoPage }
+    { path: '/demo/select', component: SelectDemoPage }
 ]
 
 const router = createRouter({

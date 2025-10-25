@@ -1,7 +1,7 @@
-import CustomButton from './CustomButton.vue'
+import Select from './Select.vue'
 
 export default {
     install(app) {
-        app.component('CustomButton', CustomButton)
+        app.component('Select', Select)
     }
 }
