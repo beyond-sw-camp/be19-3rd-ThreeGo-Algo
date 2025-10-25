@@ -1,4 +1,17 @@
 import { createApp } from 'vue'
 import App from './App.vue'
+import router from './router'
 
-createApp(App).mount('#app')
+import ElementPlus from 'element-plus'
+import 'element-plus/dist/index.css'
+
+import './assets/styles/global.css'
+import CommonComponents from './components/common'
+
+const app = createApp(App);
+
+app.use(router)
+app.use(ElementPlus)
+app.use(CommonComponents)
+
+app.mount('#app');
