@@ -1,5 +1,7 @@
 <template>
-    <el-button :class="computedClass" :disabled="disabled" :icon="icon" @click="handleClick">
+    <el-button class="custom-el-button" :class="computedClass" :style="computedStyle" :disabled="disabled"
+        @click="handleClick" type="default">
+        <img v-if="icon" :src="icon" alt="icon" class="btn-icon" :style="iconStyle" />
         <slot />
     </el-button>
 </template>
@@ -9,10 +11,12 @@ import { computed } from 'vue'
 
 const emit = defineEmits(['click'])
 const props = defineProps({
-    variant: { type: String, default: 'primary' }, // 색상
-    size: { type: String, default: 'md' }, // 크기: sm | md | lg
+    variant: { type: String, default: 'primary' }, // 버튼 종류: primary | secondary | gray1 | gray2 | danger
+    height: { type: String, default: 'md' }, // 높이: sm | md | lg
+    width: { type: [String, Number], default: null },
     disabled: Boolean,
     icon: String,
+    iconSize: { type: [String, Number], default: 18 },
 })
 
 const handleClick = (e) => {
@@ -23,13 +27,24 @@ const handleClick = (e) => {
 const computedClass = computed(() => [
     'base-button',
     `btn--${props.variant}`,
-    `btn--${props.size}`,
+    `btn-height--${props.height}`,
     { 'is-disabled': props.disabled },
 ])
+
+const computedStyle = computed(() => {
+    return props.width
+        ? { width: typeof props.width === 'number' ? `${props.width}px` : props.width }
+        : {}
+})
+
+const iconStyle = computed(() => ({
+    width: typeof props.iconSize === 'number' ? `${props.iconSize}px` : props.iconSize,
+    height: typeof props.iconSize === 'number' ? `${props.iconSize}px` : props.iconSize,
+}))
 </script>
 
 <style scoped>
-/* 공통 스타일 */
+/* 공통 버튼 스타일 */
 .base-button {
     font-family: 'Noto Sans KR';
     font-style: normal;
@@ -43,13 +58,19 @@ const computedClass = computed(() => [
     justify-content: center;
     align-items: center;
     transition: background-color 0.15s ease, transform 0.15s ease, filter 0.15s ease;
+    box-sizing: border-box;
+}
+
+.btn-icon {
+    object-fit: contain;
+    margin-right: 5px;
+    padding: 0;
 }
 
 /* === Variant === */
 .btn--primary {
     background: #0aa2eb;
     color: #ffffff;
-    border: none;
 }
 
 .btn--primary:not(.is-disabled):hover {
@@ -93,16 +114,16 @@ const computedClass = computed(() => [
     background: #e02222;
 }
 
-/* === Size === */
-.btn--sm {
+/* === Height === */
+.btn-height--sm {
     height: 32px;
 }
 
-.btn--md {
+.btn-height--md {
     height: 40px;
 }
 
-.btn--lg {
+.btn-height--lg {
     height: 46px;
 }
 
@@ -117,12 +138,6 @@ const computedClass = computed(() => [
     opacity: 0.6;
     cursor: not-allowed;
     pointer-events: none;
-}
-
-.is-disabled:hover {
-    background: inherit;
-    transform: none;
-    filter: none;
 }
 
 .base-button:focus,
