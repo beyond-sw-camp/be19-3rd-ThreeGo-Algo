@@ -48,6 +48,6 @@ const handleClick = () => {
   opacity: 0.8;
 }
 .el-icon {
-  margin-right: 6px;
+  margin-right: 1px;
 }
 </style>
