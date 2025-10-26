@@ -1,9 +1,9 @@
 <template>
-    <el-button class="custom-el-button" :class="computedClass" :style="computedStyle" :disabled="disabled"
+    <button class="custom-button" :class="computedClass" :style="computedStyle" :disabled="disabled"
         @click="handleClick" type="default">
         <img v-if="icon" :src="icon" alt="icon" class="btn-icon" :style="iconStyle" />
         <slot />
-    </el-button>
+    </button>
 </template>
 
 <script setup>

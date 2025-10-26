@@ -18,10 +18,14 @@ import BannerDemoPage from '@/views/demo/BannerDemoPage.vue';
 import CommentDemoPage from '@/views/demo/CommentDemoPage.vue';
 import TwoButtonPopupDemo from '@/views/demo/TwoButtonPopupDemo.vue';
 import OneButtonPopupDemo from '@/views/demo/OneButtonPopupDemo.vue';
+import CareerInfoMainView from '@/views/career/CareerInfoMainView.vue'
 
 const routes = [
   // 기본 홈
   { path: '/', component: HomeView },
+
+  // 기업별 정보 공유
+  { path: '/career-info', component: CareerInfoMainView },
 
   // 데모 페이지 라우트 (main 브랜치)
   { path: '/demo/button', component: ButtonDemoPage },
@@ -38,8 +42,8 @@ const routes = [
   { path: '/demo/infobanner', component: BannerDemoPage },
   { path: '/demo/comment', component: CommentDemoPage },
   { path: '/demo/twobuttonpopup', component: TwoButtonPopupDemo },
-  { path: '/demo/onebuttonpopup', component: OneButtonPopupDemo},
-  
+  { path: '/demo/onebuttonpopup', component: OneButtonPopupDemo },
+
 ]
 
 const router = createRouter({
