@@ -20,6 +20,7 @@ import TwoButtonPopupDemo from '@/views/demo/TwoButtonPopupDemo.vue';
 import OneButtonPopupDemo from '@/views/demo/OneButtonPopupDemo.vue';
 import CareerInfoMainView from '@/views/career/CareerInfoMainView.vue'
 import CareerPostCreate from '@/views/career/CareerPostCreate.vue'
+import CareerPostDetail from '@/views/career/CareerPostDetail.vue'
 
 const routes = [
   // 기본 홈
@@ -28,6 +29,7 @@ const routes = [
   // 기업별 정보 공유
   { path: '/career-info', component: CareerInfoMainView },
   { path: '/career-info/post', component: CareerPostCreate },
+  { path: '/career-info/:id', component: CareerPostDetail },
 
   // 데모 페이지 라우트 (main 브랜치)
   { path: '/demo/button', component: ButtonDemoPage },
