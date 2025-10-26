@@ -2,7 +2,6 @@
   <div class="signup-container">
     <div class="left-side">
       <img src="@/assets/images/algo_logo.png" alt="Logo" class="logo" />
-
       <div class="left-content">
         <p class="slogan">
           몰라도 된다! <br />
@@ -25,22 +24,34 @@
         </div>
 
         <div class="input-group">
-          <Input placeholder="인증번호" width="100%" />
+          <Input placeholder="인증번호" width="100%" v-model="verificationCode" />
           <CustomButton height="sm" @click="handleVerifyCode">확인</CustomButton>
         </div>
+        <p>현재 입력 값: {{ verificationCode }}</p>
+        <p v-if="message" :class="isError ? 'error-message' : 'message'">{{ message }}</p>
 
         <Input placeholder="비밀번호" icon="lock.svg" width="100%" />
         <Input placeholder="비밀번호 확인" icon="lock.svg" width="100%" />
         <Input placeholder="닉네임" icon="user.svg" width="100%" />
 
+        <div class="checkbox-container">
+          <input type="checkbox" id="privacy" v-model="isAgreed" />
+          <label for="privacy" class="privacyTxt">개인 정보 수집 및 이용에 동의합니다.</label>
+        </div>
+
         <CustomButton
           width="100%"
           height="sm"
-          :disabled="!isVerified"
+          :disabled="!isVerified || !isAgreed"
           @click="handleSignup"
         >
           회원 가입
         </CustomButton>
+
+        <div class="login-line">
+          <p>이미 계정이 있으신가요?</p>
+          <p class="login" @click="goToLogin">로그인</p>
+        </div>
       </div>
     </div>
   </div>
@@ -48,32 +59,74 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import Input from '@/components/common/Input.vue'
 import CustomButton from '@/components/common/CustomButton.vue'
 
 const isVerified = ref(false)
+const isAgreed = ref(false)
+const isError = ref(false)
+
+const verificationCode = ref('')
+const correctCode = ref('')
+const message = ref('')
+
+const router = useRouter()
+
 
 const handleRequestVerification = () => {
+  correctCode.value = '123456' // fetch요청으로 받아오기
+  message.value = ''
+  isVerified.value = false
   console.log('인증 요청 버튼 클릭됨')
+  console.log('발급된 인증번호:', correctCode.value)
 }
 
 const handleVerifyCode = () => {
-  console.log('인증번호 확인 버튼 클릭됨')
-  isVerified.value = true
+  console.log('입력한 인증번호:', verificationCode.value)
+  console.log('정답 인증번호:', correctCode.value)
+  if (verificationCode.value === correctCode.value) {
+    isVerified.value = true
+    isError.value = false
+    message.value = '인증이 성공되었습니다.'
+  } else {
+    isVerified.value = false
+    isError.value = true
+    message.value = '인증번호가 일치하지 않습니다.'
+  }
 }
 
 const handleSignup = () => {
   console.log('회원 가입 버튼 클릭됨')
 }
+
+const goToLogin = () => {
+  router.push('/login')
+}
 </script>
 
 <style scoped>
+
+.error-message {
+  color: red;
+  font-size: 13px;
+  align-self: flex-start;
+  margin-top: -5px;
+  margin-bottom: 10px;
+}
+
+.message {
+  color: green;
+  font-size: 13px;
+  align-self: flex-start;
+  margin-top: -5px;
+  margin-bottom: 10px;
+}
+
 .signup-container {
   display: flex;
   width: 100%;
   height: 100vh;
-  margin: 0;
-  padding: 0;
 }
 
 .left-side {
@@ -84,7 +137,6 @@ const handleSignup = () => {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
 }
 
 .logo {
@@ -106,14 +158,12 @@ const handleSignup = () => {
   font-weight: 600;
   color: #383838;
   line-height: 1.4;
-  text-align: left;
   margin-bottom: 10px;
 }
 
 .subtext {
   font-size: 23px;
   color: #383838;
-  text-align: left;
   margin-bottom: 40px;
 }
 
@@ -149,6 +199,25 @@ const handleSignup = () => {
   margin-bottom: 15px;
 }
 
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 8px;
+  font-size: 12px;
+  color: #383838;
+}
+
+.checkbox-container input {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.privacyTxt {
+  font-weight: 200;
+}
+
 h2 {
   align-self: flex-start;
   text-align: left;
@@ -157,5 +226,24 @@ h2 {
   font-weight: 700;
   margin-bottom: 30px;
   color: #383838;
+}
+
+.login-line {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.login-line .login {
+  cursor: pointer;
+  font-weight: 500;
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+
+.login-line .login:hover {
+  color: #0056b3;
 }
 </style>
