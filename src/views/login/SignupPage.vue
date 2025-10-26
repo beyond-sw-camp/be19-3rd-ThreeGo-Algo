@@ -27,7 +27,6 @@
           <Input placeholder="인증번호" width="100%" v-model="verificationCode" />
           <CustomButton height="sm" @click="handleVerifyCode">확인</CustomButton>
         </div>
-        <p>현재 입력 값: {{ verificationCode }}</p>
         <p v-if="message" :class="isError ? 'error-message' : 'message'">{{ message }}</p>
 
         <Input placeholder="비밀번호" icon="lock.svg" width="100%" />

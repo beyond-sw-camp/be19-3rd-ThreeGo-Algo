@@ -17,9 +17,9 @@
       <div class="form-container">
         <h2 class="title">로그인</h2>
 
-        <Input placeholder="이메일" icon="mail.svg" width="100%" />
-        <Input placeholder="비밀번호" icon="lock.svg" width="100%" />
-       
+        <Input placeholder="이메일" icon="mail.svg" width="100%" v-model="email" />
+        <Input placeholder="비밀번호" icon="lock.svg" width="100%" type="password" v-model="password" />
+        <p v-if="isError" class="error-message">{{ message }}</p>
         <CustomButton
           width="100%"
           height="sm"
@@ -34,11 +34,37 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import Input from '@/components/common/Input.vue'
 import CustomButton from '@/components/common/CustomButton.vue'
 
-const handleLogin = () => {
+const email = ref('')
+const password = ref('')
+const isError = ref(false)
+const message = ref('')  // ✅ message ref 추가!
+const router = useRouter()
+
+const handleLogin = async () => {
   console.log('로그인 버튼 클릭됨')
+
+  isError.value = false
+  message.value = ''
+  
+  try {
+    //fetch 요청하기
+    
+    const result = false  // true면 성공, false면 실패
+    
+    if (result) {
+      router.push('/')
+    } else {
+      isError.value = true
+      message.value = '아이디 또는 비밀번호를 잘못 입력하셨습니다.'
+    }
+  } catch (error) {
+    isError.value = true
+    console.error('로그인 에러:', error)
+  }
 }
 </script>
 
@@ -106,7 +132,7 @@ const handleLogin = () => {
   align-items: center;
 }
 
-.form-container > :not(.input-group):not(h2) {
+.form-container > :not(.input-group):not(h2):not(.error-message) {
   margin-bottom: 15px;
 }
 
@@ -118,5 +144,13 @@ h2 {
   font-weight: 700;
   margin-bottom: 30px;
   color: #383838;
+}
+
+.error-message {
+  color: red;
+  font-size: 13px;
+  align-self: flex-start;
+  margin-top: -5px;
+  margin-bottom: 10px;
 }
 </style>
