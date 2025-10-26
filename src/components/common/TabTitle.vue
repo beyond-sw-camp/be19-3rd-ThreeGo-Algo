@@ -12,12 +12,15 @@ defineProps({
 </script>
 
 <style scoped>
-.page-title {
+.tab-title {
+  width: 1022px;
+  margin: 0 auto;
   font-family: 'Noto Sans KR', sans-serif;
   font-size: 35px;
   font-weight: bold;
   color: #222;
-  margin-bottom: 24px;
-  letter-spacing: -0.5px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+
 }
 </style>

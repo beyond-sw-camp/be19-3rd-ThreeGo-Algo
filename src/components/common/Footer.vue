@@ -15,14 +15,14 @@
       </div>
 
       <div class="footer-column">
-        <h3>Contact</h3>
+        <h4>Contact</h4>
         <p class="footer-contact">
           team.threego@gmail.com
         </p>
       </div>
 
       <div class="footer-column">
-        <h3>Socials</h3>
+        <h4>Socials</h4>
         <ul class="footer-team-list">
           <li v-for="(member, index) in teamMembers" :key="index" class="team-member">
             <a :href="member.github" target="_blank">
@@ -96,7 +96,7 @@ const teamMembers = reactive([
 
 .footer-contact {
   font-size: 11px;
-padding: 0;
+  padding: 0;
   margin: 0;
 }
 
