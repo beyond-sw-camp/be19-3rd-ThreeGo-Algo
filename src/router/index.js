@@ -19,6 +19,9 @@ import CommentDemoPage from '@/views/demo/CommentDemoPage.vue';
 import TwoButtonPopupDemo from '@/views/demo/TwoButtonPopupDemo.vue';
 import OneButtonPopupDemo from '@/views/demo/OneButtonPopupDemo.vue';
 
+import CodingProblemList from '@/views/coding/codingProblemList/CodingProblemList.vue'
+import CodingProblemDetail from '@/views/coding/[id]/codingProblemDetail/CodingProblemDetail.vue'
+
 const routes = [
   // 기본 홈
   { path: '/', component: HomeView },
@@ -39,6 +42,9 @@ const routes = [
   { path: '/demo/comment', component: CommentDemoPage },
   { path: '/demo/twobuttonpopup', component: TwoButtonPopupDemo },
   { path: '/demo/onebuttonpopup', component: OneButtonPopupDemo},
+
+  { path: '/codingProblemList', component: CodingProblemList},
+  { path: '/codingProblemDetail', component: CodingProblemDetail},
   
 ]
 

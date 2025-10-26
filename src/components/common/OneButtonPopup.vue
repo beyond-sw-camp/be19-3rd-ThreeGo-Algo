@@ -73,22 +73,28 @@ const handleCancel = () => {
   padding-bottom: 20px;
 }
 
+.popup-image {
+  text-align: center;
+  margin-bottom: 12px;
+}
+
 .popup-image img {
   width: 90px;
   height: auto;
-  margin-bottom: 12px;
 }
 
 .popup-title {
   font-weight: 600;
   font-size: 20px;
   margin: 8px 0;
+  text-align: center;
 }
 
 .popup-subtitle {
   color: #666;
   font-size: 14px;
   margin-bottom: 20px;
+  text-align: center;
 }
 
 .popup-buttons {
@@ -96,5 +102,6 @@ const handleCancel = () => {
   justify-content: center;
   gap: 10px;
   margin-top: 12px;
+  text-align: center;
 }
 </style>
