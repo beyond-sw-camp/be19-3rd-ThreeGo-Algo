@@ -18,6 +18,9 @@ import BannerDemoPage from '@/views/demo/BannerDemoPage.vue';
 import CommentDemoPage from '@/views/demo/CommentDemoPage.vue';
 import TwoButtonPopupDemo from '@/views/demo/TwoButtonPopupDemo.vue';
 import OneButtonPopupDemo from '@/views/demo/OneButtonPopupDemo.vue';
+import RoadmapListItemDemoPage from '@/views/demo/RoadmapListItemDemoPage.vue';
+import AlgoPostListItemDemoPage from '@/views/demo/AlgoPostListItemDemoPage.vue';
+import AlgoMainView from '@/views/AlgoMainView.vue';
 
 const routes = [
   // 기본 홈
@@ -39,7 +42,14 @@ const routes = [
   { path: '/demo/comment', component: CommentDemoPage },
   { path: '/demo/twobuttonpopup', component: TwoButtonPopupDemo },
   { path: '/demo/onebuttonpopup', component: OneButtonPopupDemo},
-  
+  { path: '/demo/roadmap/:roadmapId', component: RoadmapListItemDemoPage},
+  { path: '/demo/roadmap', redirect: '/demo/roadmap/1'},
+  { path: '/demo/algo-post-list-item', component: AlgoPostListItemDemoPage },
+
+  // 알고리즘 학습 라우트
+  { path: '/algorithm/roadmap/:roadmapId', component: AlgoMainView},
+  { path: '/algorithm/roadmap', redirect: '/algorithm/roadmap/1'},
+  { path: '/algorithm', redirect: '/algorithm/roadmap/1'}
 ]
 
 const router = createRouter({
