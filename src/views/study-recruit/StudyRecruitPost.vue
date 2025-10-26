@@ -86,7 +86,6 @@ import { ref, onMounted, onBeforeUnmount, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import CustomButton from '@/components/common/CustomButton.vue'
 import DateRangeButton from '@/components/common/DateRangeButton.vue'
-import Footer from '@/components/common/Footer.vue'
 import TabTitle from '@/components/common/TabTitle.vue'
 
 const router = useRouter()

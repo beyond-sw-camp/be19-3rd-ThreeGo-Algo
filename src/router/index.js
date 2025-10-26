@@ -18,11 +18,11 @@ import BannerDemoPage from '@/views/demo/BannerDemoPage.vue';
 import CommentDemoPage from '@/views/demo/CommentDemoPage.vue';
 import TwoButtonPopupDemo from '@/views/demo/TwoButtonPopupDemo.vue';
 import OneButtonPopupDemo from '@/views/demo/OneButtonPopupDemo.vue';
-import StudyRecruitMain from '@/components/study-recruit/StudyRecruitMain.vue';
-import StudyRecruitPost from '@/components/study-recruit/StudyRecruitPost.vue'
-import StudyRecruitDetailPost from '@/components/study-recruit/StudyRecruitDetailPost.vue'
-import StudyRecruitManage from '@/components/study-recruit/StudyRecruitManage.vue'
-import CreateStudyGroup from '@/components/study-recruit/CreateStudyGroup.vue'
+import StudyRecruitMain from '@/views/study-recruit/StudyRecruitMain.vue';
+import StudyRecruitPost from '@/views/study-recruit/StudyRecruitPost.vue'
+import StudyRecruitDetailPost from '@/views/study-recruit/StudyRecruitDetailPost.vue'
+import StudyRecruitManage from '@/views/study-recruit/StudyRecruitManage.vue'
+import CreateStudyGroup from '@/views/study-recruit/CreateStudyGroup.vue'
 
 const routes = [
   // 기본 홈

@@ -108,7 +108,6 @@ import { ref } from "vue";
 import BackButton from "@/components/common/BackButton.vue";
 import MiniProfile from "@/components/common/MiniProfile.vue";
 import Comment from "@/components/common/Comment.vue";
-import Footer from "@/components/common/Footer.vue";
 import RecruitBadge from "@/components/study-recruit/component/RecruitBadge.vue";
 import ApplyStudyBox from "@/components/study-recruit/component/ApplyStudyBox.vue";
 import AfterApplyStudyBox from "@/components/study-recruit/component/AfterApplyStudyBox.vue";

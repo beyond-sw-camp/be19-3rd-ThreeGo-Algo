@@ -90,7 +90,6 @@ import TabMenu from '@/components/common/TabMenu.vue'
 import PageInfoBanner from '@/components/common/PageInfoBanner.vue'
 import SearchBar from '@/components/common/SearchBar.vue'
 import CustomButton from '@/components/common/CustomButton.vue'
-import Footer from '@/components/common/Footer.vue'
 import bannerImage from '@/assets/images/banner_study_recruit.png'
 
 const router = useRouter()
