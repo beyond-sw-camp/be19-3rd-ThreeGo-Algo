@@ -19,7 +19,7 @@
         <h2 class="title">회원가입</h2>
 
         <div class="input-group">
-          <Input placeholder="이메일" icon="mail.svg" width="100%" />
+          <Input placeholder="이메일" icon="mail.svg" width="100%" v-model="email"/>
           <CustomButton height="sm" @click="handleRequestVerification">인증 요청</CustomButton>
         </div>
 
@@ -27,16 +27,17 @@
           <Input placeholder="인증번호" width="100%" v-model="verificationCode" />
           <CustomButton height="sm" @click="handleVerifyCode">확인</CustomButton>
         </div>
-        <p v-if="message" :class="isError ? 'error-message' : 'message'">{{ message }}</p>
 
-        <Input placeholder="비밀번호" icon="lock.svg" width="100%" />
-        <Input placeholder="비밀번호 확인" icon="lock.svg" width="100%" />
-        <Input placeholder="닉네임" icon="user.svg" width="100%" />
+        <Input placeholder="비밀번호" icon="lock.svg" width="100%" v-model="password" type="password"/>
+        <Input placeholder="비밀번호 확인" icon="lock.svg" width="100%" v-model="passwordCheck" type="password"/>
+        <Input placeholder="닉네임" icon="user.svg" width="100%" v-model="nickname"/>
 
         <div class="checkbox-container">
           <input type="checkbox" id="privacy" v-model="isAgreed" />
           <label for="privacy" class="privacyTxt">개인 정보 수집 및 이용에 동의합니다.</label>
         </div>
+
+        <p v-if="message" :class="isError ? 'error-message' : 'message'">{{ message }}</p>
 
         <CustomButton
           width="100%"
@@ -67,6 +68,10 @@ const isAgreed = ref(false)
 const isError = ref(false)
 
 const verificationCode = ref('')
+const email = ref('')
+const password = ref('')
+const passwordCheck = ref('')
+const nickname = ref('')
 const correctCode = ref('')
 const message = ref('')
 
@@ -97,6 +102,11 @@ const handleVerifyCode = () => {
 
 const handleSignup = () => {
   console.log('회원 가입 버튼 클릭됨')
+  if (password.value !== passwordCheck.value) {
+    isError.value = true
+    message.value = '비밀번호가 일치하지 않습니다.'
+    return
+  }
 }
 
 const goToLogin = () => {
