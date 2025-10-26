@@ -55,8 +55,8 @@ const roadmaps = [
         title: '자료구조',
         desc: '스택, 큐, 리스트와 같은 기본 자료구조를 이해하는 것은 알고리즘 학습의 출발점입니다.',
         posts: [
-            { id: 1, title: '큐 (Queue)', quizIds: [1, 2, 3], solvedQuizIds: [1] },
-            { id: 2, title: '스택 (Stack)', quizIds: [4, 5, 6], solvedQuizIds: [4, 5] },
+            { id: 2, title: '큐 (Queue)', quizIds: [1, 2, 3], solvedQuizIds: [1] },
+            { id: 1, title: '스택 (Stack)', quizIds: [4, 5, 6], solvedQuizIds: [4, 5] },
             { id: 3, title: '연결리스트 (Linked List)', quizIds: [7, 8], solvedQuizIds: [] }
         ]
     },
@@ -107,6 +107,7 @@ function clickRoadmap(id) {
 
 function clickPost(id) {
     console.log('selectedPostId:', id);
+    router.push(`/algorithm/post/${id}`);
 }
 
 const currentIndex = computed(() => roadmaps.findIndex(r => r.id === currentRoadmapId.value));

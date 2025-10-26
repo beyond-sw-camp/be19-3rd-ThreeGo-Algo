@@ -5,7 +5,7 @@
                 <el-breadcrumb-item :to="{ path: '/algorithm' }">알고리즘 학습</el-breadcrumb-item>
                 <el-breadcrumb-item :to="{ path: `/algorithm/roadmap/${dummyPostDetail.roadmapId}` }">{{dummyPostDetail.title }}</el-breadcrumb-item>
                 <!-- TODO 학습 게시물로 이동 -->
-                <el-breadcrumb-item :to="{ path: '/algorithm' }">{{ dummyPostDetail.roadmapTitle }}</el-breadcrumb-item>
+                <el-breadcrumb-item :to="{ path: `/algorithm/post/${dummyPostDetail.postId}` }">{{ dummyPostDetail.roadmapTitle }}</el-breadcrumb-item>
                 <el-breadcrumb-item>퀴즈</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
