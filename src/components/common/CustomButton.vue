@@ -48,9 +48,9 @@ const iconStyle = computed(() => ({
 .base-button {
     font-family: 'Noto Sans KR';
     font-style: normal;
-    font-weight: 500;
+    font-weight: 400;
     font-size: 16px;
-    line-height: 1.2;
+    line-height: 1;
     border-radius: 5px;
     border: none;
     padding: 0 14px;

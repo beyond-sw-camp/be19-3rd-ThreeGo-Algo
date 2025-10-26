@@ -207,7 +207,7 @@ const updateFilters = filters => {
     showVerifiedOnly.value = filters.showVerifiedOnly
     selectedCompanies.value = filters.selectedCompanies
 }
-const goToCreatePage = () => router.push('/company/post')
+const goToCreatePage = () => router.push('/career-info/post')
 </script>
 
 <style scoped>
