@@ -5,21 +5,21 @@ import TabTitle from './TabTitle.vue'
 import CustomButton from './CustomButton.vue'
 import DateRangeButton from './DateRangeButton.vue'
 import PostCount from './PostCount.vue'
-import Select from './Select.vue'
+import CustomSelect from './CustomSelect.vue'
 import PageInfoBanner from './PageInfoBanner.vue'
 
 export {
-  MyProfileDropdown,
-  BackButton,
-  SearchBar,
-  TabTitle
+    MyProfileDropdown,
+    BackButton,
+    SearchBar,
+    TabTitle
 }
 export default {
     install(app) {
         app.component('CustomButton', CustomButton)
         app.component('DateRangeButton', DateRangeButton)
         app.component('PostCount', PostCount)
-        app.component('Select', Select)
+        app.component('CustomSelect', CustomSelect)
         app.component('PageInfoBanner', PageInfoBanner)
     }
 }
