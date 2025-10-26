@@ -59,7 +59,7 @@
 import { ref, computed, onMounted } from 'vue'
 import TabTitle from '@/components/common/TabTitle.vue'
 import TabMenu from '@/components/common/TabMenu.vue'
-import ProblemCard from '@/components/coding/codingProblemList/ProblemCard.vue'
+import ProblemCard from '@/components/coding/ProblemCard.vue'
 import SearchBar from '@/components/common/SearchBar.vue'
 import Select from '@/components/common/Select.vue'
 import axios from '@/plugins/axios.js'

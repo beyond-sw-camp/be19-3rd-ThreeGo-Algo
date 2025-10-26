@@ -19,8 +19,8 @@ import CommentDemoPage from '@/views/demo/CommentDemoPage.vue';
 import TwoButtonPopupDemo from '@/views/demo/TwoButtonPopupDemo.vue';
 import OneButtonPopupDemo from '@/views/demo/OneButtonPopupDemo.vue';
 
-import CodingProblemList from '@/views/coding/codingProblemList/CodingProblemList.vue'
-import CodingProblemDetail from '@/views/coding/[id]/codingProblemDetail/CodingProblemDetail.vue'
+import CodingProblemList from '@/views/coding/CodingProblemList.vue'
+import CodingProblemDetail from '@/views/coding/CodingProblemDetail.vue'
 
 const routes = [
   // 기본 홈
