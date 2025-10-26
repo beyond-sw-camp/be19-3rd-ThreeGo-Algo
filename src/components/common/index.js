@@ -7,6 +7,8 @@ import DateRangeButton from './DateRangeButton.vue'
 import PostCount from './PostCount.vue'
 import CustomSelect from './CustomSelect.vue'
 import PageInfoBanner from './PageInfoBanner.vue'
+import Footer from './Footer.vue'
+import Header from './Header.vue'
 
 export {
     MyProfileDropdown,
@@ -21,5 +23,7 @@ export default {
         app.component('PostCount', PostCount)
         app.component('CustomSelect', CustomSelect)
         app.component('PageInfoBanner', PageInfoBanner)
+        app.component('Header', Header)
+        app.component('Footer', Footer)
     }
 }

@@ -1,18 +1,24 @@
 <template>
-  <router-view />
-</template>
-
-<script setup>
-
-</script>
-
-<style>
-
-
-</style>
   <div id="app">
-    <router-view />
+    <Header />
+    <main class="main-content">
+      <router-view />
+    </main>
+    <Footer />
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+#app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding-top: 70px;
+  background-color: #ffffff;
+}
+
+.main-content {
+  flex: 1;
+  background-color: #ffffff;
+}
+</style>

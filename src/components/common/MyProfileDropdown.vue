@@ -1,9 +1,8 @@
 <template>
   <el-dropdown trigger="click" class="profile-dropdown" popper-class="my-profile-popper">
-    <div class="el-dropdown-link">
-      <img src="@/assets/icons/myicon.svg" alt="myinfo" class="my-information">
-      <span class="ml-1">내 정보</span>
-    </div>
+    <span class="el-dropdown-link">
+      <MiniProfile :nickname="userName" :rankName="rankName" />
+    </span>
 
     <template #dropdown>
       <el-dropdown-menu>
@@ -34,10 +33,14 @@
 
 <script setup>
 import { ref } from 'vue'
-import { User, SwitchButton } from '@element-plus/icons-vue'
+import MiniProfile from '@/components/common/MiniProfile.vue'
 
 const props = defineProps({
   userName: {
+    type: String,
+    default: ''
+  },
+  rankName: {
     type: String,
     default: ''
   },
@@ -63,14 +66,8 @@ const emit = defineEmits(['mypage', 'logout'])
 
 const logoutDialog = ref(false)
 
-const handleMyPage = () => {
-  emit('mypage')
-}
-
-const openLogoutModal = () => {
-  logoutDialog.value = true
-}
-
+const handleMyPage = () => emit('mypage')
+const openLogoutModal = () => (logoutDialog.value = true)
 const handleLogout = () => {
   logoutDialog.value = false
   emit('logout')
@@ -85,13 +82,6 @@ const handleLogout = () => {
 .el-dropdown-link {
   display: flex;
   align-items: center;
-  gap: 4px;
-  font-weight: 500;
-}
-
-.dropdown-menu {
-  min-width: 140px;
-  padding: 4px 0;
 }
 
 .el-dropdown-menu .el-dropdown-item {
@@ -102,7 +92,8 @@ const handleLogout = () => {
   font-size: 14px;
 }
 
-.el-dropdown-menu .el-dropdown-item .el-icon {
-  font-size: 16px;
+.mypage-icon,
+.logout-icon {
+  width: 16px;
 }
 </style>
