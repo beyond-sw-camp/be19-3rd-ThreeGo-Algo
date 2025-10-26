@@ -12,7 +12,9 @@ defineProps({
 </script>
 
 <style scoped>
-.page-title {
+.tab-title {
+  width: 1022px;
+  margin: 0 auto;
   font-family: 'Noto Sans KR', sans-serif;
   font-size: 35px;
   font-weight: bold;

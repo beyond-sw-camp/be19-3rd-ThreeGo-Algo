@@ -3,7 +3,6 @@
     <div class="study-recruit-main">
       <!-- ✅ 페이지 타이틀 -->
       <TabTitle title="스터디 모집" />
-      <br>
       <!-- ✅ 배너 영역 -->
       <div class="banner-wrapper">
         <PageInfoBanner
@@ -17,17 +16,11 @@
 
       <!-- ✅ 필터 / 검색 / 버튼 (한 줄) -->
       <div class="filter-search-action">
-        <!-- 왼쪽: 필터 탭 -->
-        <div class="filter-tabs">
-          <button
-            v-for="tab in filterTabs"
-            :key="tab.id"
-            :class="['filter-tab', { active: activeFilter === tab.id }]"
-            @click="handleFilterChange(tab.id)"
-          >
-            {{ tab.label }}
-          </button>
-        </div>
+        <!-- 왼쪽: 필터 탭 (TabMenu 사용) -->
+        <TabMenu
+          :items="filterTabs"
+          :onClick="handleFilterChange"
+        />
 
         <!-- 중앙: 검색창 -->
         <div class="search-center">
@@ -96,6 +89,7 @@ import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import StudyRecruitCard from '@/components/study-recruit/component/StudyRecruitCard.vue'
 import TabTitle from '@/components/common/TabTitle.vue'
+import TabMenu from '@/components/common/TabMenu.vue'
 import PageInfoBanner from '@/components/common/PageInfoBanner.vue'
 import SearchBar from '@/components/common/SearchBar.vue'
 import CustomButton from '@/components/common/CustomButton.vue'
@@ -111,11 +105,11 @@ const currentPage = ref(1)
 const isLoading = ref(false)
 const hasMore = ref(true)
 
-// 필터 탭
+// 필터 탭 (TabMenu 형식)
 const filterTabs = [
-  { id: 'ALL', label: '전체' },
-  { id: 'OPEN', label: '모집 중' },
-  { id: 'CLOSED', label: '모집 완료' }
+  { value: 'ALL', label: '전체' },
+  { value: 'OPEN', label: '모집중' },
+  { value: 'CLOSED', label: '모집완료' }
 ]
 
 // 더미 데이터
@@ -260,8 +254,8 @@ const loadMoreStudies = () => {
   }, 500)
 }
 
-const handleFilterChange = (filterId) => {
-  activeFilter.value = filterId
+const handleFilterChange = (item) => {
+  activeFilter.value = item.value
   currentPage.value = 1
   hasMore.value = true
   window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -327,37 +321,6 @@ onUnmounted(() => {
   margin: 0 auto 24px;
   padding: 0 20px;
   box-sizing: border-box;
-}
-
-.filter-tabs {
-  display: flex;
-  gap: 10px;
-  flex-shrink: 0;
-}
-
-.filter-tab {
-  padding: 8px 18px;
-  border-radius: 6px;
-  background: #fff;
-  border: 1px solid #d9d9d9;
-  font-size: 14px;
-  font-weight: 500;
-  color: #666;
-  cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-}
-
-.filter-tab:hover {
-  border-color: #0aa2eb;
-  color: #0aa2eb;
-}
-
-.filter-tab.active {
-  background-color: #0aa2eb;
-  border-color: #0aa2eb;
-  color: #fff;
 }
 
 .search-center {

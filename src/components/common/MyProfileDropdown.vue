@@ -1,42 +1,28 @@
 <template>
-  <el-dropdown trigger="click" class="profile-dropdown">
-    <span class="el-dropdown-link">
+  <el-dropdown trigger="click" class="profile-dropdown" popper-class="my-profile-popper">
+    <div class="el-dropdown-link">
       <img src="@/assets/icons/myicon.svg" alt="myinfo" class="my-information">
       <span class="ml-1">내 정보</span>
-    </span>
+    </div>
 
     <template #dropdown>
-      <el-dropdown-menu class="dropdown-menu">
+      <el-dropdown-menu>
         <!-- 마이페이지 -->
-        <el-dropdown-item @click="goMyPage">
+        <el-dropdown-item @click="handleMyPage">
           <img src="@/assets/icons/myicon.svg" alt="mypage" class="mypage-icon">
-          <span>마이페이지</span>
+          <span>{{ myPageText }}</span>
         </el-dropdown-item>
 
         <!-- 로그아웃 -->
         <el-dropdown-item divided @click="openLogoutModal">
           <img src="@/assets/icons/logout.svg" alt="logout" class="logout-icon" />
-          <span>로그아웃</span>
+          <span>{{ logoutText }}</span>
         </el-dropdown-item>
       </el-dropdown-menu>
     </template>
   </el-dropdown>
 
   <!-- 로그아웃 다이얼로그 -->
-  <el-dialog
-    v-model="logoutDialog"
-    title="로그아웃 하시겠습니까?"
-    width="320px"
-  >
-    <span>정말 로그아웃하시겠습니까?</span>
-    <template #footer>
-      <el-button @click="logoutDialog = false">취소</el-button>
-      <el-button type="danger" @click="logout">확인</el-button>
-    </template>
-  </el-dialog>
-
-
-  <!-- 로그아웃 팝업 -->
   <el-dialog
     v-model="logoutDialog"
     :title="logoutDialogTitle"
@@ -52,7 +38,6 @@
 
 <script setup>
 import { ref } from 'vue'
-import { User, SwitchButton } from '@element-plus/icons-vue'
 
 const props = defineProps({
   userName: {
@@ -98,6 +83,7 @@ const handleLogout = () => {
 <style scoped>
 .profile-dropdown {
   cursor: pointer;
+  position: relative;
 }
 
 .el-dropdown-link {
@@ -105,22 +91,41 @@ const handleLogout = () => {
   align-items: center;
   gap: 4px;
   font-weight: 500;
+  cursor: pointer;
 }
 
-.dropdown-menu {
+.my-information {
+  width: 24px;
+  height: 24px;
+}
+
+.mypage-icon,
+.logout-icon {
+  width: 18px;
+  height: 18px;
+}
+</style>
+
+<style>
+/* 전역 스타일로 드롭다운 메뉴 스타일 적용 */
+.my-profile-popper {
+  z-index: 3000 !important;
+}
+
+.my-profile-popper .el-dropdown-menu {
   min-width: 140px;
   padding: 4px 0;
 }
 
-.el-dropdown-menu .el-dropdown-item {
+.my-profile-popper .el-dropdown-menu__item {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
+  gap: 8px;
+  padding: 10px 16px;
   font-size: 14px;
 }
 
-.el-dropdown-menu .el-dropdown-item .el-icon {
-  font-size: 16px;
+.my-profile-popper .el-dropdown-menu__item:hover {
+  background-color: #f5f7fa;
 }
 </style>

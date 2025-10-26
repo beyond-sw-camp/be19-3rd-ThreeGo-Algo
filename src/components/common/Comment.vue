@@ -1,33 +1,11 @@
 <template>
     <div class="comment-section">
-    <!-- 댓글 입력 영역 -->
-    <div class="comment-input-wrapper">
-        <MiniProfile 
-        :nickname="currentUser.nickname" 
-        :rankName="currentUser.rankName" />
-        <div class="comment-input">
-        <el-input
-            v-model="newCommentContent"
-            type="textarea"
-            :rows="3"
-            placeholder="내용을 입력하세요"
-            resize="none" />
-        <el-button 
-            type="primary" 
-            size="small"
-            @click="handleSubmitComment"
-            :disabled="!newCommentContent.trim()" >
-            댓글 작성
-        </el-button>
-        </div>
-    </div>
-
     <!-- 댓글 개수 표시 -->
     <div class="comment-header">
         <span class="comment-count">댓글 {{ totalComments }}</span>
         <el-dropdown trigger="click" @command="handleSort">
         <span class="sort-dropdown">
-            등록순 
+            등록순
             <el-icon><arrow-down /></el-icon>
         </span>
         <template #dropdown>
@@ -37,6 +15,23 @@
             </el-dropdown-menu>
         </template>
         </el-dropdown>
+    </div>
+
+    <!-- 댓글 입력 영역 -->
+    <div class="comment-input-wrapper">
+        <el-input
+            v-model="newCommentContent"
+            type="textarea"
+            :rows="3"
+            placeholder="댓글을 작성해주세요"
+            resize="none" />
+        <el-button
+            type="primary"
+            size="small"
+            @click="handleSubmitComment"
+            :disabled="!newCommentContent.trim()" >
+            댓글 작성
+        </el-button>
     </div>
 
     <!-- 댓글 목록 -->
@@ -435,27 +430,21 @@ const formatCreatedAt = (createdAt) => {
 
 .comment-input-wrapper {
     display: flex;
+    flex-direction: column;
     gap: 12px;
-    margin-bottom: 24px;
+    margin: 16px 0 24px 0;
     padding: 16px;
     background: #f8f9fa;
     border-radius: 8px;
 }
 
-.comment-input {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.comment-input :deep(.el-textarea__inner) {
+.comment-input-wrapper :deep(.el-textarea__inner) {
     border: 1px solid #dcdfe6;
     border-radius: 6px;
     font-size: 14px;
 }
 
-.comment-input .el-button {
+.comment-input-wrapper .el-button {
     align-self: flex-end;
 }
 
