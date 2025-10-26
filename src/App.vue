@@ -1,11 +1,23 @@
 <template>
   <div id="app">
-    <router-view />
+    <Header />
+    <main class="main-content">
+      <router-view />
+    </main>
+    <Footer />
   </div>
 </template>
 
-<script setup>
+<style scoped>
+#app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #ffffff;
+}
 
-</script>
-
-<style scoped> </style>
+.main-content {
+  flex: 1;
+  background-color: #ffffff;
+}
+</style>

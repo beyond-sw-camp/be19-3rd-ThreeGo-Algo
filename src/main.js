@@ -10,7 +10,6 @@ import 'element-plus/dist/index.css'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
 // 전역 스타일 (통합)
-import './assets/styles/global.css'
 import './assets/main.css'
 
 // 공통 컴포넌트 자동 등록
