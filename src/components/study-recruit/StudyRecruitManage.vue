@@ -125,12 +125,13 @@
 
 <script setup>
 import { ref, computed } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import BackButton from '@/components/common/BackButton.vue';
 import TabTitle from '@/components/common/TabTitle.vue';
 import TwoButtonPopup from '@/components/common/TwoButtonPopup.vue';
 
 const route = useRoute();
+const router = useRouter();
 const studyId = route.params.id;
 
 // 스터디 정보
@@ -233,8 +234,22 @@ const closeRecruitment = () => {
 };
 
 const createStudyGroup = () => {
-  // 스터디 그룹 생성 로직
-  console.log('스터디 그룹 생성');
+  const approvedMembers = applicants.value.filter(a => a.status === 'approved');
+
+  console.log('스터디 그룹 생성 버튼 클릭');
+  console.log('승인된 멤버들:', approvedMembers);
+
+  // sessionStorage에 데이터 저장
+  const studyGroupData = {
+    studyId: studyId,
+    recruitPost: study.value,
+    approvedMembers: approvedMembers,
+    isClosed: true
+  };
+
+  sessionStorage.setItem('createStudyGroupData', JSON.stringify(studyGroupData));
+
+  router.push('/study-recruit/create-study');
 };
 
 

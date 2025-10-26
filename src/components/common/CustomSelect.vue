@@ -24,7 +24,7 @@ const selectedValue = ref('')
 
 const iconSrc = computed(() => {
   if (!props.icon) return ''
-  return new URL(`/src/assets/icons/${props.icon}`, import.meta.url).href
+  return `/src/assets/icons/${props.icon}`
 })
 
 function handleSelect(value) {
