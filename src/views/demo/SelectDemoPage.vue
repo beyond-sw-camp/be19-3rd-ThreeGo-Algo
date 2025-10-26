@@ -1,5 +1,4 @@
 <script setup>
-import Select from '@/components/common/Select.vue'
 
 const companyOptions = [
   { value: 'kakao', label: '카카오' },
@@ -29,24 +28,17 @@ const handleRecentSelect = (value) => {
     <!-- 아이콘 + placeholder -->
     <div class="section">
       <h3>아이콘 + placeholder: 모든기업</h3>
-      <Select
-        :options="companyOptions"
-        placeholder="모든기업"
-        icon="company.svg"
-        :onSelect="handleCompanySelect">
-      </Select>
-    
+      <CustomSelect :options="companyOptions" placeholder="모든기업" icon="company.svg" :onSelect="handleCompanySelect">
+      </CustomSelect>
+
     </div>
 
     <!-- 아이콘 없는 placeholder -->
     <div class="section">
       <h3>아이콘 없음 + placeholder: 최근 등록순</h3>
-      <Select
-        :options="recentOptions"
-        placeholder="최근 등록순"
-        :onSelect="handleRecentSelect">
-      </Select>
-      
+      <CustomSelect :options="recentOptions" placeholder="최근 등록순" :onSelect="handleRecentSelect">
+      </CustomSelect>
+
     </div>
   </div>
 </template>
