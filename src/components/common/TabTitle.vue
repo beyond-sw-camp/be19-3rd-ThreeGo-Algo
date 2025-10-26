@@ -19,7 +19,8 @@ defineProps({
   font-size: 35px;
   font-weight: bold;
   color: #222;
-  margin-bottom: 24px;
-  letter-spacing: -0.5px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+
 }
 </style>
