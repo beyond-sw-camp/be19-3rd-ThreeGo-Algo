@@ -85,7 +85,7 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
-import StudyRecruitCard from '@/components/study-recruit/component/StudyRecruitCard.vue'
+import StudyRecruitCard from '@/components/study-recruit/StudyRecruitCard.vue'
 import TabTitle from '@/components/common/TabTitle.vue'
 import TabMenu from '@/components/common/TabMenu.vue'
 import SearchBar from '@/components/common/SearchBar.vue'

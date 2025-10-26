@@ -24,7 +24,7 @@
 </template>
 
 <script setup>
-import RecruitBadge from '@/components/study-recruit/component/RecruitBadge.vue'
+import RecruitBadge from '@/components/study-recruit/RecruitBadge.vue'
 import MiniProfile from '@/components/common/MiniProfile.vue'
 import EmojiText from '@/components/common/EmojiText.vue'
 

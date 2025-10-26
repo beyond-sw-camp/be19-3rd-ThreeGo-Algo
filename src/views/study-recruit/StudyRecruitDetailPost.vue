@@ -108,10 +108,10 @@ import { ref } from "vue";
 import BackButton from "@/components/common/BackButton.vue";
 import MiniProfile from "@/components/common/MiniProfile.vue";
 import Comment from "@/components/common/Comment.vue";
-import RecruitBadge from "@/components/study-recruit/component/RecruitBadge.vue";
-import ApplyStudyBox from "@/components/study-recruit/component/ApplyStudyBox.vue";
-import AfterApplyStudyBox from "@/components/study-recruit/component/AfterApplyStudyBox.vue";
-import RecruitManagement from "@/components/study-recruit/component/RecruitManagement.vue";
+import RecruitBadge from "@/components/study-recruit/RecruitBadge.vue";
+import ApplyStudyBox from "@/components/study-recruit/ApplyStudyBox.vue";
+import AfterApplyStudyBox from "@/components/study-recruit/AfterApplyStudyBox.vue";
+import RecruitManagement from "@/components/study-recruit/RecruitManagement.vue";
 
 // 스터디 모집글 더미 데이터
 const post = ref({
