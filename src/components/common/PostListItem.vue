@@ -24,6 +24,7 @@
 import certificationImage from '@/assets/icons/certification.svg';
 import MiniProfile from '@/components/common/MiniProfile.vue'
 import EmojiText from '@/components/common/EmojiText.vue';
+import { defineProps } from 'vue'
 
 const props = defineProps({
     id: { type: Number, required: true },

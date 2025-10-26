@@ -7,7 +7,7 @@
 
 <script setup>
 import { emojiImages } from '@/constants/EmojiImages.js';
-import { computed } from 'vue';
+import { defineProps, computed } from 'vue';
 
 const props = defineProps({
     type: String,

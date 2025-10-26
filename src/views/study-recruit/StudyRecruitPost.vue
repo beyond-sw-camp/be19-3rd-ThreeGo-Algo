@@ -62,19 +62,21 @@
         <!-- 버튼 그룹 -->
         <div class="button-group">
           <CustomButton
-            text="이전"
-            variant="outline"
-            size="md"
+            variant="secondary"
+            height="md"
             @click="handlePrevious"
             class="action-button"
-          />
+          >
+            이전
+          </CustomButton>
           <CustomButton
-            text="완료"
             variant="primary"
-            size="md"
+            height="md"
             @click="handleSubmit"
             class="action-button"
-          />
+          >
+            완료
+          </CustomButton>
         </div>
       </div>
     </div>
@@ -84,9 +86,8 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount, reactive } from 'vue'
 import { useRouter } from 'vue-router'
-import CustomButton from '@/components/common/CustomButton.vue'
-import DateRangeButton from '@/components/common/DateRangeButton.vue'
 import TabTitle from '@/components/common/TabTitle.vue'
+// CustomButton과 DateRangeButton은 글로벌 컴포넌트로 등록되어 있어 import 불필요
 
 const router = useRouter()
 

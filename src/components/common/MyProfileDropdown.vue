@@ -61,7 +61,6 @@ const confirmLogout = () => {
 <style scoped>
 .profile-dropdown {
   cursor: pointer;
-  position: relative;
 }
 
 .el-dropdown-link {
@@ -69,11 +68,11 @@ const confirmLogout = () => {
   align-items: center;
 }
 
-.my-profile-popper .el-dropdown-menu__item {
+.el-dropdown-menu .el-dropdown-item {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 16px;
+  gap: 6px;
+  padding: 6px 12px;
   font-size: 14px;
 }
 

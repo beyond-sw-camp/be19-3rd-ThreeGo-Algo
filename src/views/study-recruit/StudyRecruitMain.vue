@@ -34,11 +34,12 @@
 
         <!-- 오른쪽: 모집 버튼 -->
         <CustomButton
-          text="+ 스터디 모집하기"
           variant="primary"
-          size="md"
+          height="md"
           @click="goToCreatePage"
-        />
+        >
+          + 스터디 모집하기
+        </CustomButton>
       </div>
 
       <!-- ✅ 구분선 -->
@@ -87,10 +88,9 @@ import { useRouter } from 'vue-router'
 import StudyRecruitCard from '@/components/study-recruit/component/StudyRecruitCard.vue'
 import TabTitle from '@/components/common/TabTitle.vue'
 import TabMenu from '@/components/common/TabMenu.vue'
-import PageInfoBanner from '@/components/common/PageInfoBanner.vue'
 import SearchBar from '@/components/common/SearchBar.vue'
-import CustomButton from '@/components/common/CustomButton.vue'
 import bannerImage from '@/assets/images/banner_study_recruit.png'
+// PageInfoBanner와 CustomButton은 글로벌 컴포넌트로 등록되어 있어 import 불필요
 
 const router = useRouter()
 

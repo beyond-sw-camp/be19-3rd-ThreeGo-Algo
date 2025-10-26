@@ -1,12 +1,12 @@
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, defineProps, defineEmits, watch } from 'vue'
 
 const props = defineProps({
   total: {
     type: Number,
     required: true
   },
-  currentPage: {
+  currentPage: { 
     type: Number,
     default: 1
   }

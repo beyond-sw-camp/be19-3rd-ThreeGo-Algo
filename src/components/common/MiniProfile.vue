@@ -6,7 +6,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { defineProps, computed } from 'vue';
 import { rankImages } from '@/constants/rankImages.js';
 
 const props = defineProps({

@@ -105,8 +105,8 @@
 import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import MiniProfile from '@/components/common/MiniProfile.vue';
-import DateRangeButton from '@/components/common/DateRangeButton.vue';
 import StudyCreationSuccessPopup from '@/components/study-recruit/component/StudyCreationSuccessPopup.vue';
+// DateRangeButton은 글로벌 컴포넌트로 등록되어 있어 import 불필요
 
 
 const route = useRoute();
