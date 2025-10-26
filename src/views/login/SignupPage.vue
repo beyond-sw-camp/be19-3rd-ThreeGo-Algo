@@ -19,7 +19,7 @@
         <h2 class="title">회원가입</h2>
 
         <div class="input-group">
-          <Input placeholder="이메일" icon="mail.svg" width="100%" v-model="email"/>
+          <Input placeholder="이메일" icon="mail.svg" width="100%" v-model="email" />
           <CustomButton height="sm" @click="handleRequestVerification">인증 요청</CustomButton>
         </div>
 
@@ -28,16 +28,22 @@
           <CustomButton height="sm" @click="handleVerifyCode">확인</CustomButton>
         </div>
 
-        <Input placeholder="비밀번호" icon="lock.svg" width="100%" v-model="password" type="password"/>
-        <Input placeholder="비밀번호 확인" icon="lock.svg" width="100%" v-model="passwordCheck" type="password"/>
-        <Input placeholder="닉네임" icon="user.svg" width="100%" v-model="nickname"/>
+        <p v-if="verificationMessage" :class="isVerificationError ? 'error-message' : 'message'">
+          {{ verificationMessage }}
+        </p>
+
+        <Input placeholder="비밀번호" icon="lock.svg" width="100%" v-model="password" type="password" />
+        <Input placeholder="비밀번호 확인" icon="lock.svg" width="100%" v-model="passwordCheck" type="password" />
+        <Input placeholder="닉네임" icon="user.svg" width="100%" v-model="nickname" />
 
         <div class="checkbox-container">
           <input type="checkbox" id="privacy" v-model="isAgreed" />
           <label for="privacy" class="privacyTxt">개인 정보 수집 및 이용에 동의합니다.</label>
         </div>
 
-        <p v-if="message" :class="isError ? 'error-message' : 'message'">{{ message }}</p>
+        <p v-if="signupMessage" :class="isSignupError ? 'error-message' : 'message'">
+          {{ signupMessage }}
+        </p>
 
         <CustomButton
           width="100%"
@@ -63,57 +69,61 @@ import { useRouter } from 'vue-router'
 import Input from '@/components/common/Input.vue'
 import CustomButton from '@/components/common/CustomButton.vue'
 
+const router = useRouter()
+
 const isVerified = ref(false)
 const isAgreed = ref(false)
-const isError = ref(false)
+const isVerificationError = ref(false)
+const isSignupError = ref(false)
 
-const verificationCode = ref('')
 const email = ref('')
+const verificationCode = ref('')
+const correctCode = ref('')
 const password = ref('')
 const passwordCheck = ref('')
 const nickname = ref('')
-const correctCode = ref('')
-const message = ref('')
 
-const router = useRouter()
-
+const verificationMessage = ref('')
+const signupMessage = ref('')
 
 const handleRequestVerification = () => {
-  correctCode.value = '123456' // fetch요청으로 받아오기
-  message.value = ''
+  correctCode.value = '123456' // TODO: fetch 요청으로 받아오기
+  verificationMessage.value = ''
   isVerified.value = false
   console.log('인증 요청 버튼 클릭됨')
-  console.log('발급된 인증번호:', correctCode.value)
 }
 
 const handleVerifyCode = () => {
-  console.log('입력한 인증번호:', verificationCode.value)
-  console.log('정답 인증번호:', correctCode.value)
   if (verificationCode.value === correctCode.value) {
     isVerified.value = true
-    isError.value = false
-    message.value = '인증이 성공되었습니다.'
+    isVerificationError.value = false
+    verificationMessage.value = '인증이 성공되었습니다.'
   } else {
     isVerified.value = false
-    isError.value = true
-    message.value = '인증번호가 일치하지 않습니다.'
+    isVerificationError.value = true
+    verificationMessage.value = '인증번호가 일치하지 않습니다.'
   }
 }
 
 const handleSignup = () => {
-  console.log('회원 가입 버튼 클릭됨')
   if (password.value !== passwordCheck.value) {
-    isError.value = true
-    message.value = '비밀번호가 일치하지 않습니다.'
+    isSignupError.value = true
+    signupMessage.value = '비밀번호가 일치하지 않습니다.'
     return
   }
+
+  isSignupError.value = false
+  console.log('회원가입 성공', {
+    email: email.value,
+    password: password.value,
+    nickname: nickname.value
+  })
 }
 
 const goToLogin = () => {
   router.push('/login')
 }
 </script>
-
 <style scoped>
 
 .error-message {

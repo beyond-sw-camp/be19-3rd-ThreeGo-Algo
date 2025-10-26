@@ -27,6 +27,16 @@
         >
           로그인
         </CustomButton>
+        <div class="find-line">
+          <p>계정이 없으신가요?</p>
+          <p class="find" @click="goToSignup">회원가입</p>
+        </div>
+
+        <div class="find-links">
+          <p class="find">아이디 찾기</p>
+          <span class="divider">|</span>
+          <p class="find">비밀번호 찾기</p>
+        </div>
       </div>
     </div>
   </div>
@@ -41,8 +51,12 @@ import CustomButton from '@/components/common/CustomButton.vue'
 const email = ref('')
 const password = ref('')
 const isError = ref(false)
-const message = ref('')  // ✅ message ref 추가!
+const message = ref('')  
 const router = useRouter()
+
+const goToSignup = () => {
+  router.push('/signup')
+}
 
 const handleLogin = async () => {
   console.log('로그인 버튼 클릭됨')
@@ -152,5 +166,35 @@ h2 {
   align-self: flex-start;
   margin-top: -5px;
   margin-bottom: 10px;
+}
+.find-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.find-links {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.find-links .divider {
+  color: #888;
+}
+
+.find {
+  cursor: pointer;
+  font-weight: 500;
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+
+.find:hover {
+  color: #0056b3;
 }
 </style>
