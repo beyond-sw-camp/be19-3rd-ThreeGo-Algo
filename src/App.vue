@@ -1,16 +1,5 @@
 <template>
   <div id="app">
-<<<<<<< HEAD
-    <router-view />
-  </div>
-</template>
-
-<script setup>
-
-</script>
-
-<style scoped> </style>
-=======
     <Header />
     <main class="main-content">
       <router-view />
@@ -32,4 +21,4 @@
   background-color: #ffffff;
 }
 </style>
->>>>>>> origin/main
+

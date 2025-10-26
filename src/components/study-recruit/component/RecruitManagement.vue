@@ -8,11 +8,14 @@
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
+
 const router = useRouter();
+const route = useRoute();
 
 const goToManagement = () => {
-  router.push('/study-recruit/manage'); // 관리 페이지 경로 (필요시 수정 가능)
+  const studyId = route.params.id; // 현재 게시물 ID 가져오기
+  router.push(`/study-recruit/manage/${studyId}`);
 };
 </script>
 

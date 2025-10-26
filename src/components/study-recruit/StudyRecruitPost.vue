@@ -78,9 +78,6 @@
         </div>
       </div>
     </div>
-
-    <!-- Footer (전체 너비) -->
-    <Footer />
   </div>
 </template>
 

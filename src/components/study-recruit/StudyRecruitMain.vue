@@ -78,9 +78,6 @@
         <p>모든 스터디를 확인했습니다.</p>
       </div>
     </div>
-
-    <!-- ✅ Footer (전체 너비) -->
-    <Footer />
   </div>
 </template>
 
