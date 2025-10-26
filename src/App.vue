@@ -37,20 +37,19 @@ watch(hideHeaderFooter, (val) => {
   background-color: #ffffff;
 }
 
-/* hideHeaderFooter가 true일 때 (회원가입/로그인 페이지) */
+
 #app.full-page {
-  display: block;  /* flex 대신 block */
+  display: block;  
   min-height: 100vh;
   padding: 0;
   margin: 0;
 }
 
 #app.full-page .main-content {
-  flex: none;  /* flex 속성 제거 */
+  flex: none; 
   min-height: 100vh;
 }
 
-/* hideHeaderFooter가 false일 때 (일반 페이지) */
 .main-content {
   flex: 1;
   background-color: #ffffff;
