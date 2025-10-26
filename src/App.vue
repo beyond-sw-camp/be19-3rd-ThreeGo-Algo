@@ -1,13 +1,14 @@
 <template>
   <div id="app" :class="{ 'full-page': hideHeaderFooter }">
-    <!-- 회원가입, 로그인 페이지는 제외-->
-    <Header v-if="!hideHeaderFooter" />
+    <Header v-if="showDefaultHeader" />
+
+    <StudyHeader v-if="showStudyHeader" />
 
     <main class="main-content">
       <router-view />
     </main>
 
-    <Footer v-if="!hideHeaderFooter" /> 
+    <Footer v-if="showFooter" /> 
   </div>
 </template>
 
@@ -15,6 +16,7 @@
 import { computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import Header from './components/common/Header.vue'
+import StudyHeader from './components/study/StudyHeader.vue'
 import Footer from './components/common/Footer.vue'
 
 const route = useRoute()
@@ -23,10 +25,25 @@ const hideHeaderFooter = computed(() => {
   return route.path === '/signup' || route.path === '/login'
 })
 
+const isStudyPage = computed(() => {
+  return route.path.startsWith('/study')
+})
+
+const showDefaultHeader = computed(() => {
+  return !hideHeaderFooter.value && !isStudyPage.value
+})
+
+const showStudyHeader = computed(() => {
+  return isStudyPage.value
+})
+
+const showFooter = computed(() => {
+  return !hideHeaderFooter.value
+})
+
 watch(hideHeaderFooter, (val) => {
   document.body.style.paddingTop = val ? '0px' : '70px'
 }, { immediate: true })
-
 </script>
 
 <style scoped>
@@ -36,7 +53,6 @@ watch(hideHeaderFooter, (val) => {
   min-height: 100vh;
   background-color: #ffffff;
 }
-
 
 #app.full-page {
   display: block;  
