@@ -39,7 +39,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { fetchCareerPosts } from '@/api/career'
+import { fetchCareerPosts } from '@/api/careerApi'
 
 import TabTitle from '@/components/common/TabTitle.vue'
 import PageInfoBanner from '@/components/common/PageInfoBanner.vue'

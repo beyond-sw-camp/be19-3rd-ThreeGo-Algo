@@ -28,8 +28,9 @@
                         <p v-html="formattedContent"></p>
                     </div>
 
-                    <!-- 댓글 -->
-                    <Comment :comments="comments" :currentUser="currentUser" @submit-comment="addComment" />
+                    <!-- 댓글 섹션 -->
+                    <Comment :comments="comments" :currentUser="currentUser" @submit-comment="addComment"
+                        @submit-reply="addReply" />
                 </div>
 
                 <!-- 오른쪽: 관련글 -->
@@ -48,7 +49,11 @@ import BackButton from "@/components/common/BackButton.vue";
 import MiniProfile from "@/components/common/MiniProfile.vue";
 import Comment from "@/components/common/Comment.vue";
 import RelatedCompanyPosts from "@/components/career/RelatedCompanyPosts.vue";
-import coreApi from "@/api/coreApi";
+import {
+    fetchCareerPostDetail,
+    fetchCareerComments,
+    createCareerComment,
+} from "@/api/careerApi";
 
 const route = useRoute();
 const router = useRouter();
@@ -58,80 +63,94 @@ const postId = route.params.postId;
 const post = ref(null);
 const comments = ref([]);
 const relatedPosts = ref([]);
-const currentUser = ref({ nickname: "나", rankName: "코뉴비" });
+const currentUser = ref({ id: null, nickname: "", rankName: "코뉴비" });
 
-// ✅ 게시글 불러오기
+// 현재 로그인 사용자 세팅
+const loadCurrentUser = () => {
+    try {
+        const token = localStorage.getItem("accessToken");
+        if (!token) return;
+
+        const payload = JSON.parse(atob(token.split(".")[1]));
+        currentUser.value.id = payload.memberId;
+        currentUser.value.nickname = payload.nickname || "사용자";
+        currentUser.value.role = payload.role;
+        currentUser.value.rankName = "코뉴비"; // 추후 서버에서 받아오기
+        console.log("로그인 사용자:", currentUser.value);
+    } catch (err) {
+        console.error("JWT 파싱 실패:", err);
+    }
+};
+
+// 게시글 불러오기
 const fetchPost = async () => {
     try {
-        const res = await coreApi.get(`/career-info/posts/${postId}`);
-        post.value = res.data;
+        post.value = await fetchCareerPostDetail(postId);
     } catch (err) {
-        console.error("❌ 게시글 불러오기 실패:", err);
+        console.error("게시글 불러오기 실패:", err);
         alert("게시글을 불러오는 중 오류가 발생했습니다.");
     }
 };
 
-// // ✅ 댓글 불러오기
-// const fetchComments = async () => {
-//     try {
-//         const res = await coreApi.get(`/career-info/posts/${postId}/comments`);
-//         comments.value = res.data;
-//     } catch (err) {
-//         console.error("❌ 댓글 불러오기 실패:", err);
-//     }
-// };
+// 댓글 불러오기 (정규화 포함)
+const fetchComments = async () => {
+    try {
+        const raw = await fetchCareerComments(postId);
 
-// // ✅ 관련글 불러오기 (같은 회사의 최신글 3개)
-// const fetchRelatedPosts = async () => {
-//     try {
-//         if (!post.value?.company) return;
-//         const res = await coreApi.get("/career-info", {
-//             params: { company: post.value.company, size: 3 },
-//         });
-//         relatedPosts.value = res.data.filter((p) => p.id !== postId);
-//     } catch (err) {
-//         console.error("❌ 관련글 불러오기 실패:", err);
-//     }
-// };
+        // 백엔드 구조 → Comment.vue 구조로 맞추기
+        const normalize = (nodes = []) =>
+            nodes.map((n) => ({
+                id: n.commentId,
+                userId: n.memberId,
+                nickname: n.nickname,
+                rankName: n.rankName,
+                content: n.content,
+                createdAt: n.createdAt,
+                replies: n.children ? normalize(n.children) : [],
+            }));
 
-// // ✅ 삭제 기능
-// const deletePost = async () => {
-//     if (!confirm("정말 이 글을 삭제하시겠습니까?")) return;
-//     try {
-//         await coreApi.delete(`/career-info/posts/${postId}`);
-//         alert("삭제되었습니다.");
-//         router.push("/career-info");
-//     } catch (err) {
-//         console.error("❌ 삭제 실패:", err);
-//         alert("삭제 중 오류가 발생했습니다.");
-//     }
-// };
+        comments.value = normalize(raw);
+    } catch (err) {
+        console.error("댓글 불러오기 실패:", err);
+    }
+};
 
-// // ✅ 댓글 등록
-// const addComment = async (text) => {
-//     try {
-//         await coreApi.post(`/career-info/posts/${postId}/comments`, {
-//             content: text,
-//         });
-//         await fetchComments(); // 새로고침
-//     } catch (err) {
-//         console.error("❌ 댓글 등록 실패:", err);
-//     }
-// };
+// 댓글 등록 (루트 댓글)
+const addComment = async ({ content }) => {
+    try {
+        await createCareerComment(postId, content); // parentId 없음
+        await fetchComments();
+    } catch (err) {
+        console.error("댓글 등록 실패:", err);
+    }
+};
 
-// ✅ 게시글 본문 포맷팅
+// 대댓글 등록
+const addReply = async ({ commentId, content }) => {
+    try {
+        await createCareerComment(postId, content, commentId); // parentId 포함
+        await fetchComments();
+    } catch (err) {
+        console.error("대댓글 등록 실패:", err);
+    }
+};
+
+// 게시글 본문 포맷팅
 const formattedContent = computed(() =>
     post.value?.content ? post.value.content.replace(/\n/g, "<br>") : ""
 );
 
-// ✅ 날짜 포맷
+// 날짜 포맷
 const formatDate = (date) => (date ? date.split(" ")[0].replace(/-/g, ".") : "");
 
-// ✅ onMounted 시 데이터 로드
+// 글쓰기 이동
+const goWritePage = () => router.push("/career-info/post");
+
+// onMounted 시 데이터 로드
 onMounted(async () => {
+    loadCurrentUser();
     await fetchPost();
     await fetchComments();
-    await fetchRelatedPosts();
 });
 </script>
 
@@ -194,19 +213,6 @@ onMounted(async () => {
 .post-date {
     font-size: 14px;
     color: #666;
-}
-
-.action-link {
-    font-size: 13px;
-    color: #666;
-    background: none;
-    border: none;
-    cursor: pointer;
-}
-
-.action-link:hover {
-    color: #0aa2eb;
-    text-decoration: underline;
 }
 
 .post-content {
