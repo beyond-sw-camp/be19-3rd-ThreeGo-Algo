@@ -68,6 +68,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import Input from '@/components/common/Input.vue'
 import CustomButton from '@/components/common/CustomButton.vue'
+import memberApi from '@/api/memberApi'
 
 const router = useRouter()
 
@@ -86,38 +87,63 @@ const nickname = ref('')
 const verificationMessage = ref('')
 const signupMessage = ref('')
 
-const handleRequestVerification = () => {
-  correctCode.value = '123456' // TODO: fetch 요청으로 받아오기
-  verificationMessage.value = ''
-  isVerified.value = false
-  console.log('인증 요청 버튼 클릭됨')
-}
-
-const handleVerifyCode = () => {
-  if (verificationCode.value === correctCode.value) {
-    isVerified.value = true
+const handleRequestVerification = async () => {
+  try {
+    await memberApi.post('/auth/email', { email: email.value })
+    verificationMessage.value = '인증번호가 이메일로 전송되었습니다.'
     isVerificationError.value = false
-    verificationMessage.value = '인증이 성공되었습니다.'
-  } else {
-    isVerified.value = false
+  } catch (err) {
+    verificationMessage.value = '이메일 전송 실패. 이미 가입된 이메일일 수 있습니다.'
     isVerificationError.value = true
-    verificationMessage.value = '인증번호가 일치하지 않습니다.'
   }
 }
 
-const handleSignup = () => {
+const handleVerifyCode = async () => {
+  try {
+    await memberApi.get('/auth/code', {
+      params: {
+        mail: email.value,
+        code: verificationCode.value
+      }
+    })
+    verificationMessage.value = '이메일 인증 완료!'
+    isVerified.value = true
+    isVerificationError.value = false
+  } catch (err) {
+    verificationMessage.value = '인증번호가 일치하지 않습니다.'
+    isVerificationError.value = true
+    isVerified.value = false
+  }
+}
+
+const handleSignup = async () => {
   if (password.value !== passwordCheck.value) {
     isSignupError.value = true
     signupMessage.value = '비밀번호가 일치하지 않습니다.'
     return
   }
 
-  isSignupError.value = false
-  console.log('회원가입 성공', {
-    email: email.value,
-    password: password.value,
-    nickname: nickname.value
-  })
+  if (!isVerified.value) {
+    isSignupError.value = true
+    signupMessage.value = '이메일 인증을 완료해주세요.'
+    return
+  }
+
+  try {
+    await memberApi.post('/signup', {
+      email: email.value,
+      password: password.value,
+      nickname: nickname.value
+    })
+    signupMessage.value = '회원가입이 완료되었습니다!'
+    isSignupError.value = false
+
+    // 1초 뒤 로그인 페이지 이동
+    setTimeout(() => router.push('/login'), 1000)
+  } catch (err) {
+    signupMessage.value = '회원가입 실패. 다시 시도해주세요.'
+    isSignupError.value = true
+  }
 }
 
 const goToLogin = () => {
@@ -214,7 +240,6 @@ const goToLogin = () => {
   margin-bottom: 10px;
 }
 
-.form-container > :not(.input-group):not(h2) {
   margin-bottom: 15px;
 }
 
