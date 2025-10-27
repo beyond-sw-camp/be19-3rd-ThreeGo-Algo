@@ -6,8 +6,8 @@
       
       <div class="post-info">
         <!-- <h1 class="post-title">{{ postTitle }}</h1> -->
-         <!-- <h1 class="post-title">{{ post.postTitle }}</h1> -->
-         <div><TabTitle title="두 수의 합" /></div>
+        <!-- <h1 class="post-title">{{ post.postTitle }}</h1> -->
+        <div><TabTitle title="두 수의 합" /></div>
         <div class="post-meta">
           <!-- <span class="problem-title">문제: {{ problemTitle }}</span>
           <span class="problem-platform">플랫폼: {{ problemPlatform }}</span>

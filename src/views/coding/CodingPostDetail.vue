@@ -1,9 +1,9 @@
 <template>
-  <div class="solution-detail-page">
+    <div class="solution-detail-page">
 
     <!-- 문제 정보 배너 -->
     <div class="problem-banner">
-      <span class="banner-label">
+        <span class="banner-label">
         <span class="problem-name">{{ problemTitle }}</span>에 대한 코딩풀이 </span>
     </div>
     
@@ -12,90 +12,90 @@
 
     <!-- 게시물 헤더 -->
     <div class="post-header">
-      <h1 class="post-title">{{ postTitle }}</h1>
-      <MiniProfile :nickname="nickname" :rankName="memberRank" />
-      <span class="post-date">{{ createdAt }}</span>
+        <h1 class="post-title">{{ postTitle }}</h1>
+        <MiniProfile :nickname="nickname" :rankName="memberRank" />
+        <span class="post-date">{{ createdAt }}</span>
     </div>
 
     <!-- 게시물 내용 -->
     <div class="post-content-section">
-      <div v-html="postContent" class="post-content"></div>
+        <div v-html="postContent" class="post-content"></div>
     </div>
 
     <!-- AI 피드백 섹션 -->
     <div class="ai-feedback-section">
-      <h2 class="section-title">AI 피드백</h2>
+        <h2 class="section-title">AI 피드백</h2>
 
-      <!-- AI 피드백 로딩 중 -->
-      <div v-if="isAiLoading" class="ai-loading">
+        <!-- AI 피드백 로딩 중 -->
+        <div v-if="isAiLoading" class="ai-loading">
         
         <div class="loading-spinner">
-          <el-icon class="is-loading" :size="60" color="#0AA2EB">
+            <el-icon class="is-loading" :size="60" color="#0AA2EB">
             <Loading />
-          </el-icon>
+            </el-icon>
         </div>
         <p class="loading-text">
-          AI가 풀이를 열심히 분석하고 있어요 🤖<br />
-          조금만 기다려주세요, 곧 피드백을 드릴게요!
+            AI가 풀이를 열심히 분석하고 있어요 🤖<br />
+            조금만 기다려주세요, 곧 피드백을 드릴게요!
         </p>
-      </div>
+        </div>
 
-      <!-- AI 피드백 완료 -->
-      <div v-else class="ai-feedback-content">
+        <!-- AI 피드백 완료 -->
+        <div v-else class="ai-feedback-content">
         <!-- 시간 복잡도 -->
         <div class="feedback-card">
-          <div class="card-header">
+            <div class="card-header">
             <h3>⏱️ 시간 복잡도</h3>
-          </div>
-          <div class="card-content">
+            </div>
+            <div class="card-content">
             <p class="big-o-badge">{{ aiBigO }}</p>
-          </div>
+            </div>
         </div>
 
         <!-- 잘한 점 -->
         <div class="feedback-card good">
-          <div class="card-header">
+            <div class="card-header">
             <h3>👍 잘한 점</h3>
-          </div>
-          <div class="card-content">
+            </div>
+            <div class="card-content">
             <ul>
-              <li v-for="(item, index) in aiGood" :key="index">{{ item }}</li>
+                <li v-for="(item, index) in aiGood" :key="index">{{ item }}</li>
             </ul>
-          </div>
+            </div>
         </div>
 
         <!-- 개선할 점 -->
         <div class="feedback-card bad">
-          <div class="card-header">
+            <div class="card-header">
             <h3>💡 개선할 점</h3>
-          </div>
-          <div class="card-content">
+            </div>
+            <div class="card-content">
             <ul>
-              <li v-for="(item, index) in aiBad" :key="index">{{ item }}</li>
+                <li v-for="(item, index) in aiBad" :key="index">{{ item }}</li>
             </ul>
-          </div>
+            </div>
         </div>
 
         <!-- 개선 방향 -->
         <div class="feedback-card plan">
-          <div class="card-header">
+            <div class="card-header">
             <h3>🚀 개선 방향</h3>
-          </div>
-          <div class="card-content">
+            </div>
+            <div class="card-content">
             <p>{{ aiPlan }}</p>
-          </div>
+            </div>
         </div>
-      </div>
+        </div>
     </div>
 
     <!-- 오른쪽 사이드바 -->
     <div class="right-sidebar">
-      <!-- 다른 풀이 목록 -->
-      <div class="other-solutions">
+        <!-- 다른 풀이 목록 -->
+        <div class="other-solutions">
         <h3 class="sidebar-title">더 많은 <span class="highlight">{{ problemTitle }}</span> 풀이글 보기</h3>
         
         <div class="solution-list">
-          <PostListItem
+            <PostListItem
             v-for="solution in otherSolutions"
             :key="solution.id"
             :id="solution.id"
@@ -104,14 +104,12 @@
             :rankName="solution.rankName"
             :createdAt="solution.createdAt"
             :likeCount="solution.likeCount"
-            :commentCount="solution.commentCount"
-          />
+            :commentCount="solution.commentCount"/>
         </div>
-      </div>
+        </div>
 
-      <!-- AI 피드백 요청 카드 -->
-       
-      <div class="ai-request-card">
+        <!-- AI 피드백 요청 카드 -->
+        <div class="ai-request-card">
         <div class="koala-background"></div>
         <CustomButton
           variant="primary"
