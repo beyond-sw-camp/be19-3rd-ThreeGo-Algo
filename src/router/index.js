@@ -51,27 +51,32 @@ const routes = [
   { path: '/home', component: NewHomeView },
 
   // 스터디 모집
-  { path: '/study-recruit', name: 'StudyRecruit', component: StudyRecruitMain },
-  { path: '/study-recruit/post', name: 'StudyRecruitPost', component: StudyRecruitPost },
-  { path: '/study-recruit/:id', name: 'StudyRecruitDetail', component: StudyRecruitDetailPost },
-  { path: '/study-recruit/manage/:id', name: 'StudyRecruitManage', component: StudyRecruitManage },
-  { path: '/study-recruit/create-study', name: 'CreateStudyGroup', component: CreateStudyGroup },
+  { path: '/study-recruit', name: 'StudyRecruit', component: StudyRecruitMain, meta: { requiresAuth: true } },
+  { path: '/study-recruit/post', name: 'StudyRecruitPost', component: StudyRecruitPost, meta: { requiresAuth: true } },
+  { path: '/study-recruit/:id', name: 'StudyRecruitDetail', component: StudyRecruitDetailPost, meta: { requiresAuth: true } },
+  { path: '/study-recruit/manage/:id', name: 'StudyRecruitManage', component: StudyRecruitManage, meta: { requiresAuth: true } },
+  { path: '/study-recruit/create-study', name: 'CreateStudyGroup', component: CreateStudyGroup, meta: { requiresAuth: true } },
 
   // 스터디
-  { path: '/study', component: StudyMainPage },
-  { path: '/study/board', component: StudyBoardPage },
-  { path: '/study/settings', component: StudySettingPage },
+  { path: '/study', component: StudyMainPage, meta: { requiresAuth: true } },
+  { path: '/study/board', component: StudyBoardPage, meta: { requiresAuth: true } },
+  { path: '/study/settings', component: StudySettingPage, meta: { requiresAuth: true } },
 
   // 기업별 정보 공유
-  { path: '/career-info', component: CareerInfoMainView },
-  { path: '/career-info/post', component: CareerPostCreate },
-  { path: '/career-info/:id', component: CareerPostDetail },
+  { path: '/career-info', component: CareerInfoMainView, meta: { requiresAuth: true } },
+  { path: '/career-info/post', component: CareerPostCreate, meta: { requiresAuth: true } },
+  { path: '/career-info/:id', component: CareerPostDetail, meta: { requiresAuth: true } },
 
+  // 알고리즘 학습
+  { path: '/algorithm/roadmap/:roadmapId', component: AlgoMainView, meta: { requiresAuth: true } },
+  { path: '/algorithm/post/:postId/quiz/:quizId', component: AlgoQuizView, meta: { requiresAuth: true } },
+  { path: '/algorithm/post/:postId', component: AlgoPostView, meta: { requiresAuth: true } },
+  { path: '/algorithm/roadmap', redirect: '/algorithm/roadmap/1' },
+  { path: '/algorithm', redirect: '/algorithm/roadmap/1' },
+
+  // 회원 관련 (로그인 불필요)
   { path: '/signup', component: SignupPage },
   { path: '/login', component: LoginPage },
-  { path: '/study', component: StudyMainPage },
-  { path: '/study/board', component: StudyBoardPage },
-  { path: '/study/settings', component: StudySettingPage },
 
 
   // 데모 페이지 라우트 (main 브랜치)
@@ -89,9 +94,9 @@ const routes = [
   { path: '/demo/infobanner', component: BannerDemoPage },
   { path: '/demo/comment', component: CommentDemoPage },
   { path: '/demo/twobuttonpopup', component: TwoButtonPopupDemo },
-  { path: '/demo/onebuttonpopup', component: OneButtonPopupDemo},
-  { path: '/demo/input', component: InputDemoPage},
-  { path: '/demo/study', component: StudyDemoPage},
+  { path: '/demo/onebuttonpopup', component: OneButtonPopupDemo },
+  { path: '/demo/input', component: InputDemoPage },
+  { path: '/demo/study', component: StudyDemoPage },
   { path: '/demo/onebuttonpopup', component: OneButtonPopupDemo },
   { path: '/demo/input', component: InputDemoPage },
   { path: '/demo/study/:studyId/roadmap', component: StudyRoadmapDemoPage },
@@ -111,5 +116,41 @@ const router = createRouter({
   history: createWebHistory(),
   routes,
 })
+
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem('accessToken')
+
+  // 로그인 필요한 페이지인데 토큰이 없는 경우
+  if (to.meta.requiresAuth && !token) {
+    if (confirm('로그인 후 이용 가능합니다. 로그인 페이지로 이동하시겠습니까?')) {
+      next('/login')
+    } else {
+      next(false)
+    }
+    return
+  }
+
+  // 토큰 만료 여부 확인
+  if (token) {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]))
+      const now = Date.now() / 1000
+      if (payload.exp && payload.exp < now) {
+        alert('로그인 세션이 만료되었습니다. 다시 로그인해주세요.')
+        localStorage.clear()
+        return next('/login')
+      }
+    } catch (e) {
+      console.warn('토큰 파싱 실패:', e)
+      localStorage.clear()
+      alert('로그인 정보가 올바르지 않습니다. 다시 로그인해주세요.')
+      return next('/login')
+    }
+  }
+
+  next()
+})
+
+
 
 export default router
