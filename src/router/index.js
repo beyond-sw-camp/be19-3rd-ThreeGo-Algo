@@ -37,6 +37,11 @@ import CareerPostDetail from '@/views/career/CareerPostDetail.vue'
 import SignupPage from '@/views/login/SignupPage.vue'
 import InputDemoPage from '@/views/demo/InputDemoPage.vue'
 import LoginPage from '@/views/login/LoginPage.vue'
+
+import StudyDemoPage from '@/views/demo/StudyDemoPage.vue'
+import StudyMainPage from '@/views/study/StudyMainPage.vue'
+import StudyBoardPage from '@/views/study/StudyBoardPage.vue'
+import StudySettingPage from '@/views/study/StudySettingPage.vue'
 import StudyRoadmapDemoPage from '@/views/demo/StudyRoadmapDemoPage.vue'
 
 
@@ -52,6 +57,11 @@ const routes = [
   { path: '/study-recruit/manage/:id', name: 'StudyRecruitManage', component: StudyRecruitManage },
   { path: '/study-recruit/create-study', name: 'CreateStudyGroup', component: CreateStudyGroup },
 
+  // 스터디
+  { path: '/study', component: StudyMainPage },
+  { path: '/study/board', component: StudyBoardPage },
+  { path: '/study/settings', component: StudySettingPage },
+
   // 기업별 정보 공유
   { path: '/career-info', component: CareerInfoMainView },
   { path: '/career-info/post', component: CareerPostCreate },
@@ -59,7 +69,9 @@ const routes = [
 
   { path: '/signup', component: SignupPage },
   { path: '/login', component: LoginPage },
-
+  { path: '/study', component: StudyMainPage },
+  { path: '/study/board', component: StudyBoardPage },
+  { path: '/study/settings', component: StudySettingPage },
 
 
   // 데모 페이지 라우트 (main 브랜치)
@@ -77,6 +89,9 @@ const routes = [
   { path: '/demo/infobanner', component: BannerDemoPage },
   { path: '/demo/comment', component: CommentDemoPage },
   { path: '/demo/twobuttonpopup', component: TwoButtonPopupDemo },
+  { path: '/demo/onebuttonpopup', component: OneButtonPopupDemo},
+  { path: '/demo/input', component: InputDemoPage},
+  { path: '/demo/study', component: StudyDemoPage},
   { path: '/demo/onebuttonpopup', component: OneButtonPopupDemo },
   { path: '/demo/input', component: InputDemoPage },
   { path: '/demo/study/:studyId/roadmap', component: StudyRoadmapDemoPage },
