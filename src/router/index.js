@@ -21,6 +21,7 @@ import OneButtonPopupDemo from '@/views/demo/OneButtonPopupDemo.vue';
 import SignupPage from '@/views/login/SignupPage.vue'
 import InputDemoPage from '@/views/demo/InputDemoPage.vue'
 import LoginPage from '@/views/login/LoginPage.vue'
+import StudyRoadmapDemoPage from '@/views/demo/StudyRoadmapDemoPage.vue'
 
 const routes = [
   // 기본 홈
@@ -45,9 +46,9 @@ const routes = [
   { path: '/demo/infobanner', component: BannerDemoPage },
   { path: '/demo/comment', component: CommentDemoPage },
   { path: '/demo/twobuttonpopup', component: TwoButtonPopupDemo },
-  { path: '/demo/onebuttonpopup', component: OneButtonPopupDemo},
-  { path: '/demo/input', component: InputDemoPage},
-
+  { path: '/demo/onebuttonpopup', component: OneButtonPopupDemo },
+  { path: '/demo/input', component: InputDemoPage },
+  { path: '/demo/study/:studyId/roadmap', component: StudyRoadmapDemoPage }
 ]
 
 const router = createRouter({
