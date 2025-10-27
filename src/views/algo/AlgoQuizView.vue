@@ -25,7 +25,7 @@
             <div class="quiz-sidebar">
                 <p>📚 퀴즈 목록</p>
                 <div class="quiz-list-wrapper">
-                    <QuizListItem v-for="(quiz, index) in quizzes" :key="quiz.id" :quiz="quiz"
+                    <QuizListItem v-for="(quiz, index) in quizzes" :key="quiz.id" :quiz="quiz" :isActive="quiz.id === currentQuizId"
                         :solved="solvedQuizIds.includes(quiz.id)" :index="index" @click="handleQuizClick(quiz.id)" />
                 </div>
             </div>
@@ -166,8 +166,7 @@ function handleSubmit({ quizId, selectedOption }) {
 .quiz-sidebar {
     border: 1px solid #F1EFEE;
     border-radius: 8px;
-    padding: 10px 30px;
-    width: 280px;
+    padding: 10px;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -175,6 +174,8 @@ function handleSubmit({ quizId, selectedOption }) {
 }
 
 .quiz-sidebar p {
+    margin-top: 10px;
+    margin-bottom: 0px;
     font-size: 14px;
     font-weight: 700;
     color: #0AA2EB;
@@ -202,6 +203,9 @@ function handleSubmit({ quizId, selectedOption }) {
 }
 
 .quiz-list-wrapper {
+    align-items: center;
+    width: 250px;
+    padding: 10px;
     max-height: 200px;
     overflow-y: auto;
     display: flex;
