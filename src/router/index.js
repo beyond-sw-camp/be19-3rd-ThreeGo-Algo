@@ -21,13 +21,19 @@ import OneButtonPopupDemo from '@/views/demo/OneButtonPopupDemo.vue';
 import SignupPage from '@/views/login/SignupPage.vue'
 import InputDemoPage from '@/views/demo/InputDemoPage.vue'
 import LoginPage from '@/views/login/LoginPage.vue'
-
+import StudyDemoPage from '@/views/demo/StudyDemoPage.vue'
+import StudyMainPage from '@/views/study/StudyMainPage.vue'
+import StudyBoardPage from '@/views/study/StudyBoardPage.vue'
+import StudySettingPage from '@/views/study/StudySettingPage.vue'
 const routes = [
   // 기본 홈
   { path: '/', component: HomeView },
 
   { path: '/signup', component: SignupPage },
   { path: '/login', component: LoginPage },
+  { path: '/study', component: StudyMainPage },
+  { path: '/study/board', component: StudyBoardPage },
+  { path: '/study/settings', component: StudySettingPage },
 
 
   // 데모 페이지 라우트 (main 브랜치)
@@ -47,6 +53,7 @@ const routes = [
   { path: '/demo/twobuttonpopup', component: TwoButtonPopupDemo },
   { path: '/demo/onebuttonpopup', component: OneButtonPopupDemo},
   { path: '/demo/input', component: InputDemoPage},
+  { path: '/demo/study', component: StudyDemoPage},
 
 ]
 
