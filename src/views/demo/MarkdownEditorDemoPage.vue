@@ -8,7 +8,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import MarkdownEditor from '@/components/common/MarkdownEditor.vue'
+import MarkdownEditor from '@/components/common/PostEditor.vue'
 
  const editorRef = ref(null)
 

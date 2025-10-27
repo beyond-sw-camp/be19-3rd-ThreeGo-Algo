@@ -46,9 +46,9 @@ const truncateTitle = (title) => {
   return title.length > 15 ? title.substring(0, 15) + '...' : title
 }
 
-const goToBoard = () => router.push('/board')
-const goToPost = (postId) => router.push(`/board/${postId}`)
-const goToWrite = () => router.push('/board/new')
+const goToBoard = () => router.push('/study/board')
+const goToPost = (postId) => router.push(`/study/board/${postId}`)
+const goToWrite = () => router.push('/study/board/new')
 </script>
 
 <style scoped>

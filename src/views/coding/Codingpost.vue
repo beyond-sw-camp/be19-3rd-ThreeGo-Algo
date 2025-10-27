@@ -81,7 +81,7 @@ import { ref, reactive } from 'vue'
 import TabTitle from '@/components/common/TabTitle.vue'
 import Input from '@/components/common/Input.vue'
 import CustomButton from '@/components/common/CustomButton.vue'
-import MarkdownEditor from '@/components/common/MarkdownEditor.vue'
+import MarkdownEditor from '@/components/common/PostEditor.vue'
 import TwoButtonPopup from '@/components/common/TwoButtonPopup.vue'
 
 /* 상태 */
