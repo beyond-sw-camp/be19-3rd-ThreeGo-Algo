@@ -37,8 +37,9 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { fetchCareerPosts } from '@/api/career'
 
 import TabTitle from '@/components/common/TabTitle.vue'
 import PageInfoBanner from '@/components/common/PageInfoBanner.vue'
@@ -58,157 +59,66 @@ const selectedVerified = ref('ALL')
 const showVerifiedOnly = ref(false)
 const selectedCompanies = ref([])
 
-// Select 옵션
-const companies = ['네이버', '카카오', '삼성전자', '현대오토에버', 'LG전자', 'SK', '쿠팡']
-const companyOptions = [{ label: '모든 기업', value: 'ALL' }, ...companies.map(c => ({ label: c, value: c }))]
-const yearOptions = [{ label: '모든 년도', value: 'ALL' }, { label: '2025년', value: '2025' }, { label: '2024년', value: '2024' }]
-const verifiedOptions = [{ label: '전체 보기', value: 'ALL' }, { label: '인증된 글만 보기', value: 'APPROVED' }]
+const allPosts = ref([])
 
-// 더미 게시글
-const allPosts = ref([
-    {
-        id: 1,
-        title: '현대오토에버 면접 후기 공유합니다 (문제 복기)',
-        nickname: '하이요',
-        rankName: '코뉴비',
-        createdAt: '2025.10.13',
-        status: 'APPROVED',
-        likeCount: 123,
-        commentCount: 9,
-        company: '현대오토에버',
-    },
-    {
-        id: 2,
-        title: '삼성전자 DX 면접 후기 (코테 포함)',
-        nickname: '코테왕',
-        rankName: '코잘알',
-        createdAt: '2025.10.12',
-        status: '',
-        likeCount: 88,
-        commentCount: 3,
-        company: '삼성전자',
-    },
-    {
-        id: 3,
-        title: '네이버 2025 상반기 코테 후기 공유합니다 ☘️',
-        nickname: '코알린',
-        rankName: '코좀알',
-        createdAt: '2025.10.08',
-        status: 'APPROVED',
-        likeCount: 75,
-        commentCount: 5,
-        company: '네이버',
-    },
-    {
-        id: 4,
-        title: 'LG전자 DX 직무 면접 후기 (기술면접 중심)',
-        nickname: '취준중',
-        rankName: '코뉴비',
-        createdAt: '2025.09.28',
-        status: '',
-        likeCount: 64,
-        commentCount: 7,
-        company: 'LG전자',
-    },
-    {
-        id: 5,
-        title: '카카오 코테 2차 후기 및 문제 복기 ✍️',
-        nickname: '디벨로퍼K',
-        rankName: '코잘알',
-        createdAt: '2025.09.15',
-        status: 'APPROVED',
-        likeCount: 101,
-        commentCount: 8,
-        company: '카카오',
-    },
-    {
-        id: 6,
-        title: 'SK C&C 면접 후기 (AI면접 포함)',
-        nickname: '준코알라',
-        rankName: '코뉴비',
-        createdAt: '2025.09.10',
-        status: '',
-        likeCount: 42,
-        commentCount: 2,
-        company: 'SK',
-    },
-    {
-        id: 7,
-        title: '쿠팡 SDE 코테 후기 (2024 하반기)',
-        nickname: '알고러버',
-        rankName: '코좀알',
-        createdAt: '2024.11.22',
-        status: 'APPROVED',
-        likeCount: 58,
-        commentCount: 6,
-        company: '쿠팡',
-    },
-    {
-        id: 8,
-        title: '삼성전자 반도체 SW개발 직무 1차 면접 후기',
-        nickname: '프로그맨',
-        rankName: '코잘알',
-        createdAt: '2024.11.10',
-        status: 'APPROVED',
-        likeCount: 90,
-        commentCount: 10,
-        company: '삼성전자',
-    },
-    {
-        id: 9,
-        title: '현대오토에버 2차 면접 후기 - 실무진 중심',
-        nickname: '면접봄',
-        rankName: '코신',
-        createdAt: '2024.10.25',
-        status: '',
-        likeCount: 34,
-        commentCount: 1,
-        company: '현대오토에버',
-    },
-    {
-        id: 10,
-        title: '네이버 2024 하반기 최종면접 후기',
-        nickname: '알고장인',
-        rankName: '코잘알',
-        createdAt: '2024.09.18',
-        status: 'APPROVED',
-        likeCount: 112,
-        commentCount: 12,
-        company: '네이버',
-    },
-])
+// 게시글 불러오기
+const fetchPosts = async () => {
+    try {
+        const params = {}
+        if (selectedCompany.value !== 'ALL') params.company = selectedCompany.value
+        if (selectedYear.value !== 'ALL') params.year = selectedYear.value
+        if (selectedVerified.value !== 'ALL') params.status = selectedVerified.value
+        if (searchKeyword.value) params.keyword = searchKeyword.value
 
-// 필터링 로직
-const displayedPosts = computed(() => {
-    let result = allPosts.value
-    if (searchKeyword.value)
-        result = result.filter(p => p.title.toLowerCase().includes(searchKeyword.value.toLowerCase()))
-    if (selectedCompany.value !== 'ALL')
-        result = result.filter(p => p.company === selectedCompany.value)
-    if (selectedYear.value !== 'ALL')
-        result = result.filter(p => p.createdAt.startsWith(selectedYear.value))
-    if (selectedVerified.value === 'APPROVED' || showVerifiedOnly.value)
-        result = result.filter(p => p.status === 'APPROVED')
-    if (selectedCompanies.value.length > 0)
-        result = result.filter(p => selectedCompanies.value.includes(p.company))
-    return result
+        const res = await fetchCareerPosts(params)
+        allPosts.value = res
+    } catch (err) {
+        console.error('❌ 게시글 불러오기 실패:', err)
+    }
+}
+
+// 화면 로드 시 초기 데이터 가져오기
+onMounted(() => {
+    fetchPosts()
 })
 
-// 이벤트 핸들러
-const handleSearch = keyword => (searchKeyword.value = keyword)
-const handleCompanySelect = val => (selectedCompany.value = val)
-const handleYearSelect = val => (selectedYear.value = val)
-const handleVerifiedSelect = val => (selectedVerified.value = val)
+// 필터링은 서버 기반으로 (즉시 fetch)
+const handleSearch = async (keyword) => {
+    searchKeyword.value = keyword
+    await fetchPosts()
+}
+const handleCompanySelect = async (val) => {
+    selectedCompany.value = val
+    await fetchPosts()
+}
+const handleYearSelect = async (val) => {
+    selectedYear.value = val
+    await fetchPosts()
+}
+const handleVerifiedSelect = async (val) => {
+    selectedVerified.value = val
+    await fetchPosts()
+}
+
 const resetFilters = () => {
     showVerifiedOnly.value = false
     selectedCompanies.value = []
+    selectedCompany.value = 'ALL'
+    selectedYear.value = 'ALL'
+    selectedVerified.value = 'ALL'
+    fetchPosts()
 }
-const updateFilters = filters => {
+const updateFilters = (filters) => {
     showVerifiedOnly.value = filters.showVerifiedOnly
     selectedCompanies.value = filters.selectedCompanies
+    fetchPosts()
 }
+
 const goToCreatePage = () => router.push('/career-info/post')
+
+const displayedPosts = computed(() => allPosts.value)
 </script>
+
 
 <style scoped>
 .company-info-page {
