@@ -5,39 +5,22 @@
       <TabTitle title="스터디 모집" />
       <!-- ✅ 배너 영역 -->
       <div class="banner-wrapper">
-        <PageInfoBanner
-          title="함께할 코알라를 찾아 성장하세요 🐨🌱"
-          subtitle="코딩, 면접 준비해야 하는데… 의지가 부족하신가요?
-          동료들을 찾아 같이 열심히 준비해보세요!"
-          :image="bannerImage"
-          bgColor="#f8fbff"
-        />
+        <PageInfoBanner title="함께할 코알라를 찾아 성장하세요 🐨🌱" subtitle="코딩, 면접 준비해야 하는데… 의지가 부족하신가요?
+          동료들을 찾아 같이 열심히 준비해보세요!" :image="bannerImage" />
       </div>
 
       <!-- ✅ 필터 / 검색 / 버튼 (한 줄) -->
       <div class="filter-search-action">
         <!-- 왼쪽: 필터 탭 (TabMenu 사용) -->
-        <TabMenu
-          :items="filterTabs"
-          :onClick="handleFilterChange"
-        />
+        <TabMenu :items="filterTabs" :onClick="handleFilterChange" />
 
         <!-- 중앙: 검색창 -->
         <div class="search-center">
-          <SearchBar
-            v-model="searchKeyword"
-            placeholder="스터디명, 내용을 검색해보세요"
-            buttonText="검색"
-            @search="handleSearch"
-          />
+          <SearchBar v-model="searchKeyword" placeholder="스터디명, 내용을 검색해보세요" buttonText="검색" @search="handleSearch" />
         </div>
 
         <!-- 오른쪽: 모집 버튼 -->
-        <CustomButton
-          variant="primary"
-          height="md"
-          @click="goToCreatePage"
-        >
+        <CustomButton variant="primary" height="md" @click="goToCreatePage">
           + 스터디 모집하기
         </CustomButton>
       </div>
@@ -48,18 +31,9 @@
       <!-- ✅ 카드 리스트 -->
       <div class="cards-container">
         <div v-if="displayedStudies.length > 0" class="card-grid">
-          <StudyRecruitCard
-            v-for="study in displayedStudies"
-            :key="study.id"
-            :status="study.status"
-            :title="study.title"
-            :period="study.period"
-            :authorName="study.authorName"
-            :rankName="study.rankName"
-            :members="study.members"
-            :comments="study.comments"
-            @click="handleCardClick(study.id)"
-          />
+          <StudyRecruitCard v-for="study in displayedStudies" :key="study.id" :status="study.status"
+            :title="study.title" :period="study.period" :authorName="study.authorName" :rankName="study.rankName"
+            :members="study.members" :comments="study.comments" @click="handleCardClick(study.id)" />
         </div>
 
         <!-- 데이터 없을 때 -->
