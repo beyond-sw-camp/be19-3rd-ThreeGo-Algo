@@ -532,7 +532,7 @@ const formatCreatedAt = (createdAt) => {
 
 .mini-profile-wrapper {
     position: relative;
-    top: 6px;
+    /* top: 6px; */
 }
 
 .comment-input {

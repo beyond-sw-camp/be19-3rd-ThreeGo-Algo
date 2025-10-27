@@ -54,6 +54,7 @@ import {
     fetchCareerComments,
     createCareerComment,
 } from "@/api/careerApi";
+import memberApi from "@/api/memberApi";
 
 const route = useRoute();
 const router = useRouter();
@@ -66,21 +67,28 @@ const relatedPosts = ref([]);
 const currentUser = ref({ id: null, nickname: "", rankName: "코뉴비" });
 
 // 현재 로그인 사용자 세팅
-const loadCurrentUser = () => {
+const loadCurrentUser = async () => {
     try {
-        const token = localStorage.getItem("accessToken");
-        if (!token) return;
+        const token = localStorage.getItem("accessToken")
+        if (!token) return
 
-        const payload = JSON.parse(atob(token.split(".")[1]));
-        currentUser.value.id = payload.memberId;
-        currentUser.value.nickname = payload.nickname || "사용자";
-        currentUser.value.role = payload.role;
-        currentUser.value.rankName = "코뉴비"; // 추후 서버에서 받아오기
-        console.log("로그인 사용자:", currentUser.value);
+        // JWT에서 기본 정보만 파싱
+        const payload = JSON.parse(atob(token.split(".")[1]))
+        currentUser.value.id = payload.memberId
+        currentUser.value.role = payload.role
+
+        // 서버에서 닉네임 + 등급(rankName) 가져오기
+        const res = await memberApi.get("/member/rank", {
+            headers: { Authorization: `Bearer ${token}` },
+        })
+        currentUser.value.nickname = res.data.nickname
+        currentUser.value.rankName = res.data.rankName
+
+        console.log("현재 로그인 사용자:", currentUser.value)
     } catch (err) {
-        console.error("JWT 파싱 실패:", err);
+        console.error("로그인 사용자 정보 불러오기 실패:", err)
     }
-};
+}
 
 // 게시글 불러오기
 const fetchPost = async () => {

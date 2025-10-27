@@ -31,6 +31,7 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import MyProfileDropdown from '@/components/common/MyProfileDropdown.vue'
+import memberApi from '@/api/memberApi'
 
 const router = useRouter()
 const isLoggedIn = ref(false)
@@ -45,15 +46,23 @@ const menuItems = [
 
 ]
 
-onMounted(() => {
+onMounted(async () => {
     const token = localStorage.getItem('accessToken')
-    const name = localStorage.getItem('nickname')
+    if (!token) return
 
-    if (token) {
+    try {
+        const res = await memberApi.get('/member/rank', {
+            headers: { Authorization: `Bearer ${token}` },
+        })
         isLoggedIn.value = true
-        nickname.value = name || '사용자'
+        nickname.value = res.data.nickname
+        rankName.value = res.data.rankName
+        console.log('✅ 현재 로그인 사용자:', res.data)
+    } catch (err) {
+        console.error('❌ 사용자 정보 불러오기 실패:', err)
     }
 })
+
 
 const goHome = () => router.push('/')
 
