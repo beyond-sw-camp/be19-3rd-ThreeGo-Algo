@@ -31,15 +31,15 @@ const props = defineProps({
   role: {
     type: String,
     default: 'member',
-    validator: (value) => ['admin', 'member'].includes(value)
+    validator: (value) => ['leader', 'member'].includes(value)
   }
 })
 
 const rankImage = computed(() => rankImages[props.rankName])
 
 const roleVariant = computed(() => {
-  if (props.role === 'admin') {
-    return 'admin'
+  if (props.role === 'leader') {
+    return 'leader'
   }
   return 'member'
 })
