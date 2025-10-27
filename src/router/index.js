@@ -18,6 +18,9 @@ import BannerDemoPage from '@/views/demo/BannerDemoPage.vue';
 import CommentDemoPage from '@/views/demo/CommentDemoPage.vue';
 import TwoButtonPopupDemo from '@/views/demo/TwoButtonPopupDemo.vue';
 import OneButtonPopupDemo from '@/views/demo/OneButtonPopupDemo.vue';
+import CareerInfoMainView from '@/views/career/CareerInfoMainView.vue'
+import CareerPostCreate from '@/views/career/CareerPostCreate.vue'
+import CareerPostDetail from '@/views/career/CareerPostDetail.vue'
 import SignupPage from '@/views/login/SignupPage.vue'
 import InputDemoPage from '@/views/demo/InputDemoPage.vue'
 import LoginPage from '@/views/login/LoginPage.vue'
@@ -26,6 +29,10 @@ const routes = [
   // 기본 홈
   { path: '/', component: HomeView },
 
+  // 기업별 정보 공유
+  { path: '/career-info', component: CareerInfoMainView },
+  { path: '/career-info/post', component: CareerPostCreate },
+  { path: '/career-info/:id', component: CareerPostDetail },
   { path: '/signup', component: SignupPage },
   { path: '/login', component: LoginPage },
 
@@ -45,8 +52,8 @@ const routes = [
   { path: '/demo/infobanner', component: BannerDemoPage },
   { path: '/demo/comment', component: CommentDemoPage },
   { path: '/demo/twobuttonpopup', component: TwoButtonPopupDemo },
-  { path: '/demo/onebuttonpopup', component: OneButtonPopupDemo},
-  { path: '/demo/input', component: InputDemoPage},
+  { path: '/demo/onebuttonpopup', component: OneButtonPopupDemo },
+  { path: '/demo/input', component: InputDemoPage },
 
 ]
 
