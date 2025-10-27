@@ -43,11 +43,13 @@ import StudyBoardPage from '@/views/study/StudyBoardPage.vue'
 import StudySettingPage from '@/views/study/StudySettingPage.vue'
 import StudyRoadmapDemoPage from '@/views/demo/StudyRoadmapDemoPage.vue'
 import MyStudyPage from '@/views/mypage/MyStudyPage.vue'
+import StudyPostCreate from '@/views/study/StudyPostCreate.vue'
 
 import CodingProblemList from '@/views/coding/CodingProblemList.vue'
 import CodingProblemDetail from '@/views/coding/CodingProblemDetail.vue'
 import Codingpost from '@/views/coding/Codingpost.vue'
 import CodingPostDetail from '@/views/coding/CodingPostDetail.vue'
+import StudyPostDetail from '@/views/study/StudyPostDetail.vue'
 
 const routes = [
   // 기본 홈
@@ -65,6 +67,9 @@ const routes = [
   { path: '/study/home', component: StudyMainPage, meta: { requiresAuth: true } },
   { path: '/study/board', component: StudyBoardPage, meta: { requiresAuth: true } },
   { path: '/study/settings', component: StudySettingPage, meta: { requiresAuth: true } },
+  { path: '/study/board/new', component: StudyPostCreate, meta: { requiresAuth: true } },
+  { path: '/study/board/post/:id', component: StudyPostDetail, meta: { requiresAuth: true } },
+
 
   // 기업별 정보 공유
   { path: '/career-info', component: CareerInfoMainView, meta: { requiresAuth: true } },
