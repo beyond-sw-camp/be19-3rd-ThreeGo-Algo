@@ -10,7 +10,11 @@
     </div>
 
     <div class="board-list">
+      <div v-if="posts.length === 0" class="no-posts">
+        게시물이 없습니다
+      </div>
       <div 
+        v-else
         v-for="post in posts" 
         :key="post.id"
         class="board-item"
@@ -42,23 +46,12 @@ defineProps({
 })
 
 const truncateTitle = (title) => {
-  if (title.length > 15) {
-    return title.substring(0, 15) + '...'
-  }
-  return title
+  return title.length > 15 ? title.substring(0, 15) + '...' : title
 }
 
-const goToBoard = () => {
-  router.push('/board')
-}
-
-const goToPost = (postId) => {
-  router.push(`/board/${postId}`)
-}
-
-const goToWrite = () => {
-  router.push('/board/write')
-}
+const goToBoard = () => router.push('/board')
+const goToPost = (postId) => router.push(`/board/${postId}`)
+const goToWrite = () => router.push('/board/write')
 </script>
 
 <style scoped>
@@ -121,7 +114,6 @@ const goToWrite = () => {
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
-
 }
 
 .board-item:hover .post-title {
@@ -157,5 +149,14 @@ const goToWrite = () => {
 
 .write-button:hover {
   background-color: #0891d1;
+}
+
+.no-posts {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #CFCFCF;
+  font-size: 14px;
+  height: 100%;
 }
 </style>
