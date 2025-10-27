@@ -19,7 +19,7 @@ const props = defineProps({
 .status-badge {
   display: inline-block;
   padding: 3px 15px;
-  border-radius: 20px;
+  border-radius: 8px;
   font-size: 16px;
   font-weight: 500;
   color: white;
