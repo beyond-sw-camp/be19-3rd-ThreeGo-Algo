@@ -4,7 +4,13 @@
     <section class="hero-section">
       <h3>학습부터 취업까지 <strong>- ALG<img src="/koala.svg" alt="코알라" class="kola-icon1" /></strong>와 함께 성장하세요.</h3>
       <h1>몰라도 된다, 알고 있으면 되니까!</h1><br/>
-      <button class="start-btn" @click="goToLogin">지금 바로 시작하기</button>
+
+      <!-- 로그인 상태에 따른 조건부 렌더링 -->
+      <button v-if="!isLoggedIn" class="start-btn" @click="goToLogin">지금 바로 시작하기</button>
+      <div v-else class="welcome-message">
+        <img src="/koala.svg" alt="알코알라" class="welcome-icon" />
+        <p><strong>{{ userName }}</strong>님 환영합니다</p>
+      </div>
 
       <!-- Auto Carousel Banner -->
       <div class="carousel-container">
@@ -55,7 +61,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { ref, onMounted, onBeforeUnmount, computed } from 'vue'
 import home_books from '@/assets/images/home_books.png'
 import robot from '@/assets/images/robot.png'
 import home_career from '@/assets/images/home_career.png'
@@ -69,6 +75,31 @@ import { useRouter } from 'vue-router'
 
 const router = useRouter()
 const goToLogin = () => router.push('/login')
+
+// 로그인 상태 확인
+const userInfo = ref(null)
+
+// 로그인 여부 계산
+const isLoggedIn = computed(() => userInfo.value !== null)
+
+// 사용자 이름 (닉네임 또는 이메일의 @ 앞부분 사용)
+const userName = computed(() => {
+  if (!userInfo.value) return ''
+  return userInfo.value.nickname || userInfo.value.email?.split('@')[0] || '사용자'
+})
+
+// 로그인 상태 확인 함수
+const checkLoginStatus = () => {
+  const storedUser = localStorage.getItem('user')
+  if (storedUser) {
+    try {
+      userInfo.value = JSON.parse(storedUser)
+    } catch (e) {
+      console.error('사용자 정보 파싱 오류:', e)
+      localStorage.removeItem('user')
+    }
+  }
+}
 
 const banners = [
   {
@@ -121,6 +152,7 @@ const goToSlide = (index) => {
 }
 
 onMounted(() => {
+  checkLoginStatus()
   interval = setInterval(() => {
     nextSlide()
   }, 3000) // 3초마다 자동 슬라이드
@@ -176,6 +208,36 @@ onBeforeUnmount(() => clearInterval(interval))
 
 .start-btn:hover {
   background-color: #0091e0;
+}
+
+/* 환영 메시지 스타일 */
+.welcome-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 0 0 60px 0;
+  padding: 16px 28px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 168, 255, 0.15);
+}
+
+.welcome-icon {
+  width: 32px;
+  height: 32px;
+}
+
+.welcome-message p {
+  font-size: 18px;
+  color: #383838;
+  margin: 0;
+  font-weight: 500;
+}
+
+.welcome-message strong {
+  color: #00a8ff;
+  font-weight: 700;
 }
 
 /* Carousel Container */
