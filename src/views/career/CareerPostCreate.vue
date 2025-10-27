@@ -45,6 +45,8 @@
                     </div>
                 </div>
 
+                <div class="file-limit">※ 1MB 이하의 이미지 파일만 업로드할 수 있습니다.</div>
+
                 <!-- 인증 확인 체크박스 -->
                 <div v-if="formData.file" class="confirm-check">
                     <input type="checkbox" id="confirmCheck" v-model="formData.confirmed" class="check-input" />
@@ -75,6 +77,7 @@ import { ref, reactive, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 import CustomButton from '@/components/common/CustomButton.vue'
 import CustomSelect from '@/components/common/CustomSelect.vue'
+import { createCareerPost } from '@/api/careerApi'
 
 const router = useRouter()
 let $ = null
@@ -93,18 +96,27 @@ const fileInput = ref(null)
 const fileName = ref('')
 
 // 옵션
-const companyOptions = ['네이버', '카카오', '삼성전자', '현대오토에버', 'LG전자', 'SK', '쿠팡'].map(c => ({ label: c, value: c }))
+const companyOptions = ['네이버', '카카오', '삼성전자', 'LG전자'].map(c => ({ label: c, value: c }))
 const yearOptions = ['2025', '2024', '2023'].map(y => ({ label: y, value: y }))
 
 // 파일 업로드
 const triggerFileInput = () => fileInput.value.click()
 const handleFileUpload = e => {
     const file = e.target.files[0]
-    if (file) {
-        fileName.value = file.name
-        formData.file = file
+    if (!file) return
+
+    // 10MB 초과 시 경고 및 리셋
+    const maxSize = 1024 * 1024 // 1MB
+    if (file.size > maxSize) {
+        alert('1MB 이하의 이미지 파일만 업로드할 수 있습니다.')
+        e.target.value = '' // 선택 초기화
+        return
     }
+
+    fileName.value = file.name
+    formData.file = file
 }
+
 
 const removeFile = () => {
     formData.file = null
@@ -147,13 +159,27 @@ const validateForm = () => {
     return true
 }
 
-const handleSubmit = () => {
-    if (validateForm()) {
-        console.log('제출 데이터:', formData)
-        alert('게시글이 등록되었습니다!')
-        router.push('/career-info')
+const handleSubmit = async () => {
+    if (!validateForm()) return
+
+    try {
+        const data = new FormData()
+        data.append('title', formData.title)
+        data.append('company', formData.company)
+        data.append('year', formData.year)
+        data.append('content', formData.content)
+        if (formData.file) data.append('image', formData.file)
+
+        const res = await createCareerPost(data)
+
+        alert('게시글이 성공적으로 등록되었습니다!')
+        router.push(`/career-info/${res.id || ''}`) // 등록 후 상세 페이지로 이동
+    } catch (err) {
+        console.error('게시글 등록 실패:', err)
+        alert('게시글 등록 중 오류가 발생했습니다.')
     }
 }
+
 
 const handlePrevious = () => router.push('/career-info')
 
@@ -227,6 +253,14 @@ onBeforeUnmount(() => {
 
 .required {
     color: #dc3545;
+}
+
+.file-limit {
+    display: block;
+    margin-top: 4px;
+    font-size: 11px;
+    font-weight: 300;
+    color: #999;
 }
 
 .form-input {
@@ -327,7 +361,7 @@ onBeforeUnmount(() => {
 .check-label {
     font-size: 13px;
     font-weight: 400;
-    color: #555;
+    color: #ff2b2b;
     line-height: 1.6;
     cursor: pointer;
 }
