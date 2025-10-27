@@ -49,6 +49,8 @@ import CodingProblemDetail from '@/views/coding/CodingProblemDetail.vue'
 import Codingpost from '@/views/coding/Codingpost.vue'
 import CodingPostDetail from '@/views/coding/CodingPostDetail.vue'
 
+import StudyRoadmapManagePage from '@/views/study/StudyRoadmapManagePage.vue'
+
 const routes = [
   // 기본 홈
   { path: '/', component: NewHomeView },
@@ -65,6 +67,8 @@ const routes = [
   { path: '/study/home', component: StudyMainPage, meta: { requiresAuth: true } },
   { path: '/study/board', component: StudyBoardPage, meta: { requiresAuth: true } },
   { path: '/study/settings', component: StudySettingPage, meta: { requiresAuth: true } },
+  { path: '/study/settings/member', component: StudySettingPage, meta: { requiresAuth: true } },
+  { path: '/study/settings/roadmap', component: StudyRoadmapManagePage, meta: { requiresAuth: true } },
 
   // 기업별 정보 공유
   { path: '/career-info', component: CareerInfoMainView, meta: { requiresAuth: true } },

@@ -47,6 +47,10 @@ export default {
       type: String,
       required: true,
       validator: (value) => ['admin', 'member'].includes(value)
+    },
+    currentRoute: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -65,11 +69,16 @@ export default {
     };
   },
   mounted() {
-    this.selectedRoute = this.$route.path;
+    this.selectedRoute = this.currentRoute || this.$route.path;
   },
   watch: {
     '$route.path'(newPath) {
       this.selectedRoute = newPath;
+    },
+    currentRoute(newRoute) {
+      if (newRoute) {
+        this.selectedRoute = newRoute;
+      }
     }
   },
   methods: {
