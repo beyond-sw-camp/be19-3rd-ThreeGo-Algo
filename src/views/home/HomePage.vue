@@ -2,7 +2,7 @@
   <div class="home-container">
     <!-- Hero Section -->
     <section class="hero-section">
-      <h3>학습부터 취업까지 <strong>- ALG<img src="/koala.svg" alt="코알라" class="kola-icon1" /></strong>와 함께 성장하세요.</h3>
+      <h3>학습부터 취업까지 <img src="/src/assets/images/algo_logo.png" alt="코알라" class="kola-icon1" />와 함께 성장하세요.</h3>
       <h1>몰라도 된다, 알고 있으면 되니까!</h1><br/>
 
       <!-- 로그인 상태에 따른 조건부 렌더링 -->
@@ -51,7 +51,7 @@
     <!-- Target Audience Section -->
     <section class="audience-section">
       <h2 class="audience-title">
-        ALG<img src="/koala.svg" alt="코알라" class="kola-icon" />는 이런 분들을 위해 만들어졌어요
+        <img src="/src/assets/images/algo_logo.png" alt="코알라" class="kola-icon" />는 이런 분들을 위해 만들어졌어요
       </h2>
       <div class="audience-images">
         <img v-for="(image, index) in forImages" :key="index" :src="image" :alt="`for-${index + 1}`" />
@@ -392,15 +392,15 @@ onBeforeUnmount(() => clearInterval(interval))
 }
 
 .kola-icon1 {
-  width: 24px;
-  height: 24px;
+  width: 55px;
+  height: auto;
   margin: 0 2px;
   vertical-align: middle;
   display: inline-block;
 }
 .kola-icon {
-  width: 40px;
-  height: 40px;
+  width: 100px;
+  height: auto;
   margin: 0 2px;
   vertical-align: middle;
   display: inline-block;

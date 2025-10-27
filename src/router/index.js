@@ -25,7 +25,7 @@ import LoginPage from '@/views/login/LoginPage.vue'
 
 const routes = [
   // 기본 홈
-  { path: '/', component: HomeView },
+  { path: '/', component: NewHomeView },
   { path: '/home', component: NewHomeView },
 
   { path: '/signup', component: SignupPage },
