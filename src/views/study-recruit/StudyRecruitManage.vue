@@ -80,16 +80,14 @@
               <tr>
                 <th>신청자</th>
                 <th>지원동기</th>
-                <th>신청일</th>
                 <th>상태</th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="applicant in applicants" :key="applicant.id">
+              <tr v-for="applicant in applicants" :key="applicant.joinId">
                 <td class="applicant-name">{{ applicant.nickname }}</td>
                 <td class="motivation">{{ applicant.applicant }}</td>
-                <td class="apply-date">{{ formatDate(applicant.createdAt) }}</td>
                 <td>
                   <span 
                     class="status-badge" 
@@ -102,14 +100,14 @@
                   <button 
                     v-if="applicant.status === 'PENDING'"
                     class="btn-accept"
-                    @click="acceptApplicant(applicant.id)"
+                    @click="acceptApplicant(applicant.joinId)"
                   >
                     수락
                   </button>
                   <button 
                     v-if="applicant.status === 'PENDING'"
                     class="btn-reject"
-                    @click="rejectApplicant(applicant.id)"
+                    @click="rejectApplicant(applicant.joinId)"
                   >
                     거절
                   </button>
@@ -147,20 +145,42 @@ const applicants = ref([]);
 
 // 📊 통계
 const totalApplicants = computed(() => applicants.value.length);
-const approvedCount = computed(() => 
+const approvedCount = computed(() =>
   applicants.value.filter(a => a.status === 'APPROVED').length
 );
+
+// ✅ 게시글 정보 조회
+const fetchPostInfo = async () => {
+  try {
+    const response = await coreApi.get(`/study-recruit/posts/${postId}`);
+    const data = response.data;
+
+    study.value = {
+      title: data.title,
+      memberLimit: data.capacity
+    };
+
+    // 모집 상태 확인 (OPEN, CLOSED, CANCELLED)
+    isClosed.value = data.status === 'CLOSED' || data.status === 'CANCELLED';
+
+    console.log('✅ 게시글 정보:', data);
+    console.log('✅ 모집 마감 여부:', isClosed.value);
+  } catch (error) {
+    console.error('❌ 게시글 정보 조회 실패:', error);
+  }
+};
 
 // ✅ 신청자 목록 조회 API
 const fetchApplicants = async () => {
   try {
     const response = await coreApi.get(`/study-recruit/posts/${postId}/members`);
     applicants.value = response.data.map(applicant => ({
-      id: applicant.memberId,
-      nickname: applicant.memberNickname,
+      joinId: applicant.id,                 // 신청 ID (수락/거절에 사용)
+      memberId: applicant.memberId,         // 회원 ID
+      nickname: applicant.memberNickname,   // 신청자 닉네임
       applicant: applicant.applicant,       // 지원동기
       status: applicant.status,             // PENDING / APPROVED / REJECTED
-      createdAt: applicant.createdAt
+      appliedAt: applicant.appliedAt        // 신청일
     }));
 
     console.log('✅ 신청자 목록:', applicants.value);
@@ -170,24 +190,26 @@ const fetchApplicants = async () => {
 };
 
 // ✅ 신청자 수락 API
-const acceptApplicant = async (memberId) => {
+const acceptApplicant = async (joinId) => {
   try {
-    await coreApi.put(`/study-recruit/posts/${postId}/members/${memberId}/approve`);
+    await coreApi.post(`/study-recruit/applicants/${joinId}/accept`);
     alert('신청이 수락되었습니다.');
     await fetchApplicants();
   } catch (error) {
     console.error('❌ 신청자 수락 실패:', error);
+    alert('신청 수락 중 오류가 발생했습니다.');
   }
 };
 
 // ✅ 신청자 거절 API
-const rejectApplicant = async (memberId) => {
+const rejectApplicant = async (joinId) => {
   try {
-    await coreApi.put(`/study-recruit/posts/${postId}/members/${memberId}/reject`);
+    await coreApi.post(`/study-recruit/applicants/${joinId}/reject`);
     alert('신청이 거절되었습니다.');
     await fetchApplicants();
   } catch (error) {
     console.error('❌ 신청자 거절 실패:', error);
+    alert('신청 거절 중 오류가 발생했습니다.');
   }
 };
 
@@ -206,15 +228,17 @@ const getStatusText = (status) => {
   return statusMap[status] || status;
 };
 
-const formatDate = (dateStr) => {
-  const date = new Date(dateStr);
-  return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getDate()).padStart(2, '0')}`;
-};
-
-// ✅ 모집 마감 → 스터디 그룹 생성
-const closeRecruitment = () => {
-  isClosed.value = true;
-  showClosePopup.value = false;
+// ✅ 모집 마감 API
+const closeRecruitment = async () => {
+  try {
+    await coreApi.post(`/study-recruit/posts/${postId}/close`);
+    alert("스터디 모집이 마감되었습니다.");
+    isClosed.value = true;
+    showClosePopup.value = false;
+  } catch (error) {
+    console.error("❌ 모집 마감 실패:", error);
+    alert("모집 마감 중 오류가 발생했습니다.");
+  }
 };
 
 const createStudyGroup = () => {
@@ -229,8 +253,9 @@ const createStudyGroup = () => {
   router.push('/study-recruit/create-study');
 };
 
-// 🔹 페이지 로드 시 신청자 목록 조회
+// 🔹 페이지 로드 시 게시글 정보 및 신청자 목록 조회
 onMounted(async () => {
+  await fetchPostInfo();
   await fetchApplicants();
 });
 </script>
