@@ -45,10 +45,10 @@ const routes = [
   { path: '/demo/twobuttonpopup', component: TwoButtonPopupDemo },
   { path: '/demo/onebuttonpopup', component: OneButtonPopupDemo},
 
-  { path: '/codingProblemList', component: CodingProblemList},
-  { path: '/codingProblemDetail', component: CodingProblemDetail},
-  { path: '/codingpost', component: Codingpost},
-  { path: '/codingpostDetail', component: CodingPostDetail},
+  { path: '/coding-problems', component: CodingProblemList},
+  { path: '/coding-problem/:problemId/solutions', component: CodingProblemDetail},
+  { path: '/coding-problems/:problemId/solutions/new', component: Codingpost},
+  { path: '/coding-problems/:problemId/solutions/:solutionId', component: CodingPostDetail},
   
 ]
 
