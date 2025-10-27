@@ -5,7 +5,7 @@
             <router-link v-for="post in posts" :key="post.id" :to="`/career-info/${post.id}`" class="post-link">
                 <PostListItem :id="post.id" :title="post.title" :nickname="post.nickname" :rankName="post.rankName"
                     :createdAt="post.createdAt" :status="post.status" :likeCount="post.likeCount"
-                    :commentCount="post.commentCount" />
+                    :company="post.company" :year="post.year" :commentCount="post.commentCount" />
             </router-link>
         </div>
     </div>
