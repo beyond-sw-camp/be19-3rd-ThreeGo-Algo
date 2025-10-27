@@ -20,11 +20,7 @@
         <Input placeholder="이메일" icon="mail.svg" width="100%" v-model="email" />
         <Input placeholder="비밀번호" icon="lock.svg" width="100%" type="password" v-model="password" />
         <p v-if="isError" class="error-message">{{ message }}</p>
-        <CustomButton
-          width="100%"
-          height="sm"
-          @click="handleLogin"
-        >
+        <CustomButton width="100%" height="sm" @click="handleLogin">
           로그인
         </CustomButton>
         <div class="find-line">
@@ -47,6 +43,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import Input from '@/components/common/Input.vue'
 import CustomButton from '@/components/common/CustomButton.vue'
+import memberApi from '@/api/memberApi'
 
 const email = ref('')
 const password = ref('')
@@ -59,25 +56,38 @@ const goToSignup = () => {
 }
 
 const handleLogin = async () => {
-  console.log('로그인 버튼 클릭됨')
-
   isError.value = false
   message.value = ''
-  
+
   try {
-    //fetch 요청하기
-    
-    const result = false  // true면 성공, false면 실패
-    
-    if (result) {
-      router.push('/')
+    const res = await memberApi.post('/login', {
+      email: email.value,
+      password: password.value,
+    })
+
+    // JWT 토큰 추출
+    const token =
+      res.headers['token'] || // 백엔드에서 사용중인 헤더 이름
+      res.headers['authorization'] ||
+      res.data.token ||
+      null
+
+    if (token) {
+      localStorage.setItem('accessToken', token)
+
+      console.log('로그인 성공, 토큰:', token)
+      router.push('/') // 메인 페이지 이동
     } else {
       isError.value = true
       message.value = '아이디 또는 비밀번호를 잘못 입력하셨습니다.'
     }
-  } catch (error) {
+  } catch (err) {
     isError.value = true
-    console.error('로그인 에러:', error)
+    if (err.response?.status === 401) {
+      message.value = '아이디 또는 비밀번호를 잘못 입력하셨습니다.'
+    } else {
+      message.value = '로그인 중 오류가 발생했습니다.'
+    }
   }
 }
 </script>

@@ -45,12 +45,7 @@
           {{ signupMessage }}
         </p>
 
-        <CustomButton
-          width="100%"
-          height="sm"
-          :disabled="!isVerified || !isAgreed"
-          @click="handleSignup"
-        >
+        <CustomButton width="100%" height="sm" :disabled="!isVerified || !isAgreed" @click="handleSignup">
           회원 가입
         </CustomButton>
 
@@ -151,7 +146,6 @@ const goToLogin = () => {
 }
 </script>
 <style scoped>
-
 .error-message {
   color: red;
   font-size: 13px;
@@ -240,6 +234,7 @@ const goToLogin = () => {
   margin-bottom: 10px;
 }
 
+.form-container> :not(.input-group):not(h2) {
   margin-bottom: 15px;
 }
 
