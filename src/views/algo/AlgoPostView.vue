@@ -28,7 +28,9 @@
 
                         <LikeBanner :isLiked="post.isLiked" @likePost="handleLikePost" />
 
-                        <Comment :comments="comments" :currentUser="currentUser" @submit-comment="addComment" />
+                        <Comment :comments="comments" :currentUser="currentUser" @submit-comment="addComment"
+                            @submit-reply="addReply" @edit-comment="editComment" @delete-comment="deleteComment"
+                            @edit-reply="editReply" @delete-reply="deleteReply" />
                     </div>
                 </div>
             </template>
@@ -63,25 +65,84 @@ async function handleLikePost() {
     }
 };
 
+const addComment = async (commentData) => {
+    try {
+        await coreApi.post(`/algo/posts/${postId.value}/comments`, { content: commentData.content });
+
+        await getPostComments();
+    } catch (error) {
+        console.error("댓글 작성 실패:", error);
+    }
+};
+
+const addReply = async (replyData) => {
+    try {
+        await coreApi.post(`/algo/posts/${postId.value}/comments`, {
+            content: replyData.content,
+            parentId: replyData.commentId,
+        });
+
+        await getPostComments();
+    } catch (error) {
+        console.error("답글 작성 실패:", error);
+    }
+};
+
+const editComment = async (payload) => {
+    const { commentId, content } = payload;
+
+    try {
+        await coreApi.put(`/algo/comments/${commentId}`, { content });
+
+        await getPostComments();
+    } catch (error) {
+        console.error('댓글 수정 실패:', error);
+    }
+};
+
+const deleteComment = async (commentId) => {
+    if (!confirm('정말로 이 댓글을 삭제하시겠습니까?')) return
+
+    try {
+        await coreApi.delete(`/algo/comments/${commentId}`);
+
+        await getPostComments();
+    } catch (error) {
+        console.error('댓글 삭제 실패:', error);
+    }
+}
+
+const editReply = async (payload) => {
+    const { replyId, content } = payload;
+    try {
+        await coreApi.put(`/algo/comments/${replyId}`, { content });
+        await getPostComments();
+    } catch (error) {
+        console.error('대댓글 수정 실패:', error);
+    }
+};
+
+const deleteReply = async ({ replyId }) => {
+    if (!confirm('정말로 이 답글을 삭제하시겠습니까?')) return;
+
+    try {
+        await coreApi.delete(`/algo/comments/${replyId}`);
+
+        await getPostComments();
+    } catch (error) {
+        console.error('대댓글 삭제 실패:', error);
+    }
+};
+
 const writer = ref({
     nickname: "관리자",
     rankName: "관리자"
 });
 
 const currentUser = ref({
-    nickname: "강햄찌",
-    rankName: "코뉴비"
+    nickname: '',
+    rankName: ''
 });
-
-const addComment = (text) => {
-    const newComment = {
-        id: comments.value.length + 1,
-        author: "강햄찌",
-        content: text,
-        date: new Date().toISOString().slice(0, 16).replace("T", " "),
-    };
-    comments.value.push(newComment);
-};
 
 const post = ref(null);
 const postId = ref(null);
@@ -89,6 +150,14 @@ const comments = ref([]);
 
 async function getPostDetail() {
     try {
+        const name = localStorage.getItem('nickname');
+        const rank = localStorage.getItem('rank');
+
+        currentUser.value = {
+            nickname: name,
+            rankName: rank
+        };
+
         postId.value = Number(route.params.postId);
 
         const response = await coreApi.get(`/algo/posts/${postId.value}`);
