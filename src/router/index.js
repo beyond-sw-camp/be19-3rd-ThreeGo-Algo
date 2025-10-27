@@ -23,10 +23,24 @@ import AlgoPostListItemDemoPage from '@/views/demo/AlgoPostListItemDemoPage.vue'
 import AlgoMainView from '@/views/algo/AlgoMainView.vue';
 import AlgoQuizView from '@/views/algo/AlgoQuizView.vue';
 import AlgoPostView from '@/views/algo/AlgoPostView.vue';
+import CareerInfoMainView from '@/views/career/CareerInfoMainView.vue'
+import CareerPostCreate from '@/views/career/CareerPostCreate.vue'
+import CareerPostDetail from '@/views/career/CareerPostDetail.vue'
+import SignupPage from '@/views/login/SignupPage.vue'
+import InputDemoPage from '@/views/demo/InputDemoPage.vue'
+import LoginPage from '@/views/login/LoginPage.vue'
 
 const routes = [
   // 기본 홈
   { path: '/', component: HomeView },
+
+  // 기업별 정보 공유
+  { path: '/career-info', component: CareerInfoMainView },
+  { path: '/career-info/post', component: CareerPostCreate },
+  { path: '/career-info/:id', component: CareerPostDetail },
+  { path: '/signup', component: SignupPage },
+  { path: '/login', component: LoginPage },
+
 
   // 데모 페이지 라우트 (main 브랜치)
   { path: '/demo/button', component: ButtonDemoPage },
@@ -48,13 +62,13 @@ const routes = [
   { path: '/demo/roadmap', redirect: '/demo/roadmap/1'},
   { path: '/demo/algo-post-list-item', component: AlgoPostListItemDemoPage },
 
-
   // 알고리즘 학습 라우트
   { path: '/algorithm/roadmap/:roadmapId', component: AlgoMainView},
   { path: '/algorithm/roadmap', redirect: '/algorithm/roadmap/1'},
   { path: '/algorithm', redirect: '/algorithm/roadmap/1'},
   { path: '/algorithm/post/:postId/quiz/:quizId', component: AlgoQuizView },
   { path: '/algorithm/post/:postId', component: AlgoPostView },
+  { path: '/demo/input', component: InputDemoPage },
 ]
 
 const router = createRouter({
