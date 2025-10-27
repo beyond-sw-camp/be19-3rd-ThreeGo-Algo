@@ -50,6 +50,7 @@ import Codingpost from '@/views/coding/Codingpost.vue'
 import CodingPostDetail from '@/views/coding/CodingPostDetail.vue'
 
 import StudyRoadmapManagePage from '@/views/study/StudyRoadmapManagePage.vue'
+import StudyDeletePage from '@/views/study/StudyDeletePage.vue'
 
 const routes = [
   // 기본 홈
@@ -69,7 +70,8 @@ const routes = [
   { path: '/study/settings', component: StudySettingPage, meta: { requiresAuth: true } },
   { path: '/study/settings/member', component: StudySettingPage, meta: { requiresAuth: true } },
   { path: '/study/settings/roadmap', component: StudyRoadmapManagePage, meta: { requiresAuth: true } },
-
+  { path: '/study/settings/delete', component: StudyDeletePage, meta: { requiresAuth: true } },
+  
   // 기업별 정보 공유
   { path: '/career-info', component: CareerInfoMainView, meta: { requiresAuth: true } },
   { path: '/career-info/post', component: CareerPostCreate, meta: { requiresAuth: true } },

@@ -59,7 +59,7 @@ export default {
       adminMenuItems: [
         { id: 1, title: '스터디원 관리', route: '/study/settings/member' },
         { id: 2, title: '로드맵 및 마일스톤 관리', route: '/study/settings/roadmap' },
-        { id: 3, title: '스터디 해체', route: '/study/settings/disband' }
+        { id: 3, title: '스터디 해체', route: '/study/settings/delete' }
       ],
       memberMenuItem: { 
         id: 4, 
