@@ -39,7 +39,7 @@ const rankName = ref('코잘알')
 
 const menuItems = [
     { label: '알고리즘학습', path: '/algorithm' },
-    { label: '코딩풀이', path: '/problems' },
+    { label: '코딩풀이', path: '/coding-problems' },
     { label: '기업정보공유', path: '/career-info' },
     { label: '스터디모집', path: '/study-recruit' },
 

@@ -22,8 +22,8 @@
           <div class="author-info">
             <MiniProfile :nickname="post.writer" :rankName="post.rankName" />
             <span class="post-date">{{ post.createdAt }}</span>
-            <button class="action-link">수정</button>
-            <button class="action-link">삭제</button>
+            <button class="action-link" @click="goToEditPage">수정</button>
+            <button class="action-link" @click="deletePost">삭제</button>
           </div>
 
           <!-- 일정 및 진행 방식 섹션 -->
@@ -64,24 +64,17 @@
             </div>
           </div>
 
-          <!-- 준비 내용 섹션 -->
-          <div class="section">
-            <h3 class="section-title">준비 내용</h3>
-            <div class="section-content">
-              <ul>
-                <li>CS 핵심 주제: 운영체제, 네트워크, 데이터베이스, 알고리즘</li>
-                <li>프로젝트 질문·분석 프로젝트 중심으로 예상 질문 리스트 작성</li>
-                <li>기타: 카카오 인재상 기반 질의/설명 질문 대비</li>
-              </ul>
-            </div>
-          </div>
-
           <!-- 댓글 섹션 -->
           <Comment
             :comments="comments"
             :currentUser="currentUser"
             @submit-comment="addComment"
-          />
+            @submit-reply="addReply"
+            @edit-comment="editComment"
+            @delete-comment="deleteComment"
+            @edit-reply="editReply"
+            @delete-reply="deleteReply"
+/>
         </div>
 
         <!-- 우측 박스 영역 (신청자 / 작성자 분기) -->
@@ -102,9 +95,9 @@
 
   </div>
 </template>
-
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import { useRouter, useRoute } from "vue-router";
 import BackButton from "@/components/common/BackButton.vue";
 import MiniProfile from "@/components/common/MiniProfile.vue";
 import Comment from "@/components/common/Comment.vue";
@@ -112,70 +105,185 @@ import RecruitBadge from "@/components/study-recruit/RecruitBadge.vue";
 import ApplyStudyBox from "@/components/study-recruit/ApplyStudyBox.vue";
 import AfterApplyStudyBox from "@/components/study-recruit/AfterApplyStudyBox.vue";
 import RecruitManagement from "@/components/study-recruit/RecruitManagement.vue";
+import coreApi from "@/api/coreApi";
 
-// 스터디 모집글 더미 데이터
+const router = useRouter();
+const route = useRoute();
+const postId = route.params.postId;
+
 const post = ref({
-  title: "카카오 면접 대비 스터디",
-  status: "OPEN",
-  writer: "라이언",
-  rankName: "코뉴비",
-  createdAt: "2025.09.13 14:06",
-  content:
-    "2025 상반기 카카오 개발직군 1차/2차 면접 대비 스터디를 참여할 분들을 모집합니다.\n코딩테스트를 통과한 이후 면접 실전 감각을 유지하고,\nCS 기업기 + 프로젝트 기반 질문 대비를 중심으로 준비할 예정입니다.",
-  memberLimit: 20,
-  studyPeriod: "면접",
-  startDate: "2025.10.01",
-  endDate: "2025.10.31",
+  title: "",
+  status: "",
+  writer: "",
+  rankName: "",
+  createdAt: "",
+  content: "",
+  memberLimit: 0,
+  studyPeriod: "",
+  startDate: "",
+  endDate: "",
 });
 
-// 상태 관리
-const isWriter = ref(true); // 작성자 시점 여부
+const comments = ref([]);
+const isWriter = ref(true);
 const isApplied = ref(false);
-const applyStatus = ref("pending"); // pending | approved | rejected
+const applyStatus = ref("pending");
+const currentUser = ref({ nickname: "나", rankName: "코뉴비" });
 
-// 현재 사용자 정보
-const currentUser = ref({
-  nickname: "나",
-  rankName: "코뉴비"
+// ✅ 게시물 상세조회
+const fetchPostDetail = async () => {
+  try {
+    const response = await coreApi.get(`/study-recruit/posts/${postId}`);
+    const data = response.data;
+
+    post.value = {
+      title: data.title,
+      status: data.status,
+      writer: data.memberNickname,
+      rankName: data.rankName,
+      createdAt: data.createdAt || "",
+      content: data.content,
+      memberLimit: data.capacity,
+      studyPeriod: data.studyCategory || "-",
+      startDate: data.startDate,
+      endDate: data.endDate,
+    };
+  } catch (error) {
+    console.error("❌ 스터디 모집글 상세조회 실패:", error);
+  }
+};
+
+// ✅ 댓글 조회
+const fetchComments = async () => {
+  try {
+    const response = await coreApi.get(`/study-recruit/posts/${postId}/comments`);
+    const all = response.data.map(c => ({
+      id: c.id,
+      nickname: c.memberNickname,
+      rankName: c.rankName,
+      content: c.content,
+      createdAt: c.createdAt,
+      parentId: c.parentId
+    }));
+    const parents = all.filter(c => !c.parentId);
+    comments.value = parents.map(p => ({
+      ...p,
+      replies: all.filter(c => c.parentId === p.id)
+    }));
+  } catch (error) {
+    console.error("❌ 댓글 조회 실패:", error);
+  }
+};
+
+// ✅ 댓글 작성
+const addComment = async (commentData) => {
+  try {
+    await coreApi.post(`/study-recruit/comments/${postId}`, { content: commentData.content });
+    await fetchComments();
+  } catch (error) {
+    console.error("❌ 댓글 작성 실패:", error);
+  }
+};
+
+// ✅ 답글 작성
+const addReply = async (replyData) => {
+  try {
+    await coreApi.post(`/study-recruit/comments/${postId}`, {
+      content: replyData.content,
+      parentId: replyData.commentId,
+    });
+    await fetchComments();
+  } catch (error) {
+    console.error("❌ 답글 작성 실패:", error);
+  }
+};
+
+// ✅ 댓글 수정
+const editComment = async (payload) => {
+  const { commentId, content } = payload; // 구조분해 확실히!
+  try {
+    const response = await coreApi.put(`/study-recruit/comments/${commentId}`, {
+      content
+    });
+    console.log('✅ 댓글 수정 성공:', response.data);
+    await fetchComments();
+  } catch (error) {
+    console.error('❌ 댓글 수정 실패:', error);
+    console.error('❌ 에러 상세:', error.response?.data);
+    alert('댓글 수정 중 오류가 발생했습니다.');
+  }
+};
+
+// ✅ 댓글 삭제
+const deleteComment = async (commentId) => {
+  if (!confirm('정말로 이 댓글을 삭제하시겠습니까?')) return
+
+  try {
+    const response = await coreApi.delete(`/study-recruit/comments/${commentId}`)
+    console.log('✅ 댓글 삭제 성공:', response.data)
+    await fetchComments()
+  } catch (error) {
+    console.error('❌ 댓글 삭제 실패:', error)
+    alert('댓글 삭제 중 오류가 발생했습니다.')
+  }
+}
+
+// ✅ 대댓글 수정
+const editReply = async (payload) => {
+  const { replyId, content } = payload;
+  try {
+    const response = await coreApi.put(`/study-recruit/comments/${replyId}`, {
+      content
+    });
+    console.log('✅ 대댓글 수정 성공:', response.data);
+    await fetchComments();
+  } catch (error) {
+    console.error('❌ 대댓글 수정 실패:', error);
+    console.error('❌ 에러 상세:', error.response?.data);
+    alert('대댓글 수정 중 오류가 발생했습니다.');
+  }
+};
+
+// ✅ 대댓글 삭제
+const deleteReply = async ({ replyId }) => {
+  if (!confirm('정말로 이 답글을 삭제하시겠습니까?')) return;
+
+  try {
+    const response = await coreApi.delete(`/study-recruit/comments/${replyId}`);
+    console.log('✅ 대댓글 삭제 성공:', response.data);
+    await fetchComments();
+  } catch (error) {
+    console.error('❌ 대댓글 삭제 실패:', error);
+    console.error('❌ 에러 상세:', error.response?.data);
+    alert('대댓글 삭제 중 오류가 발생했습니다.');
+  }
+};
+
+// ✅ 수정 버튼
+const goToEditPage = () => {
+  router.push({
+    path: "/study-recruit/post",
+    query: { mode: "edit", id: postId },
+  });
+};
+
+// ✅ 삭제 버튼
+const deletePost = async () => {
+  if (!confirm("정말 이 모집글을 삭제하시겠습니까?")) return;
+  try {
+    await coreApi.delete(`/study-recruit/posts/${postId}`);
+    alert("모집글이 삭제되었습니다.");
+    router.push("/study-recruit");
+  } catch (error) {
+    console.error("❌ 모집글 삭제 실패:", error);
+    alert("삭제 중 오류가 발생했습니다.");
+  }
+};
+
+onMounted(() => {
+  fetchPostDetail();
+  fetchComments();
 });
-
-const comments = ref([
-  {
-    id: 1,
-    nickname: "라이언",
-    rankName: "코뉴비",
-    content: "도움이 많이 될 것 같네요! 신청해봅니다!!",
-    createdAt: "2025.11.14 18:12"
-  },
-  {
-    id: 2,
-    nickname: "제이지",
-    rankName: "코좀알",
-    content: "저도 카카오 면접 준비 중인데 함께하고 싶습니다!",
-    createdAt: "2025.11.15 10:30"
-  },
-]);
-
-// 함수들
-const handleApply = () => {
-  isApplied.value = true;
-  applyStatus.value = "pending";
-};
-
-const handleCancel = () => {
-  isApplied.value = false;
-  applyStatus.value = "";
-};
-
-const addComment = (text) => {
-  const newComment = {
-    id: comments.value.length + 1,
-    author: "나",
-    content: text,
-    date: new Date().toISOString().slice(0, 16).replace("T", " "),
-  };
-  comments.value.push(newComment);
-};
 </script>
 
 <style scoped>
