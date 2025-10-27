@@ -125,7 +125,10 @@ import PostListItem from '@/components/common/PostListItem.vue'
 import bannercoding from '@/assets/images/robot.png'
 import CustomButton from '@/components/common/CustomButton.vue'
 
+import { useRouter } from 'vue-router'
+
 const isDetailOpen = ref(false)
+const router = useRouter()
 
 // 플랫폼과 난이도, 실제 API에서 받아올 props 대신, 예시 데이터로 작성
 const props = defineProps({
@@ -226,7 +229,9 @@ const solutions = ref([
 ])
 
 /* 이벤트 핸들러 */
-const handleWriteSolution = () => console.log('풀이 작성하기 클릭')
+const handleWriteSolution = () => {
+  router.push('/codingpost')
+}
 const handleSolutionClick = (id) => console.log('풀이 상세보기:', id)
 </script>
 

@@ -1,7 +1,7 @@
 <template>
   <div class="problem-list-page">
     <!-- 상단 제목 -->
-    <TabTitle title="코딩 문제 목록" />
+    <div><TabTitle title="코딩 문제 목록" /></div>
 
     <div class="spacer"></div>
 
@@ -24,8 +24,7 @@
           placeholder="문제명을 검색해보세요"
           button-text="검색"
           v-model="keyword"
-          @search="fetchProblems"
-        />
+          @search="fetchProblems" />
       </div>
     </div>
 
@@ -39,8 +38,7 @@
         :problem-title="problem.title"
         :post-count="problem.postCount"
         :link="problem.link"
-        @click="handleCardClick(problem)"
-      />
+        @click="handleCardClick(problem)" />
     </div>
 
     <!-- 로딩 -->
@@ -61,7 +59,7 @@ import TabTitle from '@/components/common/TabTitle.vue'
 import TabMenu from '@/components/common/TabMenu.vue'
 import ProblemCard from '@/components/coding/ProblemCard.vue'
 import SearchBar from '@/components/common/SearchBar.vue'
-import Select from '@/components/common/Select.vue'
+import Select from '@/components/common/CustomSelect.vue'
 import axios from '@/plugins/axios.js'
 
 // 상태
@@ -155,10 +153,10 @@ function handleSortChange(value) {
 }
 
 // 카드 클릭 핸들러
-function handleCardClick(problem) {
+function handleCardClick(postId) {
   console.log('문제 클릭:', problem.title)
   // 라우터 이동 가능 (예: 상세 페이지)
-  // router.push(`/problems/${problem.id}`)
+  router.push(`/coding-problems/posts/${postId}`)
 }
 
 // 필터링된 문제 목록 계산
@@ -204,7 +202,7 @@ onMounted(() => {
   max-width: 400px;
 }
 
-/* ✅ 카드 그리드 정렬 */
+/* 카드 그리드 정렬 */
 .problem-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));

@@ -21,6 +21,8 @@ import OneButtonPopupDemo from '@/views/demo/OneButtonPopupDemo.vue';
 
 import CodingProblemList from '@/views/coding/CodingProblemList.vue'
 import CodingProblemDetail from '@/views/coding/CodingProblemDetail.vue'
+import Codingpost from '@/views/coding/Codingpost.vue'
+import CodingPostDetail from '@/views/coding/CodingPostDetail.vue'
 
 const routes = [
   // 기본 홈
@@ -45,6 +47,8 @@ const routes = [
 
   { path: '/codingProblemList', component: CodingProblemList},
   { path: '/codingProblemDetail', component: CodingProblemDetail},
+  { path: '/codingpost', component: Codingpost},
+  { path: '/codingpostDetail', component: CodingPostDetail},
   
 ]
 

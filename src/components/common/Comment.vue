@@ -2,9 +2,11 @@
     <div class="comment-section">
     <!-- 댓글 입력 영역 -->
     <div class="comment-input-wrapper">
+        <div class="mini-profile-wrapper">
         <MiniProfile 
-        :nickname="currentUser.nickname" 
-        :rankName="currentUser.rankName" />
+            :nickname="currentUser.nickname" 
+            :rankName="currentUser.rankName" />
+        </div>
         <div class="comment-input">
         <el-input
             v-model="newCommentContent"
@@ -48,9 +50,11 @@
 
         <!-- 댓글 수정 모드 -->
         <div v-if="editingCommentId === comment.id" class="comment-edit-mode">
+            <div class="mini-profile-wrapper">
             <MiniProfile 
             :nickname="comment.nickname" 
             :rankName="comment.rankName" />
+            </div>
             <div class="edit-content">
                 <el-input
                 v-model="editContent"
@@ -120,9 +124,11 @@
         <div 
             class="reply-input-wrapper" 
             v-if="replyStates[comment.id]?.showInput" >
+            <div class="mini-profile-wrapper">
             <MiniProfile 
                 :nickname="currentUser.nickname" 
                 :rankName="currentUser.rankName" />
+            </div>
             <div class="reply-input">
                 <el-input
                 v-model="replyStates[comment.id].content"
@@ -154,9 +160,11 @@
 
             <!-- 답글 수정 모드 -->
             <div v-if="editingReplyId === reply.id" class="reply-edit-mode">
+                <div class="mini-profile-wrapper">
                 <MiniProfile
                     :nickname="reply.nickname"
                     :rankName="reply.rankName" />
+                    </div>
                 <div class="edit-content">
                     <el-input
                     v-model="editReplyContent"
@@ -178,11 +186,14 @@
 
             <!-- 답글 일반 모드 -->
             <div v-else class="reply-content-wrapper">
+                <img src="@/assets/icons/reply-kebab.svg" alt="답글 옵션" class="kebab-icon" />
                 <div class="reply-body">
                     <div class="reply-header-info">
+                    <div class="mini-profile-wrapper">
                     <MiniProfile
                     :nickname="reply.nickname"
                     :rankName="reply.rankName"/>
+                    </div>
                     <span class="reply-time">{{ formatCreatedAt(reply.createdAt) }}</span>
                     
                     <!-- 케밥 메뉴 (본인 답글) -->
@@ -434,19 +445,25 @@ const formatCreatedAt = (createdAt) => {
 }
 
 .comment-input-wrapper {
-    display: flex;
-    gap: 12px;
-    margin-bottom: 24px;
-    padding: 16px;
-    background: #f8f9fa;
-    border-radius: 8px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.mini-profile-wrapper {
+  position: relative;
+  top: 6px;
 }
 
 .comment-input {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .comment-input :deep(.el-textarea__inner) {
@@ -637,12 +654,18 @@ const formatCreatedAt = (createdAt) => {
     flex-direction: column;
     gap: 16px;
     padding-left: 16px;
-    border-left: 2px solid #e4e7ed;
+    /* border-left: 2px solid #e4e7ed; */
 }
 
 .reply-item {
     display: flex;
     flex-direction: column;
+}
+
+.reply-background {
+    background-color: #f0faff; 
+    border-radius: 4px; 
+    padding: 8px; 
 }
 
 .reply-content-wrapper,
