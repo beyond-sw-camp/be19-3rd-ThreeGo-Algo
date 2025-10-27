@@ -9,16 +9,18 @@
         :rankName="rankName"
       />
       
-      <EmojiText type="grayPeople" :count= "memberCount"/>
-
+      <EmojiText type="grayPeople" :count="memberCount"/>
     </div>
   </div>
 </template>
 
 <script setup>
 import { defineProps } from 'vue'
+import { useRouter } from 'vue-router'
 import MiniProfile from '../common/MiniProfile.vue'
 import EmojiText from '../common/EmojiText.vue'
+
+const router = useRouter()
 
 const props = defineProps({
   id: {
@@ -52,8 +54,8 @@ const props = defineProps({
 })
 
 const handleCardClick = () => {
-  const url = `${window.location.origin}/study/home?id=${props.id}`
-  window.open(url, '_blank')
+  sessionStorage.setItem('studyId', props.id.toString())
+  window.open(`${window.location.origin}/study/home`, '_blank')
 }
 </script>
 
@@ -94,13 +96,5 @@ const handleCardClick = () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-
-.member-count {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 14px;
-  color: #838383;
 }
 </style>
