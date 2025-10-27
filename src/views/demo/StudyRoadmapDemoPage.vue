@@ -1,12 +1,6 @@
 <template>
-    <br></br>
-    <div class="study-roadmap-container">
-        <div class="study-roadmap-title">
-            <p>스터디 로드맵</p>
-        </div>
-
-        <StudyRoadmap v-for="r in roadmaps" :key="r.roadmapId" :roadmap="r" />
-    </div>
+    <br />
+    <StudyRoadmap :roadmaps="roadmaps" />
 </template>
 
 <script setup>
@@ -64,23 +58,3 @@ const roadmaps = ref([
     },
 ])
 </script>
-
-<style scoped>
-.study-roadmap-container {
-    border: 1px solid #DBF4FF;
-    padding: 20px;
-    border-radius: 8px;
-    margin: 10px;
-    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
-}
-
-.study-roadmap-title {
-    border-left: 5px solid #0AA2EB;
-}
-
-.study-roadmap-title p {
-    margin-left: 10px;
-    font-size: 14px;
-    font-weight: 600;
-}
-</style>
