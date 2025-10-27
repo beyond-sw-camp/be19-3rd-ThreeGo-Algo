@@ -44,7 +44,8 @@ const menuItems = [
     { label: '알고리즘학습', path: '/algorithm' },
     { label: '코딩풀이', path: '/problems' },
     { label: '기업정보공유', path: '/career-info' },
-    { label: '스터디', path: '/study' },
+    { label: '스터디모집', path: '/study-recruit' },
+
 ]
 
 // 홈으로 이동

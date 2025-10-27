@@ -18,6 +18,12 @@ import BannerDemoPage from '@/views/demo/BannerDemoPage.vue';
 import CommentDemoPage from '@/views/demo/CommentDemoPage.vue';
 import TwoButtonPopupDemo from '@/views/demo/TwoButtonPopupDemo.vue';
 import OneButtonPopupDemo from '@/views/demo/OneButtonPopupDemo.vue';
+
+import StudyRecruitMain from '@/views/study-recruit/StudyRecruitMain.vue';
+import StudyRecruitPost from '@/views/study-recruit/StudyRecruitPost.vue'
+import StudyRecruitDetailPost from '@/views/study-recruit/StudyRecruitDetailPost.vue'
+import StudyRecruitManage from '@/views/study-recruit/StudyRecruitManage.vue'
+import CreateStudyGroup from '@/views/study-recruit/CreateStudyGroup.vue'
 import RoadmapListItemDemoPage from '@/views/demo/RoadmapListItemDemoPage.vue';
 import AlgoPostListItemDemoPage from '@/views/demo/AlgoPostListItemDemoPage.vue';
 import AlgoMainView from '@/views/algo/AlgoMainView.vue';
@@ -26,20 +32,31 @@ import AlgoPostView from '@/views/algo/AlgoPostView.vue';
 import CareerInfoMainView from '@/views/career/CareerInfoMainView.vue'
 import CareerPostCreate from '@/views/career/CareerPostCreate.vue'
 import CareerPostDetail from '@/views/career/CareerPostDetail.vue'
+
 import SignupPage from '@/views/login/SignupPage.vue'
 import InputDemoPage from '@/views/demo/InputDemoPage.vue'
 import LoginPage from '@/views/login/LoginPage.vue'
+
 
 const routes = [
   // 기본 홈
   { path: '/', component: HomeView },
 
+  // 스터디 모집
+  { path: '/study-recruit', name: 'StudyRecruit', component: StudyRecruitMain },
+  { path: '/study-recruit/post', name: 'StudyRecruitPost', component: StudyRecruitPost },
+  { path: '/study-recruit/:id', name: 'StudyRecruitDetail', component: StudyRecruitDetailPost },
+  { path: '/study-recruit/manage/:id', name: 'StudyRecruitManage', component: StudyRecruitManage },
+  { path: '/study-recruit/create-study', name: 'CreateStudyGroup', component: CreateStudyGroup},
+  
   // 기업별 정보 공유
   { path: '/career-info', component: CareerInfoMainView },
   { path: '/career-info/post', component: CareerPostCreate },
   { path: '/career-info/:id', component: CareerPostDetail },
+
   { path: '/signup', component: SignupPage },
   { path: '/login', component: LoginPage },
+
 
 
   // 데모 페이지 라우트 (main 브랜치)
@@ -69,6 +86,7 @@ const routes = [
   { path: '/algorithm/post/:postId/quiz/:quizId', component: AlgoQuizView },
   { path: '/algorithm/post/:postId', component: AlgoPostView },
   { path: '/demo/input', component: InputDemoPage },
+
 ]
 
 const router = createRouter({
