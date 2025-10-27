@@ -83,7 +83,7 @@ async function getRoadmaps() {
 
         await getPostsByRoadmap(currentRoadmapId.value);
     } catch (error) {
-        console.error('❌ 로드맵 목록 불러오기 실패:', error);
+        console.error('로드맵 목록 불러오기 실패:', error);
     }
 }
 
@@ -108,7 +108,7 @@ async function getPostsByRoadmap(roadmapId) {
             console.log(currentRoadmap);
         }
     } catch (error) {
-        console.error(`❌ 로드맵(${roadmapId}) 게시글 불러오기 실패:`, error);
+        console.error(`로드맵(${roadmapId})의 게시물 리스트 불러오기 실패:`, error);
     }
 }
 
