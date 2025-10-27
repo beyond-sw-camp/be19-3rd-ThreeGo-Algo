@@ -5,10 +5,10 @@
 
       <div class="left-content">
         <p class="slogan">
-          매일 성장하는 당신을<br/>
+          매일 성장하는 당신을<br />
           응원하는 ALGO입니다.
         </p>
-  
+
         <img src="@/assets/images/login.png" alt="login image" class="login-image" />
       </div>
     </div>
@@ -48,7 +48,7 @@ import memberApi from '@/api/memberApi'
 const email = ref('')
 const password = ref('')
 const isError = ref(false)
-const message = ref('')  
+const message = ref('')
 const router = useRouter()
 
 const goToSignup = () => {
@@ -65,9 +65,8 @@ const handleLogin = async () => {
       password: password.value,
     })
 
-    // JWT 토큰 추출
     const token =
-      res.headers['token'] || // 백엔드에서 사용중인 헤더 이름
+      res.headers['token'] ||
       res.headers['authorization'] ||
       res.data.token ||
       null
@@ -75,8 +74,13 @@ const handleLogin = async () => {
     if (token) {
       localStorage.setItem('accessToken', token)
 
-      console.log('로그인 성공, 토큰:', token)
-      router.push('/') // 메인 페이지 이동
+      // 토큰에서 닉네임 추출
+      const payload = JSON.parse(atob(token.split('.')[1]))
+      const nickname = payload.nickname || payload.sub || '사용자'
+      localStorage.setItem('nickname', nickname)
+
+      console.log('로그인 성공:', nickname)
+      router.push('/')
     } else {
       isError.value = true
       message.value = '아이디 또는 비밀번호를 잘못 입력하셨습니다.'
@@ -156,7 +160,7 @@ const handleLogin = async () => {
   align-items: center;
 }
 
-.form-container > :not(.input-group):not(h2):not(.error-message) {
+.form-container> :not(.input-group):not(h2):not(.error-message) {
   margin-bottom: 15px;
 }
 
@@ -177,6 +181,7 @@ h2 {
   margin-top: -5px;
   margin-bottom: 10px;
 }
+
 .find-line {
   display: flex;
   align-items: center;

@@ -28,18 +28,15 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import MyProfileDropdown from '@/components/common/MyProfileDropdown.vue'
 
 const router = useRouter()
-const isLoggedIn = ref(true)
+const isLoggedIn = ref(false)
+const nickname = ref('')
+const rankName = ref('코잘알')
 
-// 로그인 사용자 정보 예시
-const nickname = ref('알코알라')
-const rankName = ref('코알못')
-
-// 메뉴 목록
 const menuItems = [
     { label: '알고리즘학습', path: '/algorithm' },
     { label: '코딩풀이', path: '/problems' },
@@ -47,21 +44,27 @@ const menuItems = [
     { label: '스터디', path: '/study' },
 ]
 
-// 홈으로 이동
-const goHome = () => {
-    router.push('/')
-}
+onMounted(() => {
+    const token = localStorage.getItem('accessToken')
+    const name = localStorage.getItem('nickname')
 
-// 마이페이지 이동
-const goMyPage = () => {
-    console.log('➡️ 마이페이지 이동')
-    router.push('/mypage')
-}
+    if (token) {
+        isLoggedIn.value = true
+        nickname.value = name || '사용자'
+    }
+})
 
-// 로그아웃 처리
+const goHome = () => router.push('/')
+
+const goMyPage = () => router.push('/mypage')
+
 const handleLogout = () => {
     console.log('🚪 로그아웃 처리 완료')
+    localStorage.removeItem('accessToken')
+    localStorage.removeItem('nickname')
+
     isLoggedIn.value = false
+    router.push('/')
 }
 </script>
 
