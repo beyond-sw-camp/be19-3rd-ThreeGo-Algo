@@ -1,9 +1,9 @@
 <template>
-    <el-button class="custom-el-button" :class="computedClass" :style="computedStyle" :disabled="disabled"
+    <button class="custom-button" :class="computedClass" :style="computedStyle" :disabled="disabled"
         @click="handleClick" type="default">
         <img v-if="icon" :src="icon" alt="icon" class="btn-icon" :style="iconStyle" />
         <slot />
-    </el-button>
+    </button>
 </template>
 
 <script setup>
@@ -48,9 +48,9 @@ const iconStyle = computed(() => ({
 .base-button {
     font-family: 'Noto Sans KR';
     font-style: normal;
-    font-weight: 500;
+    font-weight: 400;
     font-size: 16px;
-    line-height: 1.2;
+    line-height: 1;
     border-radius: 5px;
     border: none;
     padding: 0 14px;

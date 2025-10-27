@@ -3,6 +3,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 import HomeView from '@/views/HomeView.vue'
+import NewHomeView from '@/views/home/HomePage.vue'
 import ButtonDemoPage from '@/views/demo/ButtonDemoPage.vue'
 import DateButtonDemoPage from '@/views/demo/DateButtonDemoPage.vue'
 import PostCountDemoPage from '@/views/demo/PostCountDemoPage.vue'
@@ -18,16 +19,59 @@ import BannerDemoPage from '@/views/demo/BannerDemoPage.vue';
 import CommentDemoPage from '@/views/demo/CommentDemoPage.vue';
 import TwoButtonPopupDemo from '@/views/demo/TwoButtonPopupDemo.vue';
 import OneButtonPopupDemo from '@/views/demo/OneButtonPopupDemo.vue';
+
+import StudyRecruitMain from '@/views/study-recruit/StudyRecruitMain.vue';
+import StudyRecruitPost from '@/views/study-recruit/StudyRecruitPost.vue'
+import StudyRecruitDetailPost from '@/views/study-recruit/StudyRecruitDetailPost.vue'
+import StudyRecruitManage from '@/views/study-recruit/StudyRecruitManage.vue'
+import CreateStudyGroup from '@/views/study-recruit/CreateStudyGroup.vue'
+import RoadmapListItemDemoPage from '@/views/demo/RoadmapListItemDemoPage.vue';
+import AlgoPostListItemDemoPage from '@/views/demo/AlgoPostListItemDemoPage.vue';
+import AlgoMainView from '@/views/algo/AlgoMainView.vue';
+import AlgoQuizView from '@/views/algo/AlgoQuizView.vue';
+import AlgoPostView from '@/views/algo/AlgoPostView.vue';
+import CareerInfoMainView from '@/views/career/CareerInfoMainView.vue'
+import CareerPostCreate from '@/views/career/CareerPostCreate.vue'
+import CareerPostDetail from '@/views/career/CareerPostDetail.vue'
+
 import SignupPage from '@/views/login/SignupPage.vue'
 import InputDemoPage from '@/views/demo/InputDemoPage.vue'
 import LoginPage from '@/views/login/LoginPage.vue'
 
+import StudyDemoPage from '@/views/demo/StudyDemoPage.vue'
+import StudyMainPage from '@/views/study/StudyMainPage.vue'
+import StudyBoardPage from '@/views/study/StudyBoardPage.vue'
+import StudySettingPage from '@/views/study/StudySettingPage.vue'
+import StudyRoadmapDemoPage from '@/views/demo/StudyRoadmapDemoPage.vue'
+
+
 const routes = [
   // 기본 홈
-  { path: '/', component: HomeView },
+  { path: '/', component: NewHomeView },
+  { path: '/home', component: NewHomeView },
+
+  // 스터디 모집
+  { path: '/study-recruit', name: 'StudyRecruit', component: StudyRecruitMain },
+  { path: '/study-recruit/post', name: 'StudyRecruitPost', component: StudyRecruitPost },
+  { path: '/study-recruit/:id', name: 'StudyRecruitDetail', component: StudyRecruitDetailPost },
+  { path: '/study-recruit/manage/:id', name: 'StudyRecruitManage', component: StudyRecruitManage },
+  { path: '/study-recruit/create-study', name: 'CreateStudyGroup', component: CreateStudyGroup },
+
+  // 스터디
+  { path: '/study', component: StudyMainPage },
+  { path: '/study/board', component: StudyBoardPage },
+  { path: '/study/settings', component: StudySettingPage },
+
+  // 기업별 정보 공유
+  { path: '/career-info', component: CareerInfoMainView },
+  { path: '/career-info/post', component: CareerPostCreate },
+  { path: '/career-info/:id', component: CareerPostDetail },
 
   { path: '/signup', component: SignupPage },
   { path: '/login', component: LoginPage },
+  { path: '/study', component: StudyMainPage },
+  { path: '/study/board', component: StudyBoardPage },
+  { path: '/study/settings', component: StudySettingPage },
 
 
   // 데모 페이지 라우트 (main 브랜치)
@@ -47,7 +91,20 @@ const routes = [
   { path: '/demo/twobuttonpopup', component: TwoButtonPopupDemo },
   { path: '/demo/onebuttonpopup', component: OneButtonPopupDemo},
   { path: '/demo/input', component: InputDemoPage},
+  { path: '/demo/study', component: StudyDemoPage},
+  { path: '/demo/onebuttonpopup', component: OneButtonPopupDemo },
+  { path: '/demo/input', component: InputDemoPage },
+  { path: '/demo/study/:studyId/roadmap', component: StudyRoadmapDemoPage },
+  { path: '/demo/roadmap/:roadmapId', component: RoadmapListItemDemoPage },
+  { path: '/demo/roadmap', redirect: '/demo/roadmap/1' },
+  { path: '/demo/algo-post-list-item', component: AlgoPostListItemDemoPage },
 
+  // 알고리즘 학습 라우트
+  { path: '/algorithm/roadmap/:roadmapId', component: AlgoMainView },
+  { path: '/algorithm/roadmap', redirect: '/algorithm/roadmap/1' },
+  { path: '/algorithm', redirect: '/algorithm/roadmap/1' },
+  { path: '/algorithm/post/:postId/quiz/:quizId', component: AlgoQuizView },
+  { path: '/algorithm/post/:postId', component: AlgoPostView },
 ]
 
 const router = createRouter({
