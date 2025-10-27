@@ -54,4 +54,6 @@ watch(hideHeaderFooter, (val) => {
   flex: 1;
   background-color: #ffffff;
 }
+
 </style>
+
