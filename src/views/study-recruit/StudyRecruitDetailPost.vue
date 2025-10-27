@@ -26,14 +26,6 @@
             <button class="action-link">삭제</button>
           </div>
 
-          <!-- 모집 목적 섹션 -->
-          <div class="section">
-            <h3 class="section-title">모집 목적</h3>
-            <div class="section-content">
-              <p>{{ post.content }}</p>
-            </div>
-          </div>
-
           <!-- 일정 및 진행 방식 섹션 -->
           <div class="section">
             <h3 class="section-title">일정 & 진행 방식</h3>
@@ -61,6 +53,14 @@
                 <span class="label">스터디 종료일</span>
                 <span class="value">{{ post.endDate }}</span>
               </div>
+            </div>
+          </div>
+
+          <!-- 모집 목적 섹션 -->
+          <div class="section">
+            <h3 class="section-title">모집 목적</h3>
+            <div class="section-content">
+              <p>{{ post.content }}</p>
             </div>
           </div>
 
