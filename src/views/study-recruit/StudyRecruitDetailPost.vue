@@ -77,17 +77,12 @@
 />
         </div>
 
-        <!-- 우측 박스 영역 (신청자 / 작성자 분기) -->
-        <div class="side-box">
-          <RecruitManagement v-if="isWriter" />
-
+        <!-- ✅ 우측 박스 영역 -->
+        <div class="side-box" v-if="post.title">
+          <RecruitManagement v-if="isWriter" :postId="route.params.postId"/>
           <template v-else>
-            <ApplyStudyBox v-if="!isApplied" @apply="handleApply" />
-            <AfterApplyStudyBox
-              v-else
-              :status="applyStatus"
-              @cancel="handleCancel"
-            />
+            <ApplyStudyBox v-if="!isApplied" :dDay="0" @apply="handleApply" />
+            <AfterApplyStudyBox v-else :status="applyStatus" @cancel="handleCancel" />
           </template>
         </div>
       </div>
@@ -125,12 +120,42 @@ const post = ref({
 });
 
 const comments = ref([]);
-const isWriter = ref(true);
+const isWriter = ref(false);
 const isApplied = ref(false);
 const applyStatus = ref("pending");
 const currentUser = ref({ nickname: "나", rankName: "코뉴비" });
+const currentUserId = ref(null); 
+const currentMemberId = ref(null);
 
-// ✅ 게시물 상세조회
+// ✅ 신청 상태 확인
+const fetchApplyStatus = async () => {
+  try {
+    // 백엔드 API: GET /study-recruit/posts/{postId}/applicants/me 또는 my-application
+    const response = await coreApi.get(`/study-recruit/posts/${postId}/applicants/me`);
+
+    if (response.data) {
+      isApplied.value = true;
+      applyStatus.value = response.data.status; // 예: "PENDING", "APPROVED", "REJECTED"
+      console.log("✅ 신청 상태:", response.data.status);
+    } else {
+      isApplied.value = false;
+      applyStatus.value = null;
+    }
+  } catch (error) {
+    // 404 에러는 신청하지 않은 것으로 간주
+    if (error.response?.status === 404) {
+      console.log("✅ 신청 내역 없음");
+      isApplied.value = false;
+      applyStatus.value = null;
+    } else {
+      console.error("❌ 신청 상태 확인 실패:", error);
+      isApplied.value = false;
+      applyStatus.value = null;
+    }
+  }
+};
+
+// ✅ 게시물 상세조회 (작성자 여부 + 신청상태까지 반영)
 const fetchPostDetail = async () => {
   try {
     const response = await coreApi.get(`/study-recruit/posts/${postId}`);
@@ -148,8 +173,53 @@ const fetchPostDetail = async () => {
       startDate: data.startDate,
       endDate: data.endDate,
     };
+
+    // ✅ 작성자 여부 판별
+    const writerId = Number(data.memberId);
+    isWriter.value = currentMemberId.value === writerId;
+
+    // ✅ 디버깅 로그
+    console.log("👤 currentMemberId:", currentMemberId.value);
+    console.log("🧑‍💻 writerId:", writerId);
+    console.log("✅ isWriter:", isWriter.value);
+
+    // ✅ 작성자 아닌 경우 → 신청 상태 확인
+    if (!isWriter.value) {
+      await fetchApplyStatus();
+    }
+
   } catch (error) {
     console.error("❌ 스터디 모집글 상세조회 실패:", error);
+  }
+};
+
+
+// ✅ 3️⃣ 신청하기
+const handleApply = async (applicantText) => {
+  try {
+    await coreApi.post(`/study-recruit/posts/${postId}/applicants`, {
+      applicant: applicantText
+    });
+    alert("스터디 신청이 완료되었습니다!");
+    isApplied.value = true;
+    applyStatus.value = "PENDING";
+  } catch (error) {
+    console.error("❌ 스터디 신청 실패:", error);
+    alert("신청 중 오류가 발생했습니다.");
+  }
+};
+
+
+// ✅ 4️⃣ 신청 취소
+const handleCancel = async () => {
+  try {
+    await coreApi.delete(`/study-recruit/posts/${postId}/applicants`);
+    alert("신청이 취소되었습니다.");
+    isApplied.value = false;
+    applyStatus.value = null;
+  } catch (error) {
+    console.error("❌ 신청 취소 실패:", error);
+    alert("신청 취소 중 오류가 발생했습니다.");
   }
 };
 
@@ -280,9 +350,13 @@ const deletePost = async () => {
   }
 };
 
-onMounted(() => {
-  fetchPostDetail();
-  fetchComments();
+onMounted(async () => {
+  // ✅ localStorage에서 memberId 가져오기
+  const storedMemberId = localStorage.getItem("memberId");
+  currentMemberId.value = storedMemberId ? Number(storedMemberId) : 0;
+
+  await fetchPostDetail();
+  await fetchComments();
 });
 </script>
 

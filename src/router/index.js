@@ -57,7 +57,7 @@ const routes = [
   { path: '/study-recruit', name: 'StudyRecruit', component: StudyRecruitMain, meta: { requiresAuth: true } },
   { path: '/study-recruit/post', name: 'StudyRecruitPost', component: StudyRecruitPost, meta: { requiresAuth: true } },
   { path: '/study-recruit/:postId', name: 'StudyRecruitDetail', component: StudyRecruitDetailPost, meta: { requiresAuth: true } },
-  { path: '/study-recruit/manage/:id', name: 'StudyRecruitManage', component: StudyRecruitManage, meta: { requiresAuth: true } },
+  { path: '/study-recruit/manage/:postId', name: 'StudyRecruitManage', component: StudyRecruitManage, meta: { requiresAuth: true } },
   { path: '/study-recruit/create-study', name: 'CreateStudyGroup', component: CreateStudyGroup, meta: { requiresAuth: true } },
 
   // 스터디

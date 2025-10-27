@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/USER/Desktop/2nd_project/Algo-Backend/src/main/java/com/threego/algo/studyrecruit/**)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
