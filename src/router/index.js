@@ -2,7 +2,6 @@
 // src/router/index.js
 import { createRouter, createWebHistory } from 'vue-router'
 
-import HomeView from '@/views/HomeView.vue'
 import NewHomeView from '@/views/home/HomePage.vue'
 import ButtonDemoPage from '@/views/demo/ButtonDemoPage.vue'
 import DateButtonDemoPage from '@/views/demo/DateButtonDemoPage.vue'
@@ -44,6 +43,10 @@ import StudyBoardPage from '@/views/study/StudyBoardPage.vue'
 import StudySettingPage from '@/views/study/StudySettingPage.vue'
 import StudyRoadmapDemoPage from '@/views/demo/StudyRoadmapDemoPage.vue'
 
+import CodingProblemList from '@/views/coding/CodingProblemList.vue'
+import CodingProblemDetail from '@/views/coding/CodingProblemDetail.vue'
+import Codingpost from '@/views/coding/Codingpost.vue'
+import CodingPostDetail from '@/views/coding/CodingPostDetail.vue'
 
 const routes = [
   // 기본 홈
@@ -74,6 +77,12 @@ const routes = [
   { path: '/algorithm/roadmap', redirect: '/algorithm/roadmap/1' },
   { path: '/algorithm', redirect: '/algorithm/roadmap/1' },
 
+  // 코딩 풀이
+  { path: '/coding-problems', component: CodingProblemList, meta: { requiresAuth: true }},
+  { path: '/coding-problem/:problemId/solutions', component: CodingProblemDetail, meta: { requiresAuth: true }},
+  { path: '/coding-problems/:problemId/solutions/new', component: Codingpost, meta: { requiresAuth: true }},
+  { path: '/coding-problems/:problemId/solutions/:solutionId', component: CodingPostDetail, meta: { requiresAuth: true }},
+
   // 회원 관련 (로그인 불필요)
   { path: '/signup', component: SignupPage },
   { path: '/login', component: LoginPage },
@@ -94,6 +103,7 @@ const routes = [
   { path: '/demo/infobanner', component: BannerDemoPage },
   { path: '/demo/comment', component: CommentDemoPage },
   { path: '/demo/twobuttonpopup', component: TwoButtonPopupDemo },
+
   { path: '/demo/onebuttonpopup', component: OneButtonPopupDemo },
   { path: '/demo/input', component: InputDemoPage },
   { path: '/demo/study', component: StudyDemoPage },

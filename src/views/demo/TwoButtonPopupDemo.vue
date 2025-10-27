@@ -87,7 +87,7 @@ const handleConfirm = (type) => {
 <style scoped>
 .popup-demo-page {
   padding: 40px;
-  text-align: center;
+  /* text-align: center; */
 }
 
 .btn-group {
