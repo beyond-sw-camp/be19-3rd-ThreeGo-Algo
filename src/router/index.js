@@ -43,6 +43,7 @@ import StudyMainPage from '@/views/study/StudyMainPage.vue'
 import StudyBoardPage from '@/views/study/StudyBoardPage.vue'
 import StudySettingPage from '@/views/study/StudySettingPage.vue'
 import StudyRoadmapDemoPage from '@/views/demo/StudyRoadmapDemoPage.vue'
+import MyStudyPage from '@/views/mypage/MyStudyPage.vue'
 
 
 const routes = [
@@ -58,7 +59,7 @@ const routes = [
   { path: '/study-recruit/create-study', name: 'CreateStudyGroup', component: CreateStudyGroup, meta: { requiresAuth: true } },
 
   // 스터디
-  { path: '/study', component: StudyMainPage, meta: { requiresAuth: true } },
+  { path: '/study/home', component: StudyMainPage, meta: { requiresAuth: true } },
   { path: '/study/board', component: StudyBoardPage, meta: { requiresAuth: true } },
   { path: '/study/settings', component: StudySettingPage, meta: { requiresAuth: true } },
 
@@ -110,6 +111,10 @@ const routes = [
   { path: '/algorithm', redirect: '/algorithm/roadmap/1' },
   { path: '/algorithm/post/:postId/quiz/:quizId', component: AlgoQuizView },
   { path: '/algorithm/post/:postId', component: AlgoPostView },
+
+  // 마이페이지 라우트
+  { path: '/mypage/study', component: MyStudyPage },
+
 ]
 
 const router = createRouter({
