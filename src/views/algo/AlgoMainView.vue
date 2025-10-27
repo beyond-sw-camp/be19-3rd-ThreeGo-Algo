@@ -1,39 +1,40 @@
 <template>
     <div class="algo-main-container">
-    <TabTitle title="알고리즘 학습" />
-    <PageInfoBanner title="알고리즘, 어디서부터 공부해야 할지 모르겠다면?" subtitle="기초부터 실전까지, 방향 있는 알고리즘 학습 로드맵을 따라가면 어느새 코잘알 🐨"
-        :image="bannerAlgo" bgColor="#F0FAFF" />
+        <TabTitle title="알고리즘 학습" />
+        <PageInfoBanner title="알고리즘, 어디서부터 공부해야 할지 모르겠다면?" subtitle="기초부터 실전까지, 방향 있는 알고리즘 학습 로드맵을 따라가면 어느새 코잘알 🐨"
+            :image="bannerAlgo" bgColor="#F0FAFF" />
 
-    <div class="roadmap-container">
-        <!-- 왼쪽 로드맵 리스트 -->
-        <div class="roadmap-sidebar">
-            <span class="sidebar-title">학습 로드맵</span>
-            <hr />
-            <RoadmapItem v-for="(item, index) in roadmaps" :key="item.id" :index="index" :id="item.id" :order="item.order" :title="item.title"
-                :isActive="currentRoadmapId === item.id" @click="clickRoadmap(item.id)" />
-        </div>
-
-        <!-- 오른쪽 게시물 리스트 -->
-        <div class="roadmap-content">
-            <h2 class="roadmap-step-title">
-                Step {{ currentIndex + 1 }} <span>{{ currentRoadmap.title }}</span>
-            </h2>
-            <p class="roadmap-step-desc">
-                &nbsp;&nbsp;{{ currentRoadmap.desc }}
-            </p>
-
-            <div class="algo-list">
-                <AlgoPostItem v-for="post in currentRoadmap.posts" :key="post.id" :id="post.id" :title="post.title"
-                    :quizIds="post.quizIds" :solvedQuizIds="post.solvedQuizIds" @click="clickPost(post.id)" />
+        <div class="roadmap-container">
+            <!-- 왼쪽 로드맵 리스트 -->
+            <div class="roadmap-sidebar">
+                <span class="sidebar-title">학습 로드맵</span>
+                <hr />
+                <RoadmapItem v-for="(item, index) in roadmaps" :key="item.id" :index="index" :id="item.id"
+                    :order="item.order" :title="item.title" :isActive="currentRoadmapId === item.id"
+                    @click="clickRoadmap(item.id)" />
             </div>
-            <span class="point-info">💡 학습 후 퀴즈를 맞히면 <span>2 포인트</span>를 얻을 수 있어요!</span>
 
-            <div class="roadmap-nav">
-                <CustomButton width="120px" :disabled="isFirst" @click="goPrev">이전 로드맵</CustomButton>
-                <CustomButton width="120px" :disabled="isLast" @click="goNext">다음 로드맵</CustomButton>
+            <!-- 오른쪽 게시물 리스트 -->
+            <div class="roadmap-content">
+                <h2 class="roadmap-step-title">
+                    Step {{ currentIndex + 1 }} <span>{{ currentRoadmap.title }}</span>
+                </h2>
+                <p class="roadmap-step-desc">
+                    &nbsp;&nbsp;{{ currentRoadmap.desc }}
+                </p>
+
+                <div class="algo-list">
+                    <AlgoPostItem v-for="post in currentRoadmap.posts" :key="post.id" :id="post.id" :title="post.title"
+                        :quizIds="post.quizIds" :solvedQuizIds="post.solvedQuizIds" @click="clickPost(post.id)" />
+                </div>
+                <span class="point-info">💡 학습 후 퀴즈를 맞히면 <span>2 포인트</span>를 얻을 수 있어요!</span>
+
+                <div class="roadmap-nav">
+                    <CustomButton width="120px" :disabled="isFirst" @click="goPrev">이전 로드맵</CustomButton>
+                    <CustomButton width="120px" :disabled="isLast" @click="goNext">다음 로드맵</CustomButton>
+                </div>
             </div>
         </div>
-    </div>
     </div>
 </template>
 
@@ -90,19 +91,19 @@ const currentRoadmapId = ref(Number(route.params.roadmapId) || 1);
 
 // URL 변경 감지
 watch(
-  () => route.params.roadmapId,
-  (newRoadmapId) => {
-    if (newRoadmapId) currentRoadmapId.value = Number(newRoadmapId);
-  }
+    () => route.params.roadmapId,
+    (newRoadmapId) => {
+        if (newRoadmapId) currentRoadmapId.value = Number(newRoadmapId);
+    }
 );
 
 const currentRoadmap = computed(() => roadmaps.find(r => r.id === currentRoadmapId.value));
 
 function clickRoadmap(id) {
-  if (id !== currentRoadmapId.value) {
-    currentRoadmapId.value = id;
-    router.push(`/algorithm/roadmap/${id}`);
-  }
+    if (id !== currentRoadmapId.value) {
+        currentRoadmapId.value = id;
+        router.push(`/algorithm/roadmap/${id}`);
+    }
 }
 
 function clickPost(id) {
@@ -124,17 +125,21 @@ function goPrev() {
 }
 
 function goNext() {
-  if (!isLast.value) {
-    const nextRoadmap = roadmaps[currentIndex.value + 1];
-    currentRoadmapId.value = nextRoadmap.id;
-    router.push(`/algorithm/roadmap/${nextRoadmap.id}`);
-  }
+    if (!isLast.value) {
+        const nextRoadmap = roadmaps[currentIndex.value + 1];
+        currentRoadmapId.value = nextRoadmap.id;
+        router.push(`/algorithm/roadmap/${nextRoadmap.id}`);
+    }
 }
 </script>
 
 <style scoped>
 .algo-main-container {
-    min-height: 900px;
+    min-height: 100vh;
+    flex: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 50px 20px 60px;
 }
 
 .page-title {

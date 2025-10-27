@@ -8,7 +8,7 @@
       <router-view />
     </main>
 
-    <Footer v-if="showFooter" /> 
+    <Footer v-if="showFooter" />
   </div>
 </template>
 
@@ -26,7 +26,7 @@ const hideHeaderFooter = computed(() => {
 })
 
 const isStudyPage = computed(() => {
-  return route.path.startsWith('/study')
+  return route.path.startsWith('/study/')
 })
 
 const showDefaultHeader = computed(() => {
@@ -55,14 +55,14 @@ watch(hideHeaderFooter, (val) => {
 }
 
 #app.full-page {
-  display: block;  
+  display: block;
   min-height: 100vh;
   padding: 0;
   margin: 0;
 }
 
 #app.full-page .main-content {
-  flex: none; 
+  flex: none;
   min-height: 100vh;
 }
 
@@ -70,5 +70,4 @@ watch(hideHeaderFooter, (val) => {
   flex: 1;
   background-color: #ffffff;
 }
-
 </style>

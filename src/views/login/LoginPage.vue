@@ -5,10 +5,10 @@
 
       <div class="left-content">
         <p class="slogan">
-          매일 성장하는 당신을<br/>
+          매일 성장하는 당신을<br />
           응원하는 ALGO입니다.
         </p>
-  
+
         <img src="@/assets/images/login.png" alt="login image" class="login-image" />
       </div>
     </div>
@@ -20,11 +20,7 @@
         <Input placeholder="이메일" icon="mail.svg" width="100%" v-model="email" />
         <Input placeholder="비밀번호" icon="lock.svg" width="100%" type="password" v-model="password" />
         <p v-if="isError" class="error-message">{{ message }}</p>
-        <CustomButton
-          width="100%"
-          height="sm"
-          @click="handleLogin"
-        >
+        <CustomButton width="100%" height="sm" @click="handleLogin">
           로그인
         </CustomButton>
         <div class="find-line">
@@ -47,11 +43,12 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import Input from '@/components/common/Input.vue'
 import CustomButton from '@/components/common/CustomButton.vue'
+import memberApi from '@/api/memberApi'
 
 const email = ref('')
 const password = ref('')
 const isError = ref(false)
-const message = ref('')  
+const message = ref('')
 const router = useRouter()
 
 const goToSignup = () => {
@@ -59,25 +56,42 @@ const goToSignup = () => {
 }
 
 const handleLogin = async () => {
-  console.log('로그인 버튼 클릭됨')
-
   isError.value = false
   message.value = ''
-  
+
   try {
-    //fetch 요청하기
-    
-    const result = false  // true면 성공, false면 실패
-    
-    if (result) {
+    const res = await memberApi.post('/login', {
+      email: email.value,
+      password: password.value,
+    })
+
+    const token =
+      res.headers['token'] ||
+      res.headers['authorization'] ||
+      res.data.token ||
+      null
+
+    if (token) {
+      localStorage.setItem('accessToken', token)
+
+      // 토큰에서 닉네임 추출
+      const payload = JSON.parse(atob(token.split('.')[1]))
+      const nickname = payload.nickname || payload.sub || '사용자'
+      localStorage.setItem('nickname', nickname)
+
+      console.log('로그인 성공:', nickname)
       router.push('/')
     } else {
       isError.value = true
       message.value = '아이디 또는 비밀번호를 잘못 입력하셨습니다.'
     }
-  } catch (error) {
+  } catch (err) {
     isError.value = true
-    console.error('로그인 에러:', error)
+    if (err.response?.status === 401) {
+      message.value = '아이디 또는 비밀번호를 잘못 입력하셨습니다.'
+    } else {
+      message.value = '로그인 중 오류가 발생했습니다.'
+    }
   }
 }
 </script>
@@ -146,7 +160,7 @@ const handleLogin = async () => {
   align-items: center;
 }
 
-.form-container > :not(.input-group):not(h2):not(.error-message) {
+.form-container> :not(.input-group):not(h2):not(.error-message) {
   margin-bottom: 15px;
 }
 
@@ -167,6 +181,7 @@ h2 {
   margin-top: -5px;
   margin-bottom: 10px;
 }
+
 .find-line {
   display: flex;
   align-items: center;
