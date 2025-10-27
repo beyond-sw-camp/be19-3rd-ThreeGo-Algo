@@ -1,258 +1,290 @@
 <template>
     <div class="comment-section">
-    <!-- 댓글 입력 영역 -->
-    <div class="comment-input-wrapper">
-        <div class="mini-profile-wrapper">
-        <MiniProfile 
-            :nickname="currentUser.nickname" 
-            :rankName="currentUser.rankName" />
-        </div>
-        <div class="comment-input">
-        <el-input
-            v-model="newCommentContent"
-            type="textarea"
-            :rows="3"
-            placeholder="내용을 입력하세요"
-            resize="none" />
-        <el-button 
-            type="primary" 
-            size="small"
-            @click="handleSubmitComment"
-            :disabled="!newCommentContent.trim()" >
-            댓글 작성
-        </el-button>
-        </div>
-    </div>
-
-    <!-- 댓글 개수 표시 -->
-    <div class="comment-header">
-        <span class="comment-count">댓글 {{ totalComments }}</span>
-        <el-dropdown trigger="click" @command="handleSort">
-        <span class="sort-dropdown">
-            등록순 
-            <el-icon><arrow-down /></el-icon>
-        </span>
-        <template #dropdown>
-            <el-dropdown-menu>
-                <el-dropdown-item command="oldest">등록순</el-dropdown-item>
-                <el-dropdown-item command="latest">최신순</el-dropdown-item>
-            </el-dropdown-menu>
-        </template>
-        </el-dropdown>
-    </div>
-
-    <!-- 댓글 목록 -->
-    <div class="comment-list">
-        <div 
-        class="comment-item" 
-        v-for="comment in comments" 
-        :key="comment.id" >
-
-        <!-- 댓글 수정 모드 -->
-        <div v-if="editingCommentId === comment.id" class="comment-edit-mode">
+        <!-- 댓글 입력 영역 -->
+        <div class="comment-input-wrapper">
             <div class="mini-profile-wrapper">
-            <MiniProfile 
-            :nickname="comment.nickname" 
-            :rankName="comment.rankName" />
+                <MiniProfile
+                    :nickname="currentUser.nickname"
+                    :rankName="currentUser.rankName" />
             </div>
-            <div class="edit-content">
+            <div class="comment-input">
                 <el-input
-                v-model="editContent"
-                type="textarea"
-                :rows="3"
-                resize="none" />
-                <div class="edit-actions">
-                    <el-button size="small" @click="cancelEdit">취소</el-button>
-                    <el-button 
-                        type="primary" 
-                        size="small"
-                        @click="submitEditComment(comment.id)"
-                        :disabled="!editContent.trim()" >
-                    수정 완료
-                    </el-button>
-                </div>
+                    v-model="newCommentContent"
+                    type="textarea"
+                    :rows="3"
+                    placeholder="내용을 입력하세요"
+                    resize="none" />
+                <el-button
+                    type="primary"
+                    size="small"
+                    @click="handleSubmitComment"
+                    :disabled="!newCommentContent.trim()">
+                    댓글 작성
+                </el-button>
             </div>
         </div>
 
-        <!-- 댓글 일반 모드 -->
-        <div v-else class="comment-main">
-            <div class="comment-body">
-                <div class="comment-header-info">
-                <MiniProfile 
-                :nickname="comment.nickname" 
-                :rankName="comment.rankName" />
-                <span class="comment-time">{{ formatCreatedAt(comment.createdAt) }}</span>
-
-                <!-- 케밥 메뉴 (본인 댓글) -->
-                <el-dropdown 
-                    v-if="isMyComment(comment)"
-                    trigger="click"
-                    @command="(cmd) => handleCommentAction(cmd, comment)"
-                    class="kebab-menu" >
-                <el-icon class="kebab-icon"><more-filled /></el-icon>
+        <!-- 댓글 개수 표시 -->
+        <div class="comment-header">
+            <span class="comment-count">댓글 {{ totalComments }}</span>
+            <el-dropdown trigger="click" @command="handleSort">
+                <span class="sort-dropdown">
+                    등록순
+                    <el-icon><arrow-down /></el-icon>
+                </span>
                 <template #dropdown>
                     <el-dropdown-menu>
-                        <el-dropdown-item command="edit">수정</el-dropdown-item>
-                        <el-dropdown-item command="delete">삭제</el-dropdown-item>
+                        <el-dropdown-item command="oldest">등록순</el-dropdown-item>
+                        <el-dropdown-item command="latest">최신순</el-dropdown-item>
                     </el-dropdown-menu>
                 </template>
-                </el-dropdown>
-
-                <!-- 신고 버튼 (남의 댓글) -->
-                <el-button 
-                    v-else
-                    type="text" 
-                    class="report-btn"
-                    @click="handleReport(comment)">
-                    <img src="@/assets/icons/report.svg" alt="신고" class="report-icon" />
-                    신고
-                </el-button>
-            </div>
-            <div class="comment-content">{{ comment.content }}</div>
-            <div class="comment-actions">
-                <el-button 
-                    type="text" 
-                    class="action-btn reply-btn"
-                    @click="toggleReply(comment.id)" >
-                    답글
-                </el-button>
-            </div>
-            </div>
+            </el-dropdown>
         </div>
 
-        <!-- 답글 입력 영역 -->
-        <div 
-            class="reply-input-wrapper" 
-            v-if="replyStates[comment.id]?.showInput" >
-            <div class="mini-profile-wrapper">
-            <MiniProfile 
-                :nickname="currentUser.nickname" 
-                :rankName="currentUser.rankName" />
-            </div>
-            <div class="reply-input">
-                <el-input
-                v-model="replyStates[comment.id].content"
-                type="textarea"
-                :rows="2"
-                placeholder="답글을 입력하세요"
-                resize="none" />
-                <div class="reply-actions-buttons">
-                    <el-button size="small" @click="cancelReply(comment.id)">
-                        취소
-                    </el-button>
-                    <el-button 
-                        type="primary" 
-                        size="small"
-                        @click="handleSubmitReply(comment)"
-                        :disabled="!replyStates[comment.id]?.content.trim()" >
-                    답글 작성
-                    </el-button>
-                </div>
-            </div>
-        </div>
-
-        <!-- 답글 목록 -->
-        <div class="reply-list" v-if="comment.replies && comment.replies.length > 0">
-            <div 
-                class="reply-item" 
-                v-for="reply in comment.replies" 
-                :key="reply.id" >
-
-            <!-- 답글 수정 모드 -->
-            <div v-if="editingReplyId === reply.id" class="reply-edit-mode">
-                <div class="mini-profile-wrapper">
-                <MiniProfile
-                    :nickname="reply.nickname"
-                    :rankName="reply.rankName" />
-                    </div>
-                <div class="edit-content">
-                    <el-input
-                    v-model="editReplyContent"
-                    type="textarea"
-                    :rows="2"
-                    resize="none" />
-                    <div class="edit-actions">
-                        <el-button size="small" @click="cancelReplyEdit">취소</el-button>
-                        <el-button 
-                            type="primary" 
-                            size="small"
-                            @click="submitEditReply(reply.id, comment.id)"
-                            :disabled="!editReplyContent.trim()" >
-                            수정 완료
-                        </el-button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 답글 일반 모드 -->
-            <div v-else class="reply-content-wrapper">
-                <img src="@/assets/icons/reply-kebab.svg" alt="답글 옵션" class="kebab-icon" />
-                <div class="reply-body">
-                    <div class="reply-header-info">
+        <!-- 댓글 목록 -->
+        <div class="comment-list">
+            <div
+                class="comment-item"
+                v-for="comment in comments"
+                :key="comment.id">
+                <!-- 댓글 수정 모드 -->
+                <div v-if="editingCommentId === comment.id" class="comment-edit-mode">
                     <div class="mini-profile-wrapper">
-                    <MiniProfile
-                    :nickname="reply.nickname"
-                    :rankName="reply.rankName"/>
+                        <MiniProfile
+                            :nickname="comment.nickname"
+                            :rankName="comment.rankName" />
                     </div>
-                    <span class="reply-time">{{ formatCreatedAt(reply.createdAt) }}</span>
-                    
-                    <!-- 케밥 메뉴 (본인 답글) -->
-                    <el-dropdown 
-                        v-if="isMyReply(reply)"
-                        trigger="click"
-                        @command="(cmd) => handleReplyAction(cmd, reply, comment.id)"
-                        class="kebab-menu" >
-                        <el-icon class="kebab-icon"><more-filled /></el-icon>
-                        <template #dropdown>
-                            <el-dropdown-menu>
-                                <el-dropdown-item command="edit">수정</el-dropdown-item>
-                                <el-dropdown-item command="delete">삭제</el-dropdown-item>
-                            </el-dropdown-menu>
-                        </template>
-                    </el-dropdown>
+                    <div class="edit-content">
+                        <el-input
+                            v-model="editContent"
+                            type="textarea"
+                            :rows="3"
+                            resize="none" />
+                        <div class="edit-actions">
+                            <el-button size="small" @click="cancelEdit">취소</el-button>
+                            <el-button
+                                type="primary"
+                                size="small"
+                                @click="submitEditComment(comment.id)"
+                                :disabled="!editContent.trim()">
+                                수정 완료
+                            </el-button>
+                        </div>
+                    </div>
+                </div>
 
-                    <!-- 신고 버튼 (남의 답글) -->
-                    <el-button 
-                        v-else
-                        type="text" 
-                        class="report-btn"
-                        @click="handleReportReply(reply)">
-                        <img src="@/assets/icons/report.svg" alt="신고" class="report-icon" />
-                        신고
-                    </el-button>
+                <!-- 댓글 일반 모드 -->
+                <div v-else class="comment-main">
+                    <div class="comment-body">
+                        <div class="comment-header-info">
+                            <MiniProfile
+                                :nickname="comment.nickname"
+                                :rankName="comment.rankName" />
+                            <span class="comment-time">{{
+                                formatCreatedAt(comment.createdAt)
+                            }}</span>
+
+                            <!-- 케밥 메뉴 (본인 댓글) -->
+                            <el-dropdown
+                                v-if="isMyComment(comment)"
+                                trigger="click"
+                                @command="(cmd) => handleCommentAction(cmd, comment)"
+                                class="kebab-menu">
+                                <el-icon class="kebab-icon"><more-filled /></el-icon>
+                                <template #dropdown>
+                                    <el-dropdown-menu>
+                                        <el-dropdown-item command="edit">수정</el-dropdown-item>
+                                        <el-dropdown-item command="delete">삭제</el-dropdown-item>
+                                    </el-dropdown-menu>
+                                </template>
+                            </el-dropdown>
+
+                            <!-- 신고 버튼 (남의 댓글) -->
+                            <el-button
+                                v-else
+                                type="text"
+                                class="report-btn"
+                                @click="handleReport(comment)">
+                                <img
+                                    src="@/assets/icons/report.svg"
+                                    alt="신고"
+                                    class="report-icon" />
+                                신고
+                            </el-button>
+                        </div>
+                        <div class="comment-content">{{ comment.content }}</div>
+                        <div class="comment-actions">
+                            <el-button
+                                type="text"
+                                class="action-btn reply-btn"
+                                @click="toggleReply(comment.id)">
+                                답글
+                            </el-button>
+                        </div>
                     </div>
-                    <div class="reply-content">{{ reply.content }}</div>
+                </div>
+
+                <!-- 답글 입력 영역 -->
+                <div
+                    class="reply-input-wrapper"
+                    v-if="replyStates[comment.id]?.showInput">
+                    <div class="mini-profile-wrapper">
+                        <MiniProfile
+                            :nickname="currentUser.nickname"
+                            :rankName="currentUser.rankName" />
+                    </div>
+                    <div class="reply-input">
+                        <el-input
+                            v-model="replyStates[comment.id].content"
+                            type="textarea"
+                            :rows="2"
+                            placeholder="답글을 입력하세요"
+                            resize="none" />
+                        <div class="reply-actions-buttons">
+                            <el-button size="small" @click="cancelReply(comment.id)">
+                                취소
+                            </el-button>
+                            <el-button
+                                type="primary"
+                                size="small"
+                                @click="handleSubmitReply(comment)"
+                                :disabled="!replyStates[comment.id]?.content.trim()">
+                                답글 작성
+                            </el-button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 답글 목록 -->
+                <div
+                    class="reply-list"
+                    v-if="comment.replies && comment.replies.length > 0">
+                    <div
+                        class="reply-item"
+                        v-for="reply in comment.replies"
+                        :key="reply.id">
+                        <!-- 답글 수정 모드 -->
+                        <div v-if="editingReplyId === reply.id" class="reply-edit-mode">
+                            <div class="mini-profile-wrapper">
+                                <MiniProfile
+                                    :nickname="reply.nickname"
+                                    :rankName="reply.rankName" />
+                            </div>
+                            <div class="edit-content">
+                                <el-input
+                                    v-model="editReplyContent"
+                                    type="textarea"
+                                    :rows="2"
+                                    resize="none" />
+                                <div class="edit-actions">
+                                    <el-button size="small" @click="cancelReplyEdit"
+                                        >취소</el-button
+                                    >
+                                    <el-button
+                                        type="primary"
+                                        size="small"
+                                        @click="submitEditReply(reply.id, comment.id)"
+                                        :disabled="!editReplyContent.trim()">
+                                        수정 완료
+                                    </el-button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 답글 일반 모드 -->
+                        <div v-else class="reply-content-wrapper">
+                            <img
+                                src="@/assets/icons/reply-kebab.svg"
+                                alt="답글 옵션"
+                                class="kebab-icon" />
+                            <div class="reply-body">
+                                <div class="reply-header-info">
+                                    <div class="mini-profile-wrapper">
+                                        <MiniProfile
+                                            :nickname="reply.nickname"
+                                            :rankName="reply.rankName" />
+                                    </div>
+                                    <span class="reply-time">{{
+                                        formatCreatedAt(reply.createdAt)
+                                    }}</span>
+
+                                    <!-- 케밥 메뉴 (본인 답글) -->
+                                    <el-dropdown
+                                        v-if="isMyReply(reply)"
+                                        trigger="click"
+                                        @command="
+                                            (cmd) => handleReplyAction(cmd, reply, comment.id)
+                                        "
+                                        class="kebab-menu">
+                                        <el-icon class="kebab-icon"><more-filled /></el-icon>
+                                        <template #dropdown>
+                                            <el-dropdown-menu>
+                                                <el-dropdown-item command="edit"
+                                                    >수정</el-dropdown-item
+                                                >
+                                                <el-dropdown-item command="delete"
+                                                    >삭제</el-dropdown-item
+                                                >
+                                            </el-dropdown-menu>
+                                        </template>
+                                    </el-dropdown>
+
+                                    <!-- 신고 버튼 (남의 답글) -->
+                                    <el-button
+                                        v-else
+                                        type="text"
+                                        class="report-btn"
+                                        @click="handleReportReply(reply)">
+                                        <img
+                                            src="@/assets/icons/report.svg"
+                                            alt="신고"
+                                            class="report-icon" />
+                                        신고
+                                    </el-button>
+                                </div>
+                                <div class="reply-content">{{ reply.content }}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 답글 더보기 버튼 -->
+                    <div class="show-more-replies">
+                        <el-button type="text" class="more-btn"> + 답글 보기 </el-button>
+                    </div>
                 </div>
             </div>
         </div>
 
-            <!-- 답글 더보기 버튼 -->
-            <div class="show-more-replies">
-            <el-button type="text" class="more-btn">
-                + 답글 보기
-            </el-button>
-            </div>
-        </div>
-        </div>
-    </div>
+        <!-- 신고 모달 -->
+        <ReportModal
+    v-model="isReportModalVisible"
+    :targetType="reportTarget?.type"
+    :targetNickname="reportTarget?.nickname"
+    :targetContent="reportTarget?.content"
+    :targetId="reportTarget?.id"
+    @submit="handleReportSubmit"
+/>
     </div>
 </template>
 
 <script setup>
-import { ref, computed, reactive } from 'vue'
-import { ArrowDown, MoreFilled } from '@element-plus/icons-vue'
-import MiniProfile from '@/components/common/MiniProfile.vue'
+import { ref, computed, reactive } from 'vue';
+import { ArrowDown, MoreFilled } from '@element-plus/icons-vue';
+import MiniProfile from '@/components/common/MiniProfile.vue';
+import ReportModal from '@/components/common/reportModal.vue';
+
+
 const props = defineProps({
     comments: {
         type: Array,
         required: true,
-        default: () => []
+        default: () => [],
     },
     currentUser: {
         type: Object,
-        required: true
-    }
-})
+        required: true,
+    },
+});
 
 const emit = defineEmits([
     'submit-comment',
@@ -261,182 +293,226 @@ const emit = defineEmits([
     'delete-comment',
     'edit-reply',
     'delete-reply',
-    'report-comment',
-    'report-reply'
-])
+    'report-comment', // 신고 이벤트 추가
+    'report-reply', // 답글 신고 이벤트 추가
+    'report-submit', // 최종 신고 제출 이벤트 (모달에서 발생)
+]);
 
 // 새 댓글 내용
-const newCommentContent = ref('')
+const newCommentContent = ref('');
 
 // 답글 상태 관리
-const replyStates = reactive({})
+const replyStates = reactive({});
 
 // 수정 상태 관리
-const editingCommentId = ref(null)
-const editContent = ref('')
-const editingReplyId = ref(null)
-const editReplyContent = ref('')
+const editingCommentId = ref(null);
+const editContent = ref('');
+const editingReplyId = ref(null);
+const editReplyContent = ref('');
+
+// 신고 모달 상태
+const isReportModalVisible = ref(false);
+const reportTarget = ref(null); // 신고 대상 (댓글 또는 답글 객체)
+const reportReason = ref(''); // 신고 사유
+const reportContent = ref(''); // 기타 신고 내용
 
 // 전체 댓글 개수 (답글 포함)
 const totalComments = computed(() => {
     return props.comments.reduce((total, comment) => {
-    return total + 1 + (comment.replies?.length || 0)
-    }, 0)
-})
+        return total + 1 + (comment.replies?.length || 0);
+    }, 0);
+});
 
 // 댓글 작성
 const handleSubmitComment = () => {
-    if (!newCommentContent.value.trim()) return
+    if (!newCommentContent.value.trim()) return;
 
     emit('submit-comment', {
-    content: newCommentContent.value.trim()
-    })
+        content: newCommentContent.value.trim(),
+    });
 
-    newCommentContent.value = ''
-}
+    newCommentContent.value = '';
+};
 
 // 답글 토글
 const toggleReply = (commentId) => {
     if (!replyStates[commentId]) {
-    replyStates[commentId] = { showInput: false, content: '' }
+        replyStates[commentId] = { showInput: false, content: '' };
     }
-    replyStates[commentId].showInput = !replyStates[commentId].showInput
+    replyStates[commentId].showInput = !replyStates[commentId].showInput;
 
     // 다른 답글 입력창 닫기
-    Object.keys(replyStates).forEach(key => {
+    Object.keys(replyStates).forEach((key) => {
         if (parseInt(key) !== commentId) {
-            replyStates[key].showInput = false
+            replyStates[key].showInput = false;
         }
-    })
-}
+    });
+};
 
 // 답글 취소
 const cancelReply = (commentId) => {
     if (replyStates[commentId]) {
-        replyStates[commentId].showInput = false
-        replyStates[commentId].content = ''
+        replyStates[commentId].showInput = false;
+        replyStates[commentId].content = '';
     }
-}
+};
 
 // 답글 작성
 const handleSubmitReply = (comment) => {
-    const content = replyStates[comment.id]?.content
-    if (!content?.trim()) return
+    const content = replyStates[comment.id]?.content;
+    if (!content?.trim()) return;
 
     emit('submit-reply', {
         commentId: comment.id,
-        content: content.trim()
-    })
+        content: content.trim(),
+    });
 
-    replyStates[comment.id].content = ''
-    replyStates[comment.id].showInput = false
-}
+    replyStates[comment.id].content = '';
+    replyStates[comment.id].showInput = false;
+};
 
 // 본인 댓글 확인
 const isMyComment = (comment) => {
-    return comment.userId === props.currentUser.id
-}
+    return comment.userId === props.currentUser.id;
+};
 
 // 본인 답글 확인
 const isMyReply = (reply) => {
-    return reply.userId === props.currentUser.id
-}
+    return reply.userId === props.currentUser.id;
+};
 
 // 댓글 케밥 메뉴 액션
 const handleCommentAction = (command, comment) => {
     if (command === 'edit') {
-        editingCommentId.value = comment.id
-        editContent.value = comment.content
+        editingCommentId.value = comment.id;
+        editContent.value = comment.content;
     } else if (command === 'delete') {
-    emit('delete-comment', comment.id)
+        emit('delete-comment', comment.id);
     }
-}
+};
 
 // 답글 케밥 메뉴 액션
 const handleReplyAction = (command, reply, commentId) => {
     if (command === 'edit') {
-        editingReplyId.value = reply.id
-        editReplyContent.value = reply.content
+        editingReplyId.value = reply.id;
+        editReplyContent.value = reply.content;
     } else if (command === 'delete') {
-        emit('delete-reply', { replyId: reply.id, commentId })
+        emit('delete-reply', { replyId: reply.id, commentId });
     }
-}
+};
 
 // 댓글 수정 제출
 const submitEditComment = (commentId) => {
-    if (!editContent.value.trim()) return
+    if (!editContent.value.trim()) return;
 
     emit('edit-comment', {
         commentId,
-        content: editContent.value.trim()
-    })
+        content: editContent.value.trim(),
+    });
 
-    cancelEdit()
-}
+    cancelEdit();
+};
 
 // 댓글 수정 취소
 const cancelEdit = () => {
-    editingCommentId.value = null
-    editContent.value = ''
-}
+    editingCommentId.value = null;
+    editContent.value = '';
+};
 
 // 답글 수정 제출
 const submitEditReply = (replyId, commentId) => {
-    if (!editReplyContent.value.trim()) return
+    if (!editReplyContent.value.trim()) return;
 
     emit('edit-reply', {
-    replyId,
-    commentId,
-    content: editReplyContent.value.trim()
-    })
+        replyId,
+        commentId,
+        content: editReplyContent.value.trim(),
+    });
 
-    cancelReplyEdit()
-}
+    cancelReplyEdit();
+};
 
 // 답글 수정 취소
 const cancelReplyEdit = () => {
-    editingReplyId.value = null
-    editReplyContent.value = ''
-}
+    editingReplyId.value = null;
+    editReplyContent.value = '';
+};
 
 // 댓글 신고
 const handleReport = (comment) => {
-    emit('report-comment', comment)
-}
+    reportTarget.value = { ...comment, type: 'comment' }; // 신고 대상 설정 및 타입 명시
+    isReportModalVisible.value = true;
+    reportReason.value = ''; // 모달 열 때 사유 초기화
+    reportContent.value = ''; // 모달 열 때 기타 내용 초기화
+    // emit('report-comment', comment); // 기존 이벤트 유지
+};
 
 // 답글 신고
 const handleReportReply = (reply) => {
-    emit('report-reply', reply)
-}
+    reportTarget.value = { ...reply, type: 'reply' }; // 신고 대상 설정 및 타입 명시
+    isReportModalVisible.value = true;
+    reportReason.value = ''; // 모달 열 때 사유 초기화
+    reportContent.value = ''; // 모달 열 때 기타 내용 초기화
+    emit('report-reply', reply); // 기존 이벤트 유지
+};
+
+// 신고 모달 취소
+const cancelReport = () => {
+    isReportModalVisible.value = false;
+    reportTarget.value = null;
+    reportReason.value = '';
+    reportContent.value = '';
+};
+
+// 신고 제출
+const submitReport = () => {
+    if (!reportReason.value || (reportReason.value === '기타' && !reportContent.value.trim())) {
+        return; // 사유가 선택되지 않았거나 기타 선택 시 내용이 없으면 제출 불가
+    }
+
+    emit('report-submit', {
+        targetId: reportTarget.value.id,
+        targetType: reportTarget.value.type,
+        reason: reportReason.value,
+        content: reportReason.value === '기타' ? reportContent.value.trim() : reportReason.value,
+        // 필요하다면 신고자의 정보도 추가
+        reporterId: props.currentUser.id,
+    });
+
+    cancelReport(); // 신고 후 모달 닫기 및 상태 초기화
+};
 
 // 정렬 핸들러
-const handleSort = (command) => { console.log('정렬:', command) }
+const handleSort = (command) => {
+    console.log('정렬:', command);
+    // 실제 정렬 로직 구현 필요 (emit으로 부모에 정렬 요청)
+};
 
 // 시간 포맷팅
 const formatCreatedAt = (createdAt) => {
-    if (!createdAt) return ''
+    if (!createdAt) return '';
 
-    const date = new Date(createdAt)
-    const now = new Date()
-    const diff = now - date
+    const date = new Date(createdAt);
+    const now = new Date();
+    const diff = now - date;
 
-    const minutes = Math.floor(diff / 60000)
-    const hours = Math.floor(diff / 3600000)
-    const days = Math.floor(diff / 86400000)
+    const minutes = Math.floor(diff / 60000);
+    const hours = Math.floor(diff / 3600000);
+    const days = Math.floor(diff / 86400000);
 
-    if (minutes < 1) return '방금 전'
-    if (minutes < 60) return `${minutes}분 전`
-    if (hours < 24) return `${hours}시간 전`
-    if (days < 7) return `${days}일 전`
+    if (minutes < 1) return '방금 전';
+    if (minutes < 60) return `${minutes}분 전`;
+    if (hours < 24) return `${hours}시간 전`;
+    if (days < 7) return `${days}일 전`;
 
-    const year = date.getFullYear()
-    const month = String(date.getMonth() + 1).padStart(2, '0')
-    const day = String(date.getDate()).padStart(2, '0')
-    const hour = String(date.getHours()).padStart(2, '0')
-    const minute = String(date.getMinutes()).padStart(2, '0')
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hour = String(date.getHours()).padStart(2, '0');
+    const minute = String(date.getMinutes()).padStart(2, '0');
 
-    return `${year}.${month}.${day} ${hour}:${minute}`
-}
+    return `${year}.${month}.${day} ${hour}:${minute}`;
+};
 </script>
 
 <style scoped>
@@ -445,25 +521,25 @@ const formatCreatedAt = (createdAt) => {
 }
 
 .comment-input-wrapper {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  margin-bottom: 24px;
-  padding: 16px;
-  background: #f8f9fa;
-  border-radius: 8px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 24px;
+    padding: 16px;
+    background: #f8f9fa;
+    border-radius: 8px;
 }
 
 .mini-profile-wrapper {
-  position: relative;
-  top: 6px;
+    position: relative;
+    top: 6px;
 }
 
 .comment-input {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
 .comment-input :deep(.el-textarea__inner) {
@@ -573,11 +649,19 @@ const formatCreatedAt = (createdAt) => {
     padding: 4px 8px;
     font-size: 13px;
     color: #000000;
+    display: flex; /* 아이콘과 텍스트 정렬을 위해 추가 */
+    align-items: center; /* 아이콘과 텍스트 정렬을 위해 추가 */
+    gap: 4px; /* 아이콘과 텍스트 사이 간격 */
 }
 
 .report-btn:hover {
     color: #f56c6c;
     background: #fef0f0;
+}
+
+.report-icon {
+    width: 14px;
+    height: 14px;
 }
 
 .comment-content,
@@ -663,9 +747,9 @@ const formatCreatedAt = (createdAt) => {
 }
 
 .reply-background {
-    background-color: #f0faff; 
-    border-radius: 4px; 
-    padding: 8px; 
+    background-color: #f0faff;
+    border-radius: 4px;
+    padding: 8px;
 }
 
 .reply-content-wrapper,
@@ -687,5 +771,35 @@ const formatCreatedAt = (createdAt) => {
     font-size: 13px;
     color: #409eff;
     padding: 4px 0;
+}
+
+/* Report Modal Styles */
+.report-modal-content p {
+    margin-bottom: 15px;
+    font-size: 15px;
+    color: #303133;
+}
+
+.report-reason-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.report-textarea {
+    margin-top: 10px;
+}
+
+.report-textarea :deep(.el-textarea__inner) {
+    border: 1px solid #dcdfe6;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.dialog-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
 }
 </style>

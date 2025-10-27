@@ -17,13 +17,24 @@
             @report-comment="handleReportComment"
             @report-reply="handleReportReply" />
         </div>
+
+    <!-- 신고 모달 -->
+    <ReportModal
+      v-model="reportModal.visible"
+      :targetType="reportModal.targetType"
+      :targetNickname="reportModal.targetNickname"
+      :targetContent="reportModal.targetContent"
+      :targetId="reportModal.targetId"
+      @submit="handleReportSubmit"
+    />
     </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import Comment from '@/components/common/Comment.vue'
+import ReportModal from '@/components/common/reportModal.vue'
 
 // 현재 로그인한 사용자
 const currentUser = ref({
@@ -79,6 +90,15 @@ const comments = ref([
         replies: []
     }
 ])
+
+// 신고 모달 상태
+const reportModal = reactive({
+  visible: false,
+  targetType: '댓글',
+  targetNickname: '',
+  targetContent: '',
+  targetId: 0
+})
 
 // 댓글 ID 생성기
 let nextCommentId = 4
@@ -192,61 +212,41 @@ const handleDeleteReply = async ({ replyId, commentId }) => {
 }
 
 // 댓글 신고 핸들러
-const handleReportComment = async (comment) => {
-    try {
-        const { value: reason } = await ElMessageBox.prompt(
-        `"${comment.nickname}"님의 댓글을 신고하시겠습니까?`,
-        '댓글 신고',
-        {
-            confirmButtonText: '신고',
-            cancelButtonText: '취소',
-            inputPlaceholder: '신고 사유를 입력하세요',
-            inputType: 'textarea',
-            inputPattern: /.+/,
-            inputErrorMessage: '신고 사유를 입력하세요'
-        }
-    )
-
-    if (reason && reason.trim()) {
-        // TODO: 실제 신고 API 호출
-        console.log('댓글 신고:', {
-        commentId: comment.id,
-        reason: reason.trim()
-        })
-        ElMessage.success('신고가 접수되었습니다.')
-    }
-    } catch {
-        // 취소한 경우
-    }
+const handleReportComment = (comment) => {
+  reportModal.visible = true
+  reportModal.targetType = '댓글'
+  reportModal.targetNickname = comment.nickname
+  reportModal.targetContent = comment.content
+  reportModal.targetId = comment.id
 }
 
 // 답글 신고 핸들러
-const handleReportReply = async (reply) => {
-    try {
-    const { value: reason } = await ElMessageBox.prompt(
-        `"${reply.nickname}"님의 답글을 신고하시겠습니까?`,
-        '답글 신고',
-        {
-            confirmButtonText: '신고',
-            cancelButtonText: '취소',
-            inputPlaceholder: '신고 사유를 입력하세요',
-            inputType: 'textarea',
-            inputPattern: /.+/,
-            inputErrorMessage: '신고 사유를 입력하세요'
-        }
-    )
+const handleReportReply = (reply) => {
+  reportModal.visible = true
+  reportModal.targetType = '답글'
+  reportModal.targetNickname = reply.nickname
+  reportModal.targetContent = reply.content
+  reportModal.targetId = reply.id
+}
 
-    if (reason && reason.trim()) {
-        // TODO: 실제 신고 API 호출
-        console.log('답글 신고:', {
-        replyId: reply.id,
-        reason: reason.trim()
-        })
-        ElMessage.success('신고가 접수되었습니다.')
-    }
-    } catch {
-    // 취소한 경우
-    }
+// 신고 제출 핸들러
+const handleReportSubmit = (data) => {
+  console.log('신고 제출:', {
+    targetType: reportModal.targetType,
+    targetId: data.targetId,
+    reason: data.reason,
+    detailReason: data.detailReason
+  })
+  
+  // TODO: 실제 신고 API 호출
+  // await axios.post('/reports', {
+  //   type: reportModal.targetType === '댓글' ? 'COMMENT' : 'REPLY',
+  //   targetId: data.targetId,
+  //   reason: data.reason,
+  //   detailReason: data.detailReason
+  // })
+  
+  ElMessage.success('신고가 접수되었습니다.')
 }
 </script>
 
