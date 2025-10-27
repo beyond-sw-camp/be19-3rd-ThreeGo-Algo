@@ -250,7 +250,10 @@ const createStudyGroup = () => {
     isClosed: true
   };
   sessionStorage.setItem('createStudyGroupData', JSON.stringify(studyGroupData));
-  router.push('/study-recruit/create-study');
+  router.push({
+      path: '/study-recruit/create-study',
+      query: { postId }
+  });
 };
 
 // 🔹 페이지 로드 시 게시글 정보 및 신청자 목록 조회
