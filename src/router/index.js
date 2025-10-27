@@ -3,6 +3,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 import HomeView from '@/views/HomeView.vue'
+import NewHomeView from '@/views/home/HomePage.vue'
 import ButtonDemoPage from '@/views/demo/ButtonDemoPage.vue'
 import DateButtonDemoPage from '@/views/demo/DateButtonDemoPage.vue'
 import PostCountDemoPage from '@/views/demo/PostCountDemoPage.vue'
@@ -40,7 +41,8 @@ import LoginPage from '@/views/login/LoginPage.vue'
 
 const routes = [
   // 기본 홈
-  { path: '/', component: HomeView },
+  { path: '/', component: NewHomeView },
+  { path: '/home', component: NewHomeView },
 
   // 스터디 모집
   { path: '/study-recruit', name: 'StudyRecruit', component: StudyRecruitMain },
