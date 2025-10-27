@@ -39,11 +39,13 @@ defineProps({
 <style scoped>
 .member-summary-card {
   width: 315px;
+  height: 250px;
   background: white;
+  border: 1px solid #DBF4FF;
   border-radius: 12px;
   padding: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
   overflow: hidden;
 }
 
@@ -60,7 +62,7 @@ defineProps({
 }
 
 .header-title {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
   color: #333;
 }

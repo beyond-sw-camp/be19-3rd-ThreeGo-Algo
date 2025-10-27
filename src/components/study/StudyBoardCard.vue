@@ -24,10 +24,7 @@
         <span class="post-date">{{ post.date }}</span>
       </div>
     </div>
-
-    <button class="write-button" @click="goToWrite">
-      게시글 작성하기
-    </button>
+    <CustomButton height="md" @click="goToWrite">게시글 작성하기</CustomButton>
   </div>
 </template>
 
@@ -51,20 +48,21 @@ const truncateTitle = (title) => {
 
 const goToBoard = () => router.push('/board')
 const goToPost = (postId) => router.push(`/board/${postId}`)
-const goToWrite = () => router.push('/board/write')
+const goToWrite = () => router.push('/board/new')
 </script>
 
 <style scoped>
 .board-summary-card {
   width: 315px;
-  height: 290px;
+  height: 250px;
   background: white;
   border-radius: 12px;
   padding: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #DBF4FF;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .card-header {
@@ -82,7 +80,7 @@ const goToWrite = () => router.push('/board/write')
 }
 
 .header-title {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
   color: #333;
 }
@@ -121,7 +119,7 @@ const goToWrite = () => router.push('/board/write')
 }
 
 .post-title {
-  font-size: 12px;
+  font-size: 14px;
   color: #383838;
   flex: 1;
   transition: color 0.2s;

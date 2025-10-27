@@ -2,7 +2,7 @@
   <div class="rank-card">
     <div class="rank-image-container">
       <img :src="rankImage" :alt="props.rankName" class="mini-profile-img" />
-      <img v-if="props.role === 'admin'" src="@/assets/icons/crown.svg" alt="crown" class="crown-icon" />
+      <img v-if="props.role === 'leader'" src="@/assets/icons/crown.svg" alt="crown" class="crown-icon" />
     </div>
     
     <p class="nickname">{{ props.nickname }}</p>

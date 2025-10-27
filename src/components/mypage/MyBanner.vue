@@ -21,8 +21,8 @@ defineProps({
 <style scoped>
 .section-header-wrapper {
   display: flex;
-  justify-content: center; /* 가로 가운데 */
-  margin-top: 50px;       /* 상단 마진 50px */
+  justify-content: center;
+  margin-top: 50px;       
 }
 
 .section-header {
