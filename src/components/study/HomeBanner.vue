@@ -50,9 +50,17 @@ const isActive = computed(() => {
 
 <style scoped>
 .study-card {
+  position: relative;
+  width: 1022px;
+  height: 210px;
+  overflow: hidden;
   display: flex;
   gap: 40px;
   align-items: center;
+  align-items: center;
+  justify-content: center;
+  margin: 30px auto 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 20px;
   background: #F0FAFF;
   border-radius: 35px;

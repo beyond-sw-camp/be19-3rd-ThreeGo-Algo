@@ -42,7 +42,7 @@ const rankName = ref('코알못')
 // 메뉴 목록
 const menuItems = [
   { label: '홈', path: '/study' },
-  { label: '게시판', path: '/study/posts' },
+  { label: '게시판', path: '/study/board' },
   { label: '설정', path: '/study/settings' }
 ]
 
