@@ -271,7 +271,7 @@
 import { ref, computed, reactive } from 'vue';
 import { ArrowDown, MoreFilled } from '@element-plus/icons-vue';
 import MiniProfile from '@/components/common/MiniProfile.vue';
-import ReportModal from '@/components/common/reportModal.vue';
+import ReportModal from '@/components/common/ReportModal.vue';
 
 
 const props = defineProps({

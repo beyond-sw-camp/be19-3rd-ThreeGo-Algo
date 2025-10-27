@@ -1,39 +1,34 @@
 <template>
   <el-input
-    v-model="input"
+    :model-value="props.modelValue"
+    @input="handleInput"
     :style="{ width }"
     :placeholder="placeholder"
   >
-
     <template v-if="iconSrc" #prefix>
-      <img
-        :src="iconSrc"
-        alt="icon"
-        class="input-icon"
-      />
+      <img :src="iconSrc" alt="icon" class="input-icon" />
     </template>
   </el-input>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
+
 const props = defineProps({
-  width: {
-    type: String,
-    default: '240px'
-  },
-  placeholder: {
-    type: String,
-    default: 'Please input'
-  },
-  icon: {
-    type: String,
-    default: '' // 예: "user.svg"
-  }
+  width: { type: String, default: '240px' },
+  placeholder: { type: String, default: 'Please input' },
+  icon: { type: String, default: '' },
+  modelValue: String
 })
-const input = ref('')
+
+const emit = defineEmits(['update:modelValue'])
+
+const handleInput = (value) => {
+  emit('update:modelValue', value)
+}
+
 const iconSrc = computed(() => {
-  if (!props.icon) return null 
+  if (!props.icon) return null
   try {
     return new URL(`../../assets/icons/${props.icon}`, import.meta.url).href
   } catch (e) {
@@ -42,10 +37,3 @@ const iconSrc = computed(() => {
   }
 })
 </script>
-<style scoped>
-.input-icon {
-  width: 18px;
-  height: 18px;
-  margin-right: 4px;
-}
-</style>
