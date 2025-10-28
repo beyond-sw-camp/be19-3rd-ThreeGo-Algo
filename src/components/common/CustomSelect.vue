@@ -28,7 +28,10 @@ const iconSrc = computed(() => {
 })
 
 function handleSelect(value) {
-  props.onSelect?.(value)
+  const selectedOption = props.options.find(option => option.value === value)
+  if (selectedOption) {
+    props.onSelect?.(selectedOption)
+  }
 }
 </script>
 
