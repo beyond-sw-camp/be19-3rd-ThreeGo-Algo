@@ -1,4 +1,5 @@
 import { createApp } from 'vue'
+import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
 
@@ -21,6 +22,8 @@ window.jQuery = $
 
 // Vue 앱 생성
 const app = createApp(App)
+app.use(createPinia())
+app.use(router)
 
 // 모든 Element Plus 아이콘 전역 등록
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
