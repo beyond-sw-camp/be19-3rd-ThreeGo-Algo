@@ -112,7 +112,7 @@ const route = useRoute()
 const router = useRouter()
 const postId = route.query?.postId || route.params.postId || 0 // 안전하게 처리
 
-// ✅ 폼 데이터
+// 폼 데이터
 const formData = ref({
   title: '',
   description: '',
@@ -120,29 +120,27 @@ const formData = ref({
   endDate: ''
 })
 
-// ✅ 스터디장 정보
+// 스터디장 정보
 const leaderInfo = ref({
   nickname: '',
   rankName: ''
 })
 
-// ✅ 승인된 스터디원 목록
+// 승인된 스터디원 목록
 const members = ref([])
 
-// ✅ 팝업 및 생성된 그룹 ID
+// 팝업 및 생성된 그룹 ID
 const showSuccessPopup = ref(false)
 const createdGroupId = ref(null)
 
-// ✅ 1️⃣ 스터디장 정보 조회
+// 스터디장 정보 조회
 const fetchLeaderInfo = async () => {
   try {
     const response = await coreApi.get(`/study-recruit/posts/${postId}`)
     const data = response.data
 
-    console.log("📥 모집글 상세 데이터:", data)
-
     leaderInfo.value = {
-      nickname: data.memberNickname,  // ✅ 백엔드 필드명 맞춰서
+      nickname: data.memberNickname,
       rankName: data.rankName
     }
     formData.value.title = data.title || ''
@@ -151,7 +149,7 @@ const fetchLeaderInfo = async () => {
   }
 }
 
-// ✅ 2️⃣ 승인된 멤버 목록 조회
+// 승인된 멤버 목록 조회
 const fetchApprovedMembers = async () => {
   try {
     const response = await coreApi.get(`/study-recruit/posts/${postId}/members`)
@@ -168,9 +166,8 @@ const fetchApprovedMembers = async () => {
   }
 }
 
-// ✅ 3️⃣ 스터디 그룹 생성 API
+// 스터디 그룹 생성 API
 const handleSubmit = async () => {
-  console.log("📦 CreateStudyGroup postId:", postId)
   if (!formData.value.title.trim()) {
     alert('스터디명을 입력해주세요.')
     return
@@ -191,19 +188,15 @@ const handleSubmit = async () => {
     endDate: formData.value.endDate
   }
 
-  console.log('📤 전송할 payload:', payload)
-  console.log('📤 POST-ID 헤더:', postId)
-
   try {
-    // ✅ 헤더에 POST-ID 추가해서 요청
+    // 헤더에 POST-ID 추가해서 요청
     const response = await coreApi.post('/study', payload, {
       headers: {
         'POST-ID': postId
       }
     })
 
-    console.log('✅ 스터디 생성 성공:', response.data)
-    createdGroupId.value = response.data.groupId || 0
+    createdGroupId.value = response.data.id || response.data.studyId || 0
     showSuccessPopup.value = true
     alert('🎉 스터디 그룹이 성공적으로 생성되었습니다!')
   } catch (error) {
@@ -213,15 +206,32 @@ const handleSubmit = async () => {
   }
 }
 
-onMounted(async () => {
-  console.log("✅ [CreateStudyGroup] Mounted")
-  console.log("postId:", postId)
+// 취소 버튼
+const handleCancel = () => {
+  if (confirm('작성을 취소하시겠습니까?')) {
+    router.push('/study-recruit')
+  }
+}
 
+// 생성 완료 후 스터디 메인페이지로 이동
+const handleSuccessConfirm = () => {
+  console.log('🎯 생성된 스터디 ID:', createdGroupId.value)
+
+  if (createdGroupId.value) {
+    // sessionStorage에 studyId 저장
+    sessionStorage.setItem('studyId', createdGroupId.value.toString())
+
+    // 스터디 메인페이지로 이동
+    router.push(`/study/home?studyId=${createdGroupId.value}`)
+  } else {
+    // studyId가 없으면 스터디 모집 목록으로
+    router.push('/study-recruit')
+  }
+}
+
+onMounted(async () => {
   await fetchLeaderInfo()
   await fetchApprovedMembers()
-
-  console.log("👤 leaderInfo:", leaderInfo.value)
-  console.log("👥 members:", members.value)
 })
 </script>
 
