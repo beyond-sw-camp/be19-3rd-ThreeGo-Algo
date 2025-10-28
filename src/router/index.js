@@ -125,7 +125,10 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
-})
+  scrollBehavior() {
+    return { top: 0 } // 스크롤 위치 상단으로
+  },
+});
 
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem('accessToken')
