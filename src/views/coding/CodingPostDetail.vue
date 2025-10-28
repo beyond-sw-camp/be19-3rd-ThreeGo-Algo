@@ -125,7 +125,7 @@
           height="md"
           width="100%"
           class="action-button"
-          @click="handleRequestAiFeedback"
+          @click="handleWriteSolution"
         >
           풀이글 작성하러 가기
         </CustomButton>
@@ -134,7 +134,6 @@
 
     <!-- 댓글 섹션 -->
     <div class="comment-wrapper">
-      <h2 class="section-title">댓글 {{ commentCount }}</h2>
       <Comment
         :comments="comments"
         :currentUser="currentUser"
@@ -175,11 +174,7 @@ const comments = ref([])
 const otherSolutions = ref([])
 const isAiLoading = ref(true)
 
-const currentUser = ref({
-  id: 1,
-  nickname: '김멍띠',
-  rankName: '코신',
-})
+const currentUser = ref({ nickname: '', rankName: '' })
 
 // Computed
 const problemTitle = computed(() => postDetail.value?.problemTitle || '문제 제목')
@@ -205,6 +200,13 @@ const aiBad = computed(() => {
 // API: 게시물 상세 조회
 const fetchPostDetail = async () => {
   try {
+    const name = localStorage.getItem('nickname');
+        const rank = localStorage.getItem('rank');
+        
+      currentUser.value = {
+            nickname: name,
+            rankName: rank
+        };
     const { data } = await coreApi.get(`/coding/posts/${solutionId.value}`)
     postDetail.value = data
     if (data.aiBigO) {
@@ -234,13 +236,30 @@ const startAiPolling = () => {
   setTimeout(() => clearInterval(interval), 120000)
 }
 
+/* 이벤트 */
+const handleWriteSolution = () => {
+  if (!problem.value) {
+    alert('문제 정보를 불러오는 중입니다.')
+    return
+  }
+
+  // problemId를 경로에 포함하여 전달
+  router.push({
+    path: `/coding-problems/${problemId}/solutions/`,
+    // query: {
+    //   problemTitle: problem.value.problemTitle
+    // }
+  })
+}
+
 // API: 댓글 조회
 const fetchComments = async () => {
   try {
+        
     const { data } = await coreApi.get(`/coding/posts/${solutionId.value}/comments`)
-    comments.value = transformCommentsForUI(data)
+    comments.value = (data)
   } catch (err) {
-    console.error('❌ 댓글 조회 실패:', err)
+    console.error('댓글 조회 실패:', err)
   }
 }
 
@@ -252,6 +271,7 @@ const transformCommentsForUI = (backendComments) =>
     rankName: c.memberRank,
     content: c.content,
     createdAt: c.createdAt,
+    visibility: c.visibility,
     replies: c.children?.map(r => ({
       id: r.commentId,
       userId: r.memberId,
@@ -274,34 +294,39 @@ const fetchOtherSolutions = async () => {
   }
 }
 
-// 댓글 관련 핸들러
+// 댓글 핸들러
 const handleSubmitComment = async (data) => {
   await coreApi.post(`/coding/posts/${solutionId.value}/comments`, { content: data.content })
-  fetchComments()
-  fetchPostDetail()
+  await fetchComments()
+  await fetchPostDetail()
 }
+
 const handleSubmitReply = async (data) => {
   await coreApi.post(`/coding/posts/${solutionId.value}/comments`, {
     content: data.content,
     parentId: data.commentId,
   })
-  fetchComments()
-  fetchPostDetail()
+  await fetchComments()
+  await fetchPostDetail()
 }
+
 const handleEditComment = async (data) => {
   await coreApi.put(`/coding/comments/${data.commentId}`, { content: data.content })
-  fetchComments()
+  await fetchComments()
 }
+
 const handleDeleteComment = async (commentId) => {
   await coreApi.delete(`/coding/comments/${commentId}`)
-  fetchComments()
-  fetchPostDetail()
+  await fetchComments()
+  await fetchPostDetail()
 }
+
 const handleEditReply = handleEditComment
+
 const handleDeleteReply = async (data) => {
   await coreApi.delete(`/coding/comments/${data.replyId}`)
-  fetchComments()
-  fetchPostDetail()
+  await fetchComments()
+  await fetchPostDetail()
 }
 
 // UI 이벤트

@@ -90,8 +90,7 @@
         <div class="empty-robot">
           <el-icon :size="120"><DocumentDelete /></el-icon>
         </div>
-        <h3>코테 풀이, 아직 혼자만 보지 마세요!</h3>
-        <p>AI가 리뷰하고, 코멘트들과 함께 성장합니다 🐨</p>
+        <h3>첫 풀이글을 등록해보세요!~ 🐨</h3>
       </div>
 
       <!-- 풀이 글 리스트 -->
