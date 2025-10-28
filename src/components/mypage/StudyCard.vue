@@ -6,10 +6,12 @@
     <div class="study-footer">
       <MiniProfile 
         :nickname="nickname"
-        :rankName="rankName"
+        rankName="코뉴비"
       />
       
-      <EmojiText type="grayPeople" :count="memberCount"/>
+      <div class="member-count">
+        <EmojiText type="grayPeople" :count="memberCount"/>
+      </div>
     </div>
   </div>
 </template>
@@ -43,10 +45,6 @@ const props = defineProps({
     type: String,
     required: true
   },
-  rankName: {
-    type: String,
-    required: true
-  },
   memberCount: {
     type: Number,
     required: true
@@ -55,9 +53,7 @@ const props = defineProps({
 
 const handleCardClick = () => {
   console.log('🎯 스터디 카드 클릭:', props.id, props.name)
-
   localStorage.setItem('studyId', props.id.toString())
-
   router.push('/study/home')
 }
 </script>
@@ -87,6 +83,9 @@ const handleCardClick = () => {
   font-weight: 700;
   color: #383838;
   margin: 0 0 8px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .study-date {
@@ -99,5 +98,12 @@ const handleCardClick = () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 8px;
+}
+
+.member-count {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
 }
 </style>

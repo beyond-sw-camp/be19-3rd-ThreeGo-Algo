@@ -71,7 +71,7 @@ const searchBarKey = ref(0)
 const selectKey = ref(0)
 
 onMounted(async () => {
-  studyId.value = sessionStorage.getItem('studyId')
+  studyId.value = localStorage.getItem('studyId')
   await fetchPosts()
 })
 

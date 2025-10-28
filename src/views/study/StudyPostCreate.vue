@@ -35,7 +35,7 @@ const studyId = ref(null)
 const router = useRouter()
 
 onMounted(() => {
-  studyId.value = sessionStorage.getItem('studyId')
+  studyId.value = localStorage.getItem('studyId')
 })
 
 const formData = reactive({

@@ -70,7 +70,7 @@ const menuItems = computed(() => {
   ]
 
   if (isLeader.value) {
-    baseMenus.push({ label: '설정', path: '/study/settings' })
+    baseMenus.push({ label: '설정', path: '/study/settings/member' })
   }
 
   return baseMenus

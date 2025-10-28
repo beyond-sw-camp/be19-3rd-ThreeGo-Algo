@@ -27,7 +27,6 @@
           :startDate="study.startDate"
           :endDate="study.endDate"
           :nickname="study.leaderName"
-          :rankName="'코잘알'"
           :memberCount="study.memberCount"
         />
       </div>
@@ -52,7 +51,6 @@
 import { ref, computed, onMounted } from 'vue'
 import coreApi from '@/api/coreApi'
 import MyBanner from '@/components/mypage/MyBanner.vue'
-import StudyProfile from '@/components/study/StudyProfile.vue'
 import StudyCard from '@/components/mypage/StudyCard.vue'
 
 // ✅ 상태값
@@ -62,10 +60,6 @@ const showOnlyActive = ref(false)
 const currentPage = ref(1)
 const totalPages = ref(1)
 const isLoading = ref(false)
-
-// ✅ 사용자 정보 (localStorage에서 가져오기)
-const userNickname = ref('')
-const userRankName = ref('코뉴비')
 
 // ✅ 필터링된 스터디 목록
 const filteredStudies = computed(() => {
@@ -94,20 +88,17 @@ const nextPage = () => {
   }
 }
 
-// ✅ API 연동
 const fetchMyStudies = async () => {
   isLoading.value = true
   try {
     const response = await coreApi.get('/study-recruit/my-studies', {
       params: {
-        page: currentPage.value - 1, // 백엔드가 0-based
-        size: 9, // 한 페이지당 9개
+        page: currentPage.value - 1,
+        size: 9,
       },
     })
 
     const data = response.data
-
-    // ✅ 백엔드 응답 구조에 따라 매핑
     studies.value = Array.isArray(data.content) ? data.content : (Array.isArray(data) ? data : [])
     totalPages.value = data.totalPages ?? 1
 
@@ -119,19 +110,7 @@ const fetchMyStudies = async () => {
   }
 }
 
-// ✅ 사용자 정보 로드
-const loadUserInfo = () => {
-  const nickname = localStorage.getItem('nickname')
-  const rankName = localStorage.getItem('rankName')
-
-  userNickname.value = nickname || '사용자'
-  userRankName.value = rankName || '코뉴비'
-
-  console.log('👤 사용자 정보:', userNickname.value, userRankName.value)
-}
-
 onMounted(() => {
-  loadUserInfo()
   fetchMyStudies()
 })
 </script>
