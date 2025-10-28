@@ -80,7 +80,7 @@ const goToPost = () => {
     align-items: baseline;
     gap: 8px;
     flex-wrap: wrap;
-    /* height: 22px; */
+    height: 22px;
 }
 
 .post-title {

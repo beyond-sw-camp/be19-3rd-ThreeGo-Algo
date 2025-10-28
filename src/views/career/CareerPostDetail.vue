@@ -17,6 +17,12 @@
                             class="verified-icon" />
                     </div>
 
+                    <!-- 기업/연도 뱃지 -->
+                    <div v-if="post.company || displayYear" class="post-badges">
+                        <span v-if="post.company" class="company-badge">{{ post.company }}</span>
+                        <span v-if="displayYear" class="year-badge">{{ displayYear }}</span>
+                    </div>
+
                     <!-- 작성자 정보 -->
                     <div class="author-info">
                         <MiniProfile :nickname="post.nickname" :rankName="post.rankName" />
@@ -65,6 +71,9 @@ const post = ref(null);
 const comments = ref([]);
 const relatedPosts = ref([]);
 const currentUser = ref({ id: null, nickname: "", rankName: "코뉴비" });
+const displayYear = computed(() =>
+    post.value?.year ? post.value.year.replace(/^_/, "") : ""
+)
 
 // 현재 로그인 사용자 세팅
 const loadCurrentUser = async () => {
@@ -207,6 +216,45 @@ onMounted(async () => {
 
 .verified-icon {
     width: 30px;
+}
+
+.post-badges {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 15px 0px 15px 0px;
+    /* margin-bottom: 10px; */
+}
+
+.company-badge,
+.year-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 22px;
+    padding: 0 10px;
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 12px;
+    line-height: 1;
+}
+
+.company-badge {
+    background-color: #E6F3FF;
+    color: #0A8BE4;
+    font-weight: 500;
+    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 5px;
+}
+
+.year-badge {
+    background-color: #F2F2F2;
+    color: #444;
+    font-weight: 500;
+    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 5px;
 }
 
 .author-info {
