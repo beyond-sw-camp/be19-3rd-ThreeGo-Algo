@@ -62,9 +62,9 @@ const validateForm = () => {
 const handleBack = () => router.back()
 
 /* 문제 선택 버튼 (임시) */
-const handleSelectProblem = () => {
-  alert('문제 선택 기능은 추후 구현 예정입니다.')
-}
+// const handleSelectProblem = () => {
+//   alert('문제 선택 기능은 추후 구현 예정입니다.')
+// }
 
 /* 작성 완료 버튼 */
 const handleSubmit = () => {
