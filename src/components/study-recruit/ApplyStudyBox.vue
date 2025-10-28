@@ -1,11 +1,5 @@
 <template>
   <div class="apply-study-box">
-    <!-- 모집 마감 D-Day -->
-    <div class="deadline">
-      <span class="label">모집 마감</span>
-      <span class="d-day">D-{{ dDay }}</span>
-    </div>
-
     <!-- 타이틀 -->
     <h2 class="title">스터디 신청하기</h2>
 
@@ -21,13 +15,16 @@
       <div class="char-count">{{ applicationText.length }} / {{ maxLength }}</div>
     </div>
 
-    <!-- 신청 버튼 -->
+    <!-- 신청 버튼 (slot 방식으로 텍스트 전달) -->
     <CustomButton
-      text="+ 스터디 신청하기"
       :disabled="isButtonDisabled"
-      @click="handleApply"
+      variant="primary"
+      height="lg"
       class="apply-button"
-    />
+      @click="handleApply"
+    >
+      + 스터디 신청하기
+    </CustomButton>
   </div>
 </template>
 
@@ -36,10 +33,6 @@ import { ref, computed } from 'vue'
 import CustomButton from '@/components/common/CustomButton.vue'
 
 const props = defineProps({
-  dDay: {
-    type: Number,
-    required: true
-  },
   maxLength: {
     type: Number,
     default: 500
@@ -55,7 +48,7 @@ const isButtonDisabled = computed(() => {
 })
 
 const handleInput = () => {
-  // 최대 길이 제한 처리는 maxlength 속성으로 처리됨
+  // maxlength로 자동 제어
 }
 
 const handleApply = () => {
@@ -75,24 +68,6 @@ const handleApply = () => {
   display: flex;
   flex-direction: column;
   gap: 16px;
-}
-
-.deadline {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 14px;
-}
-
-.deadline .label {
-  color: #666;
-  font-weight: 500;
-}
-
-.deadline .d-day {
-  color: #ff5757;
-  font-weight: 700;
-  font-size: 16px;
 }
 
 .title {
@@ -140,50 +115,21 @@ const handleApply = () => {
 
 .apply-button {
   width: 100%;
-  padding: 14px;
-  font-size: 16px;
   font-weight: 600;
-  background-color: #4a9eff;
-  color: white;
-  border: none;
+  font-size: 16px;
   border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.2s ease;
 }
 
-.apply-button:hover:not(:disabled) {
-  background-color: #3a8eef;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(74, 158, 255, 0.3);
-}
-
-.apply-button:active:not(:disabled) {
-  transform: translateY(0);
-}
-
-.apply-button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-  opacity: 0.6;
-}
-
-/* 반응형 디자인 */
+/* 반응형 */
 @media (max-width: 768px) {
   .apply-study-box {
     padding: 20px;
   }
-
   .title {
     font-size: 20px;
   }
-
   .application-textarea {
     min-height: 120px;
-    font-size: 13px;
-  }
-
-  .apply-button {
-    font-size: 15px;
   }
 }
 
@@ -191,17 +137,8 @@ const handleApply = () => {
   .apply-study-box {
     padding: 16px;
   }
-
   .title {
     font-size: 18px;
-  }
-
-  .deadline {
-    font-size: 13px;
-  }
-
-  .deadline .d-day {
-    font-size: 15px;
   }
 }
 </style>

@@ -80,10 +80,15 @@ const handleLogin = async () => {
 
       // 토큰에서 닉네임 추출
       const payload = JSON.parse(atob(token.split('.')[1]))
-      const nickname = response.data.nickname || payload.nickname || payload.sub || '사용자'
-      localStorage.setItem('nickname', nickname)
+      const nickname = payload.nickname || payload.sub || '사용자'
+      
+      const memberId = payload.memberId || payload.id || payload.userId
+      const rankName = payload.rankName || payload.rank || '코뉴비'
 
-      console.log('로그인 성공:', nickname)
+      localStorage.setItem('nickname', nickname)
+      localStorage.setItem('memberId', memberId)
+
+      console.log('로그인 성공:', nickname, '/ memberId:', memberId, '/ rankName:', rankName)
       router.push('/')
     } else {
       isError.value = true
