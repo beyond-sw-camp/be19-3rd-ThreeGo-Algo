@@ -42,10 +42,32 @@
 
       <!-- 하단 버튼 -->
       <div class="actions">
-        <CustomButton @click="delegateRole">권한 위임</CustomButton>
-        <CustomButton variant="danger" @click="removeMember">스터디에서 제외</CustomButton>
+        <CustomButton @click="confirmDelegateRole">권한 위임</CustomButton>
+        <CustomButton variant="danger" @click="confirmRemoveMember">스터디에서 제외</CustomButton>
       </div>
     </main>
+
+    <!-- 권한 위임 확인 팝업 -->
+    <TwoButtonPopup
+      v-model="showDelegatePopup"
+      title="권한 위임"
+      :subtitle="`한번 위임한 권한은 되돌릴 수 없습니다.\n그래도 ${memberNickname}에게  위임하시겠습니까?`"
+      confirmText="위임하기"
+      cancelText="취소"
+      confirmVariant="danger"
+      @confirm="delegateRole"
+    />
+
+    <!-- 멤버 제외 확인 팝업 -->
+    <TwoButtonPopup
+      v-model="showRemovePopup"
+      title="멤버 제외"
+      :subtitle="`${memberNickname}를 스터디에서 제외하시겠습니까?`"
+      confirmText="제외하기"
+      cancelText="취소"
+      confirmVariant="danger"
+      @confirm="removeMember"
+    />
   </div>
 </template>
 
@@ -57,6 +79,7 @@ import MemberList from '@/components/study/MemberList.vue'
 import StudyProfile from '@/components/study/StudyProfile.vue'
 import StudySetting from '@/components/study/StudySetting.vue'
 import CustomButton from '@/components/common/CustomButton.vue'
+import TwoButtonPopup from '@/components/common/TwoButtonPopup.vue'
 import bannerBoard from '@/assets/images/study_blog_banner_board.png'
 import coreApi from '@/api/coreApi'
 
@@ -70,6 +93,16 @@ const currentRoute = computed(() => route.path)
 
 const selectedMember = ref(null)
 const currentUserNickname = ref(null)
+
+// 팝업 상태
+const showDelegatePopup = ref(false)
+const showRemovePopup = ref(false)
+
+const memberNickname = computed(() => {
+  if (!selectedMember.value) return ''
+  const member = members.value.find(m => m.memberId === selectedMember.value)
+  return member?.memberNickname || ''
+})
 
 onMounted(async () => {
   studyId.value = localStorage.getItem('studyId')
@@ -103,13 +136,13 @@ const selectMember = (memberId) => {
   console.log('role:', selectedInfo?.role)
 }
 
-const delegateRole = async () => {
+// 권한 위임 확인 팝업 열기
+const confirmDelegateRole = () => {
   if (!selectedMember.value) {
     alert('권한을 위임할 멤버를 선택해주세요!')
     return
   }
 
-  // 선택된 멤버 정보 찾기
   const selectedMemberInfo = members.value.find(m => m.memberId === selectedMember.value)
   
   if (!selectedMemberInfo) {
@@ -117,67 +150,64 @@ const delegateRole = async () => {
     return
   }
 
-  console.log('🔍 권한 위임 시도:', {
-    selectedMemberId: selectedMember.value,
-    selectedMemberNickname: selectedMemberInfo.memberNickname,
-    currentUserNickname: currentUserNickname.value
-  })
   
   if (selectedMemberInfo.memberNickname === currentUserNickname.value) {
     alert('자기 자신에게는 권한을 위임할 수 없습니다.')
     return
   }
 
-  if (!confirm('정말로 이 멤버에게 리더 권한을 위임하시겠습니까?\n위임 후에는 일반 멤버가 되며, 되돌릴 수 없습니다.')) {
-    return
-  }
+  showDelegatePopup.value = true
+}
 
+// 권한 위임
+const delegateRole = async () => {
   try {
-    await coreApi.patch(`/study/${studyId.value}/leader/${selectedMember.value}`)
+    await coreApi.put(`/study/${studyId.value}/leader/${selectedMember.value}`)
     
     alert('권한이 성공적으로 위임되었습니다!')
     
     router.push('/study/home')
     
   } catch (error) {
+    console.error('권한 위임 실패:', error)
     alert('권한 위임에 실패했습니다. 다시 시도해주세요.')
   }
 }
 
-const removeMember = async () => {
+const confirmRemoveMember = () => {
   if (!selectedMember.value) {
     alert('제외할 멤버를 선택해주세요!')
     return
   }
 
-  // 선택된 멤버 정보 찾기
   const selectedMemberInfo = members.value.find(m => m.memberId === selectedMember.value)
 
   console.log('선택된 멤버:', {
     selectedMemberId: selectedMember.value,
-    selectedMemberNickname: selectedMemberInfo.memberNickname,
+    selectedMemberNickname: selectedMemberInfo?.memberNickname,
     currentUserNickname: currentUserNickname.value
   })
   
-  if (selectedMemberInfo.memberNickname === currentUserNickname.value) {
+  if (selectedMemberInfo?.memberNickname === currentUserNickname.value) {
     alert('자기 자신을 제외할 수 없습니다.')
     return
   }
 
-  if (!confirm('정말로 이 멤버를 스터디에서 제외하시겠습니까?')) {
-    return
-  }
+  showRemovePopup.value = true
+}
 
+// 멤버 제외 
+const removeMember = async () => {
   try {
     await coreApi.delete(`/study/${studyId.value}/members/${selectedMember.value}`)
     
     alert('스터디에서 멤버가 제외되었습니다!')
     
-    // 멤버 목록 새로고침
     await fetchMembers()
     selectedMember.value = null
     
   } catch (error) {
+    console.error('멤버 제외 실패:', error)
     alert('멤버 제외에 실패했습니다.')
   }
 }
@@ -188,7 +218,6 @@ const getRoleVariant = (role) => {
   return 'member'
 }
 </script>
-
 <style scoped>
 .study-setting-page {
   display: flex;
