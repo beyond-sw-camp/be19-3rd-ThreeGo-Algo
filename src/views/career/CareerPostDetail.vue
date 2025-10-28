@@ -151,6 +151,7 @@ const fetchComments = async (id = route.params.postId) => {
                 rankName: n.rankName,
                 content: n.content,
                 createdAt: n.createdAt,
+                visibility: n.visibility,
                 replies: n.children ? normalize(n.children) : [],
             }));
         comments.value = normalize(raw);

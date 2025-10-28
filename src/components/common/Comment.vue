@@ -206,6 +206,7 @@
             :targetNickname="reportTarget?.nickname ?? reportTarget?.memberNickname"
             :targetContent="reportTarget?.content" :targetId="reportTarget?.id" @submit="handleReportSubmit" />
     </div>
+    <!-- <pre>{{ comments }}</pre> -->
 </template>
 
 <script setup>
