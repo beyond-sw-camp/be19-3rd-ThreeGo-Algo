@@ -228,7 +228,7 @@ const fetchComments = async () => {
         parentId: c.parentId,
         visibility: c.visibility || 'Y' // ✅ visibility 필드 추가 (기본값 'Y')
       };
-      console.log('📝 매핑된 댓글:', mapped);
+
       return mapped;
     });
     const parents = all.filter(c => !c.parentId);
