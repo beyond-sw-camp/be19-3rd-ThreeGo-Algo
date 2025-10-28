@@ -13,9 +13,28 @@
                     <!-- 제목 -->
                     <div class="post-title-row">
                         <h2 class="post-title">{{ post.title }}</h2>
+
+                        <!-- 승인됨 (모두에게 표시) -->
                         <img v-if="post.status === 'APPROVED'" src="@/assets/icons/certification.svg"
-                            class="verified-icon" />
+                            class="verified-icon" alt="approved" />
+
+                        <!-- 심사중 (본인 글일 때만) -->
+                        <div v-else-if="isAuthor && post.status === 'PENDING'" class="status-icon-wrapper">
+                            <img src="@/assets/icons/certification_pending.svg" class="verified-icon" alt="pending" />
+                            <div class="tooltip">인증 사진을 확인하고 있어요 🐨<br>
+                                결과는 <b>24시간 이내</b>에 나와요!<br>
+                                인증이 완료되면 <b>10포인트</b>가 추가로 지급됩니다 🎉 </div>
+                        </div>
+
+                        <!-- 반려됨 (본인 글일 때만) -->
+                        <div v-else-if="isAuthor && post.status === 'REJECTED'" class="status-icon-wrapper">
+                            <img src="@/assets/icons/certification_rejected.svg" class="verified-icon" alt="rejected" />
+                            <div class="tooltip">
+                                인증 반려 사유: {{ post.rejectReason || "사유 없음" }}
+                            </div>
+                        </div>
                     </div>
+
 
                     <!-- 기업/연도 뱃지 -->
                     <div v-if="post.company || displayYear" class="post-badges">
@@ -99,6 +118,11 @@ const loadCurrentUser = async () => {
         console.error("로그인 사용자 정보 불러오기 실패:", err)
     }
 }
+
+const isAuthor = computed(() => {
+    return currentUser.value.id === post.value?.memberId;
+});
+
 
 // 게시글 불러오기
 const fetchPost = async (id = route.params.postId) => {
@@ -302,5 +326,37 @@ onBeforeRouteUpdate(async (to, from) => {
     flex-shrink: 0;
     position: sticky;
     top: 20px;
+}
+
+.status-icon-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip {
+    position: absolute;
+    top: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #F0FAFF;
+    color: #000000;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease-in-out;
+    z-index: 10;
+    margin-top: 4px;
+}
+
+.status-icon-wrapper:hover .tooltip {
+    opacity: 1;
+}
+
+.tooltip {
+    text-align: center;
+    word-break: keep-all;
 }
 </style>
