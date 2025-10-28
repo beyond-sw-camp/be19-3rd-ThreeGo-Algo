@@ -34,25 +34,41 @@ import MyProfileDropdown from '@/components/common/MyProfileDropdown.vue'
 import coreApi from '@/api/coreApi'
 
 const router = useRouter()
+// 사용자 정보
 const isLoggedIn = ref(true)
-
-// 로그인 사용자 정보
 const nickname = ref('')
 const rankName = ref('')
-const currentMemberId = ref(null)
+const memberId = ref('')
 
 // 스터디 정보
 const studyId = ref(null)
 const isLeader = ref(false)
 
-// ✅ 스터디장 여부에 따라 메뉴 필터링
+onMounted(async () => {
+    const token = localStorage.getItem('accessToken')
+    const name = localStorage.getItem('nickname')
+    const rank = localStorage.getItem('rank')
+    const id = localStorage.getItem('memberId')
+
+    if (token) {
+        isLoggedIn.value = true
+        nickname.value = name || '사용자'
+        rankName.value = rank || '코알못'
+        memberId.value = id || '0'
+    }
+
+    await checkLeaderStatus();
+})
+
+
+
+
 const menuItems = computed(() => {
   const baseMenus = [
     { label: '홈', path: '/study/home' },
     { label: '게시판', path: '/study/board' }
   ]
 
-  // 스터디장인 경우에만 설정 메뉴 추가
   if (isLeader.value) {
     baseMenus.push({ label: '설정', path: '/study/settings' })
   }
@@ -63,8 +79,7 @@ const menuItems = computed(() => {
 // ✅ 스터디장 여부 확인
 const checkLeaderStatus = async () => {
   try {
-    studyId.value = sessionStorage.getItem('studyId')
-    console.log('🔍 studyId:', studyId.value)
+    studyId.value = localStorage.getItem('studyId')
 
     if (!studyId.value) {
       console.warn('⚠️ studyId가 없습니다.')
@@ -75,13 +90,13 @@ const checkLeaderStatus = async () => {
     const response = await coreApi.get(`/study/${studyId.value}/members`)
     const members = response.data
     console.log('📋 스터디 멤버 목록:', members)
-    console.log('👤 현재 memberId:', currentMemberId.value)
+    console.log('👤 현재 memberId:', memberId.value)
 
     // 현재 사용자가 LEADER인지 확인
-    const currentUserMember = members.find(m => m.memberId === currentMemberId.value)
+    const currentUserMember = members.find(m => m.memberId === Number(memberId.value))
     console.log('🔍 현재 사용자 멤버 정보:', currentUserMember)
 
-    isLeader.value = currentUserMember?.role === 'LEADER'
+    isLeader.value = currentUserMember.role === 'LEADER'
 
     console.log('👑 스터디장 여부:', isLeader.value)
   } catch (error) {
@@ -90,24 +105,6 @@ const checkLeaderStatus = async () => {
     isLeader.value = false
   }
 }
-
-// ✅ 사용자 정보 로드
-const loadUserInfo = () => {
-  const storedNickname = localStorage.getItem('nickname')
-  const storedRankName = localStorage.getItem('rankName')
-  const storedMemberId = localStorage.getItem('memberId')
-
-  nickname.value = storedNickname || '사용자'
-  rankName.value = storedRankName || '코뉴비'
-  currentMemberId.value = storedMemberId ? Number(storedMemberId) : null
-
-  console.log('👤 사용자 정보:', nickname.value, rankName.value, currentMemberId.value)
-}
-
-onMounted(async () => {
-  loadUserInfo()
-  await checkLeaderStatus()
-})
 
 // Blog 로고 클릭 시 마이페이지 스터디 목록으로 이동
 const goHome = () => {
@@ -120,17 +117,15 @@ const goMyPage = () => {
   router.push('/mypage')
 }
 
-// 로그아웃 처리
 const handleLogout = () => {
-  console.log('🚪 로그아웃 처리 완료')
   localStorage.removeItem('accessToken')
   localStorage.removeItem('nickname')
   localStorage.removeItem('memberId')
   localStorage.removeItem('rankName')
+  localStorage.removeItem('studyId')
 
   isLoggedIn.value = false
 
-  // ✅ 커스텀 이벤트 발생 (HomePage가 실시간으로 감지)
   window.dispatchEvent(new Event('auth-change'))
 
   router.push('/')

@@ -1,13 +1,5 @@
 <template>
   <div class="my-study-page">
-    <!-- 좌측 프로필 -->
-    <aside class="left-panel">
-        <StudyProfile
-          :nickname="userNickname"
-          :rankName="userRankName"
-          role="member"/>
-    </aside>
-
     <!-- 우측 메인 -->
     <main class="right-panel">
       <MyBanner title="스터디 그룹 공간" />

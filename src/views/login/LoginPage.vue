@@ -45,6 +45,7 @@ import Input from '@/components/common/Input.vue'
 import CustomButton from '@/components/common/CustomButton.vue'
 import memberApi from '@/api/memberApi'
 
+const id = ref(0);
 const email = ref('')
 const password = ref('')
 const isError = ref(false)

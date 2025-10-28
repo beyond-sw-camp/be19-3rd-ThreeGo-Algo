@@ -56,11 +56,9 @@ const props = defineProps({
 const handleCardClick = () => {
   console.log('🎯 스터디 카드 클릭:', props.id, props.name)
 
-  // ✅ sessionStorage에 studyId 저장
-  sessionStorage.setItem('studyId', props.id.toString())
+  localStorage.setItem('studyId', props.id.toString())
 
-  // ✅ 같은 탭에서 스터디 그룹 페이지로 이동
-  router.push(`/study/home?studyId=${props.id}`)
+  router.push('/study/home')
 }
 </script>
 

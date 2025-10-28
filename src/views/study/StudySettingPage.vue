@@ -2,10 +2,7 @@
   <div class="study-setting-page">
     <!-- 좌측 사이드바 -->
     <aside class="sidebar">
-      <StudyProfile 
-          nickname="알코알라"
-          rankName="코신"
-          role="leader"/>
+      <StudyProfile />
       <StudySetting :userRole="userRole" :currentRoute="currentRoute" />
     </aside>
 
@@ -53,7 +50,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import PageInfoBanner from '@/components/common/PageInfoBanner.vue'
 import MemberList from '@/components/study/MemberList.vue'

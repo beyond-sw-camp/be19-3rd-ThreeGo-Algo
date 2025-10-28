@@ -2,10 +2,7 @@
   <div class="study-delete-page">
     <!-- 좌측 사이드바 -->
     <aside class="sidebar">
-      <StudyProfile 
-          nickname="알코알라"
-          rankName="코신"
-          role="leader"/>
+      <StudyProfile />
       <StudySetting :userRole="userRole" :currentRoute="currentRoute" />
     </aside>
 
