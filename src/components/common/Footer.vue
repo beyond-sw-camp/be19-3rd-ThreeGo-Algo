@@ -12,6 +12,9 @@
         <p class="footer-copyright">
           © 2025 ThreeGo All rights reserved.
         </p>
+        <p class="footer-icons">
+          Icons by <a href="https://icons8.com" target="_blank" rel="noopener noreferrer">Icons8</a>
+        </p>
       </div>
 
       <div class="footer-column">
