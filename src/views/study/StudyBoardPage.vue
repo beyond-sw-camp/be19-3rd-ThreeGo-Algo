@@ -194,5 +194,6 @@ const handlePostClick = (postId) => {
   width: 50%;
   max-width: 1100px;
   margin-top: 10px;
+  padding-bottom: 50px;
 }
 </style>

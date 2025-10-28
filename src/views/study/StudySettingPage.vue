@@ -102,17 +102,19 @@ const getRoleVariant = (role) => {
 }
 
 .sidebar {
-  width: 240px;
+  width: 200px;
+  margin-left: 150px;
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
 .main-content {
-  flex: 1;
+  width: 900px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  align-items: center;
+  gap: 32px;
 }
 
 .member-list {

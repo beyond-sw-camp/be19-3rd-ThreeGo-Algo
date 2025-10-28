@@ -79,6 +79,7 @@ defineProps({
   gap: 16px;
   overflow-y: auto;
   max-height: 200px;
+  padding-bottom: 25px;
 }
 
 .member-row {
