@@ -167,12 +167,13 @@ const companyOptions = [
     { label: '삼성전자', value: '삼성전자' },
     { label: '카카오', value: '카카오' },
     { label: '네이버', value: '네이버' },
+    { label: 'LG전자', value: 'LG전자' },
 ]
 const yearOptions = [
     { label: '모든 년도', value: 'ALL' },
-    { label: '2025', value: '_2025' },
-    { label: '2024', value: '_2024' },
-    { label: '2023', value: '_2023' },
+    { label: '2025', value: '2025' },
+    { label: '2024', value: '2024' },
+    { label: '2023', value: '2023' },
 ]
 const verifiedOptions = [
     { label: '전체 보기', value: 'ALL' },
