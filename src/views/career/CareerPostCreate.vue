@@ -96,7 +96,7 @@ const fileInput = ref(null)
 const fileName = ref('')
 
 // 옵션
-const companyOptions = ['네이버', '카카오', '삼성전자', 'LG전자'].map(c => ({ label: c, value: c }))
+const companyOptions = ['네이버', '카카오', '삼성전자', 'LG전자', '기타'].map(c => ({ label: c, value: c }))
 const yearOptions = ['2025', '2024', '2023'].map(y => ({ label: y, value: y }))
 
 // 파일 업로드

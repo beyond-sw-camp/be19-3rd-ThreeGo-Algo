@@ -168,6 +168,7 @@ const companyOptions = [
     { label: '카카오', value: '카카오' },
     { label: '네이버', value: '네이버' },
     { label: 'LG전자', value: 'LG전자' },
+    { label: '기타', value: '기타' },
 ]
 const yearOptions = [
     { label: '모든 년도', value: 'ALL' },
