@@ -39,7 +39,7 @@ const rankName = ref('')
 
 const menuItems = [
     { label: '알고리즘학습', path: '/algorithm' },
-    { label: '코딩풀이', path: '/problems' },
+    { label: '코딩풀이', path: '/coding-problems' },
     { label: '기업정보공유', path: '/career-info' },
     { label: '스터디모집', path: '/study-recruit' },
 
@@ -66,10 +66,13 @@ const handleLogout = () => {
     localStorage.removeItem('accessToken')
     localStorage.removeItem('nickname')
     localStorage.removeItem('memberId')
-    localStorage.removeItem('rankName')
     localStorage.removeItem('studyId')
 
     isLoggedIn.value = false
+
+    // ✅ 커스텀 이벤트 발생 (HomePage가 실시간으로 감지)
+    window.dispatchEvent(new Event('auth-change'))
+
     router.push('/')
 }
 </script>

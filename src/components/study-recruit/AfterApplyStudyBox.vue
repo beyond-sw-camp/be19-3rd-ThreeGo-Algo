@@ -20,10 +20,12 @@
 
     <!-- 확인 중 버튼 (비활성화) -->
     <CustomButton
-      text="신청 내역 확인 중..."
       :disabled="true"
+      variant="gray1"
       class="confirm-button"
-    />
+    >
+      신청 내역 확인 중...
+    </CustomButton>
 
     <!-- 신청 취소 확인 팝업 -->
     <TwoButtonPopup
@@ -135,7 +137,7 @@ const closeCancelPopup = () => {
   font-size: 16px;
   font-weight: 600;
   background-color: #d4d4d4;
-  color: #888;
+  color: ffffff;
   border: none;
   border-radius: 12px;
   cursor: not-allowed;

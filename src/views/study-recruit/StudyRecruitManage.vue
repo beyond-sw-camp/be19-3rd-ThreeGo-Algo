@@ -3,7 +3,7 @@
     <div class="page-container">
       <!-- 상단: 뒤로가기 + 제목 -->
       <div class="page-header">
-        <BackButton text="본문으로 돌아가기" :to="`/study-recruit/${studyId}`" />
+        <BackButton text="본문으로 돌아가기" :to="`/study-recruit/${postId}`" />
         <TabTitle :title="study.title" />
       </div>
 
@@ -11,42 +11,42 @@
       <div class="status-grid">
         <!-- 모집 현황 -->
         <div class="status-card recruit-status">
-        <h3 class="card-title">모집 현황</h3>
-        <div class="status-content">
-          <p class="status-text" :class="{ open: !isClosed, closed: isClosed }">
-            <template v-if="isClosed">
-              <span class="highlight">모집이 마감</span>되었습니다.
-            </template>
-            <template v-else>
+          <h3 class="card-title">모집 현황</h3>
+          <div class="status-content">
+            <p class="status-text" :class="{ open: !isClosed, closed: isClosed }">
+              <template v-if="isClosed">
+                <span class="highlight">모집이 마감</span>되었습니다.
+              </template>
+              <template v-else>
                 <span class="highlight">모집 중</span>입니다.
-            </template>
-          </p>
-          <p class="status-description" v-if="!isClosed">
-            현재 새로운 신청을 받고 있어요!<br />
-            모집이 완료되면 스터디 그룹을 생성할 수 있습니다.
-          </p>
-          <p class="status-description" v-else>
-            더 이상 새로운 신청을 받을 수 없습니다.<br />
-            승인된 인원으로 스터디 그룹을 생성해주세요.
-          </p>
-          <button 
-            class="close-recruit-btn" 
-            @click="isClosed ? createStudyGroup() : showClosePopup = true"
-          >
-            {{ isClosed ? '스터디 그룹 생성하기' : '모집 마감하기' }}
-          </button>
+              </template>
+            </p>
+            <p class="status-description" v-if="!isClosed">
+              현재 새로운 신청을 받고 있어요!<br />
+              모집이 완료되면 스터디 그룹을 생성할 수 있습니다.
+            </p>
+            <p class="status-description" v-else>
+              더 이상 새로운 신청을 받을 수 없습니다.<br />
+              승인된 인원으로 스터디 그룹을 생성해주세요.
+            </p>
+            <button 
+              class="close-recruit-btn" 
+              @click="isClosed ? createStudyGroup() : showClosePopup = true"
+            >
+              {{ isClosed ? '스터디 그룹 생성하기' : '모집 마감하기' }}
+            </button>
+          </div>
         </div>
-      </div>
 
-      <!-- 모집 마감 확인 팝업 -->
-    <TwoButtonPopup
-      v-model="showClosePopup"
-      title="모집 마감"
-      subtitle="스터디 모집을 마감 하시겠습니까?"
-      confirm-text="확인"
-      cancel-text="취소"
-      @confirm="closeRecruitment"
-    />
+        <!-- 모집 마감 확인 팝업 -->
+        <TwoButtonPopup
+          v-model="showClosePopup"
+          title="모집 마감"
+          subtitle="스터디 모집을 마감 하시겠습니까?"
+          confirm-text="확인"
+          cancel-text="취소"
+          @confirm="closeRecruitment"
+        />
 
         <!-- 신청 현황 -->
         <div class="status-card application-status">
@@ -80,16 +80,14 @@
               <tr>
                 <th>신청자</th>
                 <th>지원동기</th>
-                <th>신청일</th>
                 <th>상태</th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="applicant in applicants" :key="applicant.id">
-                <td class="applicant-name">{{ applicant.name }}</td>
-                <td class="motivation">{{ applicant.motivation }}</td>
-                <td class="apply-date">{{ applicant.date }}</td>
+              <tr v-for="applicant in applicants" :key="applicant.joinId">
+                <td class="applicant-name">{{ applicant.nickname }}</td>
+                <td class="motivation">{{ applicant.applicant }}</td>
                 <td>
                   <span 
                     class="status-badge" 
@@ -100,16 +98,16 @@
                 </td>
                 <td class="action-buttons">
                   <button 
-                    v-if="applicant.status === 'pending'"
+                    v-if="applicant.status === 'PENDING'"
                     class="btn-accept"
-                    @click="acceptApplicant(applicant.id)"
+                    @click="acceptApplicant(applicant.joinId)"
                   >
                     수락
                   </button>
                   <button 
-                    v-if="applicant.status === 'pending'"
+                    v-if="applicant.status === 'PENDING'"
                     class="btn-reject"
-                    @click="rejectApplicant(applicant.id)"
+                    @click="rejectApplicant(applicant.joinId)"
                   >
                     거절
                   </button>
@@ -124,136 +122,147 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import BackButton from '@/components/common/BackButton.vue';
 import TabTitle from '@/components/common/TabTitle.vue';
 import TwoButtonPopup from '@/components/common/TwoButtonPopup.vue';
+import coreApi from '@/api/coreApi';
 
 const route = useRoute();
 const router = useRouter();
-const studyId = route.params.id;
+const postId = route.params.postId;
 
 // 스터디 정보
 const study = ref({
-  title: '카카오 면접 대비 스터디',
-  memberLimit: 20
+  title: '',
+  memberLimit: 0
 });
 
-// 모집 마감 상태 추가
 const isClosed = ref(false);
 const showClosePopup = ref(false);
+const applicants = ref([]);
 
-// 신청자 목록
-const applicants = ref([
-  {
-    id: 1,
-    name: '준식이',
-    motivation: '카카오 같이 뿌셔봅시다!',
-    date: '2025.10.19',
-    status: 'pending'
-  },
-  {
-    id: 2,
-    name: '목지',
-    motivation: '면접은 처음이지만 열심히 해보겠습니다 :)',
-    date: '2025.10.19',
-    status: 'pending'
-  },
-  {
-    id: 3,
-    name: '제이지',
-    motivation: '첫 스터디라 긴장되지만 열심히 하겠습니다!',
-    date: '2025.10.18',
-    status: 'approved'
-  },
-  {
-    id: 4,
-    name: '프로도',
-    motivation: '함께 준비하면 더 많은 연습이 될 것 같네요 🔥 신청해봅니다!!',
-    date: '2025.10.18',
-    status: 'approved'
-  },
-  {
-    id: 5,
-    name: '라이언',
-    motivation: '.',
-    date: '2025.10.17',
-    status: 'rejected'
-  },
-  {
-    id: 6,
-    name: '라이라이언',
-    motivation: '잘부탁드립니다',
-    date: '2025.10.17',
-    status: 'approved'
-  }
-]);
-
-// 통계 계산
+// 📊 통계
 const totalApplicants = computed(() => applicants.value.length);
-const approvedCount = computed(() => 
-  applicants.value.filter(a => a.status === 'approved').length
+const approvedCount = computed(() =>
+  applicants.value.filter(a => a.status === 'APPROVED').length
 );
 
-const getStatusClass = (status) => {
-  return {
-    'status-pending': status === 'pending',
-    'status-approved': status === 'approved',
-    'status-rejected': status === 'rejected'
-  };
+// ✅ 게시글 정보 조회
+const fetchPostInfo = async () => {
+  try {
+    const response = await coreApi.get(`/study-recruit/posts/${postId}`);
+    const data = response.data;
+
+    study.value = {
+      title: data.title,
+      memberLimit: data.capacity
+    };
+
+    // 모집 상태 확인 (OPEN, CLOSED, CANCELLED)
+    isClosed.value = data.status === 'CLOSED' || data.status === 'CANCELLED';
+
+    console.log('✅ 게시글 정보:', data);
+    console.log('✅ 모집 마감 여부:', isClosed.value);
+  } catch (error) {
+    console.error('❌ 게시글 정보 조회 실패:', error);
+  }
 };
+
+// ✅ 신청자 목록 조회 API
+const fetchApplicants = async () => {
+  try {
+    const response = await coreApi.get(`/study-recruit/posts/${postId}/members`);
+    applicants.value = response.data.map(applicant => ({
+      joinId: applicant.id,                 // 신청 ID (수락/거절에 사용)
+      memberId: applicant.memberId,         // 회원 ID
+      nickname: applicant.memberNickname,   // 신청자 닉네임
+      applicant: applicant.applicant,       // 지원동기
+      status: applicant.status,             // PENDING / APPROVED / REJECTED
+      appliedAt: applicant.appliedAt        // 신청일
+    }));
+
+    console.log('✅ 신청자 목록:', applicants.value);
+  } catch (error) {
+    console.error('❌ 신청자 목록 조회 실패:', error);
+  }
+};
+
+// ✅ 신청자 수락 API
+const acceptApplicant = async (joinId) => {
+  try {
+    await coreApi.post(`/study-recruit/applicants/${joinId}/accept`);
+    alert('신청이 수락되었습니다.');
+    await fetchApplicants();
+  } catch (error) {
+    console.error('❌ 신청자 수락 실패:', error);
+    alert('신청 수락 중 오류가 발생했습니다.');
+  }
+};
+
+// ✅ 신청자 거절 API
+const rejectApplicant = async (joinId) => {
+  try {
+    await coreApi.post(`/study-recruit/applicants/${joinId}/reject`);
+    alert('신청이 거절되었습니다.');
+    await fetchApplicants();
+  } catch (error) {
+    console.error('❌ 신청자 거절 실패:', error);
+    alert('신청 거절 중 오류가 발생했습니다.');
+  }
+};
+
+const getStatusClass = (status) => ({
+  'status-pending': status === 'PENDING',
+  'status-approved': status === 'APPROVED',
+  'status-rejected': status === 'REJECTED'
+});
 
 const getStatusText = (status) => {
   const statusMap = {
-    pending: '대기 중',
-    approved: '수락됨',
-    rejected: '거절됨'
+    PENDING: '대기 중',
+    APPROVED: '수락됨',
+    REJECTED: '거절됨'
   };
   return statusMap[status] || status;
 };
 
-const acceptApplicant = (id) => {
-  const applicant = applicants.value.find(a => a.id === id);
-  if (applicant) {
-    applicant.status = 'approved';
+// ✅ 모집 마감 API
+const closeRecruitment = async () => {
+  try {
+    await coreApi.post(`/study-recruit/posts/${postId}/close`);
+    alert("스터디 모집이 마감되었습니다.");
+    isClosed.value = true;
+    showClosePopup.value = false;
+  } catch (error) {
+    console.error("❌ 모집 마감 실패:", error);
+    alert("모집 마감 중 오류가 발생했습니다.");
   }
-};
-
-const rejectApplicant = (id) => {
-  const applicant = applicants.value.find(a => a.id === id);
-  if (applicant) {
-    applicant.status = 'rejected';
-  }
-};
-
-const closeRecruitment = () => {
-  isClosed.value = true;
-  showClosePopup.value = false;
-  // 필요시 API 호출
 };
 
 const createStudyGroup = () => {
-  const approvedMembers = applicants.value.filter(a => a.status === 'approved');
-
-  console.log('스터디 그룹 생성 버튼 클릭');
-  console.log('승인된 멤버들:', approvedMembers);
-
-  // sessionStorage에 데이터 저장
+  const approvedMembers = applicants.value.filter(a => a.status === 'APPROVED');
   const studyGroupData = {
-    studyId: studyId,
+    postId: postId,
     recruitPost: study.value,
     approvedMembers: approvedMembers,
     isClosed: true
   };
-
   sessionStorage.setItem('createStudyGroupData', JSON.stringify(studyGroupData));
-
-  router.push('/study-recruit/create-study');
+  router.push({
+      path: '/study-recruit/create-study',
+      query: { postId }
+  });
 };
 
-
+// 🔹 페이지 로드 시 게시글 정보 및 신청자 목록 조회
+onMounted(async () => {
+  await fetchPostInfo();
+  await fetchApplicants();
+});
 </script>
+
 
 <style scoped>
 .recruit-management-page {
