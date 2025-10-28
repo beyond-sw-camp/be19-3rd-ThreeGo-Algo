@@ -37,12 +37,12 @@ const props = defineProps({
     commentCount: { type: Number, required: true },
     peopleCount: Number
 });
+const emit = defineEmits(['click'])
 
 const certificationIcon = certificationImage;
 
-// TODO 게시물 상세 페이지로 이동 기능 구현
 const goToPost = () => {
-    console.log('게시물 상세 페이지로 이동 예정!');
+    emit('click', props.id)
 }
 </script>
 

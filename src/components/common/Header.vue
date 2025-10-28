@@ -59,7 +59,7 @@ onMounted(() => {
 
 const goHome = () => router.push('/')
 
-const goMyPage = () => router.push('/mypage')
+const goMyPage = () => router.push('/mypage/study')
 
 const handleLogout = () => {
     console.log('🚪 로그아웃 처리 완료')
@@ -67,6 +67,7 @@ const handleLogout = () => {
     localStorage.removeItem('nickname')
     localStorage.removeItem('rank')
     localStorage.removeItem('memberId')
+    localStorage.removeItem('studyId')
 
     isLoggedIn.value = false
 

@@ -3,6 +3,7 @@
     <img :src="imageSrc" :alt="title" class="study-image" />
     <div class="study-info">
       <h2 class="study-title">{{ title }}</h2>
+      <p class="study-description">{{ description }}</p>
       <div class="date-container">
         <span class="study-date">{{ startDate }} ~ {{ endDate }}</span>
         <StudyBadge :isActive="isActive" />
@@ -17,6 +18,10 @@ import StudyBadge from './StudyBadge.vue'
 
 const props = defineProps({
   title: {
+    type: String,
+    required: true
+  },
+  description: {
     type: String,
     required: true
   },
@@ -64,6 +69,11 @@ const isActive = computed(() => {
   padding: 20px;
   background: #F0FAFF;
   border-radius: 35px;
+}
+
+.study-description {
+  font-size: 16px;
+  color: #383838;
 }
 
 .study-image {
