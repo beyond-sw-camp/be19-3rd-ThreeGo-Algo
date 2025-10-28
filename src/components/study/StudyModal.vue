@@ -56,45 +56,37 @@ import Input from '@/components/common/Input.vue'
 import CustomButton from '@/components/common/CustomButton.vue'
 
 const props = defineProps({
-  modalTitle: {
-    type: String,
-    default: ''
-  },
-  title: {
-    type: String,
-    default: ''
-  },
-  order: {
-    type: [Number, String],
-    default: ''
-  },
-  description: {
-    type: String,
-    default: ''
+  modalTitle: String,
+  initialData: {
+    type: Object,
+    default: null
   }
 })
 
 const emit = defineEmits(['close', 'submit'])
 
-const localTitle = ref(props.title)
-const localOrder = ref(props.order)
-const localDescription = ref(props.description)
+const localTitle = ref('')
+const localOrder = ref('')
+const localDescription = ref('')
 
-watch(() => props.title, (newVal) => {
-  localTitle.value = newVal
-})
 
-watch(() => props.order, (newVal) => {
-  localOrder.value = newVal
-})
+watch(
+  () => props.initialData,
+  (newVal) => {
+    if (newVal) {
+      localTitle.value = newVal.title || ''
+      localOrder.value = newVal.order || ''
+      localDescription.value = newVal.description || ''
+    } else {
+      localTitle.value = ''
+      localOrder.value = ''
+      localDescription.value = ''
+    }
+  },
+  { immediate: true }
+)
 
-watch(() => props.description, (newVal) => {
-  localDescription.value = newVal
-})
-
-const handleClose = () => {
-  emit('close')
-}
+const handleClose = () => emit('close')
 
 const handleSubmit = () => {
   emit('submit', {
@@ -104,6 +96,7 @@ const handleSubmit = () => {
   })
 }
 </script>
+
 
 <style scoped>
 .modal-overlay {

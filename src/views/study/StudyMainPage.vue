@@ -63,7 +63,7 @@ const formattedMembers = computed(() => {
 })
 
 onMounted(async () => {
-  studyId.value = sessionStorage.getItem('studyId')
+  studyId.value = localStorage.getItem('studyId')
     
   if (studyId.value) {
     try {

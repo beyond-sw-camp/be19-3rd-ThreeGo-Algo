@@ -9,7 +9,9 @@
         :rankName="rankName"
       />
       
-      <EmojiText type="grayPeople" :count="memberCount"/>
+      <div class="member-count">
+        <EmojiText type="grayPeople" :count="memberCount"/>
+      </div>
     </div>
   </div>
 </template>
@@ -43,29 +45,28 @@ const props = defineProps({
     type: String,
     required: true
   },
-  rankName: {
-    type: String,
-    required: true
-  },
   memberCount: {
     type: Number,
     required: true
+  },
+  rankName: {        
+    type: String,
+    required: false,
+    default: '코뉴비'
   }
 })
 
 const handleCardClick = () => {
   console.log('🎯 스터디 카드 클릭:', props.id, props.name)
-
   localStorage.setItem('studyId', props.id.toString())
-
   router.push('/study/home')
 }
 </script>
 
 <style scoped>
 .study-card {
-  width: 270px;
-  height: 170px;
+  width: 200px;
+  height: 150px;
   background: white;
   border: 1px solid #D9D9D9;
   border-radius: 16px;
@@ -87,6 +88,9 @@ const handleCardClick = () => {
   font-weight: 700;
   color: #383838;
   margin: 0 0 8px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .study-date {
@@ -99,5 +103,12 @@ const handleCardClick = () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 8px;
+}
+
+.member-count {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
 }
 </style>
