@@ -37,7 +37,8 @@
                 <!-- 댓글 수정 모드 -->
                 <div v-if="editingCommentId === comment.id" class="comment-edit-mode">
                     <div class="mini-profile-wrapper">
-                        <MiniProfile :nickname="comment.nickname || comment.memberNickname" :rankName="comment.rankName || comment.memberRank" />
+                        <MiniProfile :nickname="comment.nickname || comment.memberNickname"
+                            :rankName="comment.rankName || comment.memberRank" />
                     </div>
                     <div class="edit-content">
                         <el-input v-model="editContent" type="textarea" :rows="3" resize="none" />
@@ -60,29 +61,43 @@
                             <span class="comment-time">{{ formatCreatedAt(comment.createdAt) }}</span>
 
                             <!-- 케밥 메뉴 (본인 댓글) -->
-                            <el-dropdown v-if="isMyComment(comment)" trigger="click"
-                                @command="(cmd) => handleCommentAction(cmd, comment)" class="kebab-menu">
-                                <el-icon class="kebab-icon"><more-filled /></el-icon>
-                                <template #dropdown>
-                                    <el-dropdown-menu>
-                                        <el-dropdown-item command="edit">수정</el-dropdown-item>
-                                        <el-dropdown-item command="delete">삭제</el-dropdown-item>
-                                    </el-dropdown-menu>
-                                </template>
-                            </el-dropdown>
+                            <template v-if="isMyComment(comment) && comment.visibility === 'Y'">
+                                <el-dropdown trigger="click" @command="(cmd) => handleCommentAction(cmd, comment)"
+                                    class="kebab-menu">
+                                    <el-icon class="kebab-icon"><more-filled /></el-icon>
+                                    <template #dropdown>
+                                        <el-dropdown-menu>
+                                            <el-dropdown-item command="edit">수정</el-dropdown-item>
+                                            <el-dropdown-item command="delete">삭제</el-dropdown-item>
+                                        </el-dropdown-menu>
+                                    </template>
+                                </el-dropdown>
+                            </template>
 
-                            <!-- 신고 버튼 (남의 댓글) -->
-                            <el-button v-else type="text" class="report-btn" @click="handleReport(comment)">
-                                <img src="@/assets/icons/report.svg" alt="신고" class="report-icon" />
-                                신고
-                            </el-button>
+                            <template v-else-if="comment.visibility === 'N'">
+                            </template>
+
+                            <template v-else>
+                                <!-- 신고 버튼 (남의 댓글) -->
+                                <el-button type="text" class="report-btn" @click="handleReport(comment)">
+                                    <img src="@/assets/icons/report.svg" alt="신고" class="report-icon" />
+                                    신고
+                                </el-button>
+                            </template>
                         </div>
-                        <div class="comment-content">{{ comment.content }}</div>
-                        <div class="comment-actions">
-                            <el-button type="text" class="action-btn reply-btn" @click="toggleReply(comment.id)">
-                                답글
-                            </el-button>
-                        </div>
+
+                        <template v-if="comment.visibility === 'Y'">
+                            <div class="comment-content">{{ comment.content }}</div>
+                            <div class="comment-actions">
+                                <el-button type="text" class="action-btn reply-btn" @click="toggleReply(comment.id)">
+                                    답글
+                                </el-button>
+                            </div>
+                        </template>
+                        <template v-else>
+                            <div class="comment-content-delete">삭제되거나 신고당한 댓글입니다.</div>
+                        </template>
+
                     </div>
                 </div>
 
@@ -107,8 +122,10 @@
                 </div>
 
                 <!-- 답글 목록 -->
-                <div class="reply-list" v-if="(comment?.replies ?? comment?.childComments ?? []).length > 0">
-                    <div class="reply-item" v-for="reply in (comment?.replies ?? comment?.childComments ?? [])"
+                <div class="reply-list"
+                    v-if="(comment?.replies ?? comment?.childComments ?? comment?.children ?? []).length > 0">
+                    <div class="reply-item"
+                        v-for="reply in (comment?.replies ?? comment?.childComments ?? comment?.children ?? [])"
                         :key="reply.id">
                         <!-- 답글 수정 모드 -->
                         <div v-if="editingReplyId === reply.id" class="reply-edit-mode">
@@ -137,46 +154,57 @@
                                         <MiniProfile :nickname="reply.nickname || reply.memberNickname"
                                             :rankName="reply.rankName || reply.memberRank" />
                                     </div>
-                                    <span class="reply-time">{{
-                                        formatCreatedAt(reply.createdAt)
-                                        }}</span>
+                                    <span class="reply-time">{{ formatCreatedAt(reply.createdAt) }}</span>
 
-                                    <!-- 케밥 메뉴 (본인 답글) -->
-                                    <el-dropdown v-if="isMyReply(reply)" trigger="click" @command="
-                                        (cmd) => handleReplyAction(cmd, reply, comment.id)
-                                    " class="kebab-menu">
-                                        <el-icon class="kebab-icon"><more-filled /></el-icon>
-                                        <template #dropdown>
-                                            <el-dropdown-menu>
-                                                <el-dropdown-item command="edit">수정</el-dropdown-item>
-                                                <el-dropdown-item command="delete">삭제</el-dropdown-item>
-                                            </el-dropdown-menu>
-                                        </template>
-                                    </el-dropdown>
+                                    <template v-if="isMyReply(reply) && reply.visibility === 'Y'">
+                                        <!-- 케밥 메뉴 (본인 답글) -->
+                                        <el-dropdown trigger="click" @command="
+                                            (cmd) => handleReplyAction(cmd, reply, comment.id)
+                                        " class="kebab-menu">
+                                            <el-icon class="kebab-icon"><more-filled /></el-icon>
+                                            <template #dropdown>
+                                                <el-dropdown-menu>
+                                                    <el-dropdown-item command="edit">수정</el-dropdown-item>
+                                                    <el-dropdown-item command="delete">삭제</el-dropdown-item>
+                                                </el-dropdown-menu>
+                                            </template>
+                                        </el-dropdown>
+                                    </template>
 
-                                    <!-- 신고 버튼 (남의 답글) -->
-                                    <el-button v-else type="text" class="report-btn" @click="handleReportReply(reply)">
-                                        <img src="@/assets/icons/report.svg" alt="신고" class="report-icon" />
-                                        신고
-                                    </el-button>
+                                    <template v-else-if="reply.visibility === 'N'"></template>
+
+                                    <template v-else>
+                                        <!-- 신고 버튼 (남의 답글) -->
+                                        <el-button type="text" class="report-btn" @click="handleReportReply(reply)">
+                                            <img src="@/assets/icons/report.svg" alt="신고" class="report-icon" />
+                                            신고
+                                        </el-button>
+                                    </template>
                                 </div>
-                                <div class="reply-content">{{ reply.content }}</div>
+                                <template v-if="reply.visibility === 'Y'">
+                                    <div class="reply-content">{{ reply.content }}</div>
+                                </template>
+                                <template v-else>
+                                    <div class="reply-content-delete">
+                                        삭제되거나 신고당한 댓글입니다.
+                                    </div>
+                                </template>
                             </div>
                         </div>
                     </div>
 
                     <!-- 답글 더보기 버튼 -->
-                    <div class="show-more-replies">
+                    <!-- <div class="show-more-replies">
                         <el-button type="text" class="more-btn"> + 답글 보기 </el-button>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
 
         <!-- 신고 모달 -->
         <ReportModal v-model="isReportModalVisible" :targetType="reportTarget?.type"
-            :targetNickname="reportTarget?.nickname" :targetContent="reportTarget?.content" :targetId="reportTarget?.id"
-            @submit="handleReportSubmit" />
+            :targetNickname="reportTarget?.nickname ?? reportTarget?.memberNickname"
+            :targetContent="reportTarget?.content" :targetId="reportTarget?.id" @submit="handleReportSubmit" />
     </div>
 </template>
 
@@ -232,7 +260,20 @@ const reportContent = ref(''); // 기타 신고 내용
 // 전체 댓글 개수 (답글 포함)
 const totalComments = computed(() => {
     return props.comments.reduce((total, comment) => {
-        return total + 1 + (comment.replies?.length || 0);
+
+        const isParent = comment.visibility === 'Y' ? 1 : 0;
+
+        const childrenList =
+            comment.children ||
+            comment.childComments ||
+            comment.replies ||
+            [];
+
+        const childrenCount = childrenList.filter(
+            child => child.visibility === 'Y'
+        ).length;
+
+        return total + isParent + childrenCount;
     }, 0);
 });
 
@@ -288,8 +329,8 @@ const handleSubmitReply = (comment) => {
 const isMyComment = (comment) => {
     if (comment.userId === undefined && props.currentUser?.id === undefined) {
         return comment.memberNickname === props.currentUser.nickname;
-    } 
-    
+    }
+
     return comment.userId === props.currentUser.id;
 };
 
@@ -435,6 +476,15 @@ const formatCreatedAt = (createdAt) => {
 
     return `${year}.${month}.${day} ${hour}:${minute}`;
 };
+
+const replies = computed(() => {
+    return (
+        props.comments?.replies ??
+        props.comments?.childComments ??
+        props.comments?.children ??
+        []
+    );
+});
 </script>
 
 <style scoped>
@@ -597,6 +647,14 @@ const formatCreatedAt = (createdAt) => {
     margin-bottom: 8px;
     white-space: pre-wrap;
     word-break: break-word;
+}
+
+.comment-content-delete,
+.reply-content-delete {
+    font-size: 14px;
+    color: #CFCFCF;
+    font-weight: 600;
+    margin-bottom: 8px;
 }
 
 .comment-actions {
