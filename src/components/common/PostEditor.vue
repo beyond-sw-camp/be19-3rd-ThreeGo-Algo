@@ -64,6 +64,13 @@ onMounted(async () => {
 onBeforeUnmount(() => {
   $(editor.value).summernote('destroy')
 })
+const getContent = () => {
+  return $(editor.value).summernote('code')
+}
+
+defineExpose({
+  getContent
+})
 
 watch(
   () => props.modelValue,

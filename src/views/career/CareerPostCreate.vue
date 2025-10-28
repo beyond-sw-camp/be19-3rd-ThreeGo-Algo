@@ -14,9 +14,9 @@
                 <label class="form-label">필수사항 <span class="required">*</span></label>
                 <div class="required-row">
                     <CustomSelect :options="companyOptions" placeholder="기업 선택" icon="company.svg"
-                        :onSelect="val => formData.company = val" />
+                        :onSelect="val => formData.company = val.value" />
                     <CustomSelect :options="yearOptions" placeholder="년도 선택" icon="calendar.svg"
-                        :onSelect="val => formData.year = val" />
+                        :onSelect="val => formData.year = val.value" />
                 </div>
             </div>
 
@@ -78,6 +78,7 @@ import { useRouter } from 'vue-router'
 import CustomButton from '@/components/common/CustomButton.vue'
 import CustomSelect from '@/components/common/CustomSelect.vue'
 import { createCareerPost } from '@/api/careerApi'
+
 
 const router = useRouter()
 let $ = null
