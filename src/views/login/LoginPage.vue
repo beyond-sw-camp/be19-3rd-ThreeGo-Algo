@@ -1,7 +1,9 @@
 <template>
   <div class="login-container">
     <div class="left-side">
-      <img src="@/assets/images/algo_logo.png" alt="Logo" class="logo" />
+      <div class="logo-section" @click="goHome">
+        <img src="@/assets/images/algo_logo.png" alt="logo" class="logo-icon" />
+      </div>
 
       <div class="left-content">
         <p class="slogan">
@@ -52,6 +54,8 @@ const isError = ref(false)
 const message = ref('')
 const router = useRouter()
 
+const goHome = () => router.push('/')
+
 const goToSignup = () => {
   router.push('/signup')
 }
@@ -82,7 +86,7 @@ const handleLogin = async () => {
       // 토큰에서 닉네임 추출
       const payload = JSON.parse(atob(token.split('.')[1]))
       const nickname = payload.nickname || payload.sub || '사용자'
-      
+
       const memberId = payload.memberId || payload.id || payload.userId
       const rankName = payload.rankName || payload.rank || '코뉴비'
 
@@ -126,7 +130,13 @@ const handleLogin = async () => {
   overflow: hidden;
 }
 
-.logo {
+.logo-section {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.logo-icon {
   position: absolute;
   top: 30px;
   left: 30px;
