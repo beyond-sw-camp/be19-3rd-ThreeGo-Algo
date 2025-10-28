@@ -8,23 +8,27 @@
     />
 
     <div class="content-container">
-      <div class="search-controls">
-        <SearchBar 
-          :key="searchBarKey"
-          v-model="searchKeyword" 
-          placeholder="제목을 검색하세요" 
-          buttonText="검색" 
-          @search="handleSearch" 
-          class="search-bar"
-        />
-        <CustomSelect 
-          :key="selectKey"
-          :options="filterOptions" 
-          placeholder="최신순" 
-          :onSelect="handleSelect" 
-        />
-        <p class="reset-button" @click="handleReset">초기화</p>
-        <CustomButton height="sm" @click="handleCreatePost">+ 게시물 작성하기</CustomButton>
+      <div class="top-controls">
+        <div class="search-controls">
+          <SearchBar 
+            :key="searchBarKey"
+            v-model="searchKeyword" 
+            placeholder="제목을 검색하세요" 
+            buttonText="검색" 
+            @search="handleSearch" 
+            class="search-bar"
+          />
+          <CustomSelect 
+            :key="selectKey"
+            :options="filterOptions" 
+            placeholder="최신순" 
+            @select="handleSelect" 
+          />
+        </div>
+
+        <div class="create-btn">
+          <CustomButton height="sm" @click="handleCreatePost">+ 게시물 작성하기</CustomButton>
+        </div>
       </div>
 
       <PostCount :count="filteredPosts.length" label="게시물" class="post-count" />
@@ -32,7 +36,7 @@
       <div class="post-list">
         <PostListItem
           v-for="post in filteredPosts"
-          :key="post.id"
+          :key="`${post.id}`"
           :id="post.id"
           :title="post.title"
           :nickname="post.memberNickname"
@@ -85,6 +89,13 @@ const formatDate = (dateString) => {
   return dateString.split(' ')[0].replace(/-/g, '.')
 }
 
+const parseDate = (dateString) => {
+  if (!dateString) return new Date(0)
+  const isoString = dateString.replace(' ', 'T')
+  const date = new Date(isoString)
+  return isNaN(date.getTime()) ? new Date(0) : date
+}
+
 const filterOptions = [
   { value: 'latest', label: '최신순' },
   { value: 'oldest', label: '오래된 순' },
@@ -102,17 +113,16 @@ const filteredPosts = computed(() => {
 
   // 정렬
   switch (selectedFilter.value) {
-    case 'latest':
-      result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    case 'latest': // 최신순
+      result.sort((a, b) => parseDate(b.createdAt) - parseDate(a.createdAt))
       break
-    case 'oldest':
-      result.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+    case 'oldest': // 오래된순
+      result.sort((a, b) => parseDate(a.createdAt) - parseDate(b.createdAt))
       break
-    case 'comment':
-      result.sort((a, b) => b.commentCount - a.commentCount)
+    case 'comment': // 댓글 많은 순
+      result.sort((a, b) => (b.commentCount || 0) - (a.commentCount || 0))
       break
   }
-
   return result
 })
 
@@ -123,14 +133,6 @@ const handleSearch = () => {
 const handleSelect = (option) => {
   selectedFilter.value = option.value
   console.log('필터 선택:', option)
-}
-
-const handleReset = () => {
-  searchKeyword.value = ''
-  selectedFilter.value = 'latest'
-  searchBarKey.value++
-  selectKey.value++
-  console.log('초기화')
 }
 
 const handleCreatePost = () => {
@@ -159,12 +161,18 @@ const handlePostClick = (postId) => {
   margin-top: 50px;
 }
 
-.search-controls {
+.top-controls {
   display: flex;
   justify-content: space-between;
-  align-items: center;        
+  align-items: center;
   width: 50%;
   max-width: 1100px;
+}
+
+.search-controls {
+  display: flex;
+  gap: 10px;
+  align-items: center;
 }
 
 .search-bar {
@@ -172,17 +180,8 @@ const handlePostClick = (postId) => {
   flex-shrink: 0;
 }
 
-.reset-button {
-  font-size: 14px;
-  color: #666;
-  text-decoration: underline;
-  cursor: pointer;
-  white-space: nowrap;
-  margin: 0;
-}
-
-.reset-button:hover {
-  color: #333;
+.create-btn {
+  flex-shrink: 0;
 }
 
 .post-count {
