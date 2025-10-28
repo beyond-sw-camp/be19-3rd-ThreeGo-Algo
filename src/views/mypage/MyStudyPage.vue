@@ -27,6 +27,7 @@
           :startDate="study.startDate"
           :endDate="study.endDate"
           :nickname="study.leaderName"
+          :rankName="study.leaderRank || study.leaderRankName || '코뉴비'"
           :memberCount="study.memberCount"
         />
       </div>
@@ -103,6 +104,9 @@ const fetchMyStudies = async () => {
     totalPages.value = data.totalPages ?? 1
 
     console.log('✅ 스터디 목록 조회 성공:', studies.value)
+    if (studies.value.length > 0) {
+      console.log('📋 첫 번째 스터디 데이터:', studies.value[0])
+    }
   } catch (error) {
     console.error('❌ 스터디 목록 조회 실패:', error)
   } finally {

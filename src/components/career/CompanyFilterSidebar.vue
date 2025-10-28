@@ -5,7 +5,7 @@
             글 작성하기
         </CustomButton>
 
-        <FilterCard :showVerifiedOnly="showVerifiedOnly" :selectedCompanies="selectedCompanies"
+        <FilterCard :showVerifiedOnly="showVerifiedOnly" :selectedCompanies="selectedCompanies" :companies="companies"
             @updateFilters="$emit('updateFilters', $event)" @reset="$emit('reset')" />
 
         <RewardCard @create="$emit('create')" />
@@ -16,7 +16,11 @@
 import CustomButton from '@/components/common/CustomButton.vue'
 import FilterCard from './FilterCard.vue'
 import RewardCard from './RewardCard.vue'
-defineProps({ showVerifiedOnly: Boolean, selectedCompanies: Array })
+defineProps({
+    showVerifiedOnly: Boolean,
+    selectedCompanies: Array,
+    companies: { type: Array, default: () => [] }
+})
 defineEmits(['updateFilters', 'reset', 'create'])
 </script>
 

@@ -1,7 +1,10 @@
 <template>
   <div class="signup-container">
     <div class="left-side">
-      <img src="@/assets/images/algo_logo.png" alt="Logo" class="logo" />
+      <div class="logo-section" @click="goHome">
+        <img src="@/assets/images/algo_logo.png" alt="logo" class="logo-icon" />
+      </div>
+
       <div class="left-content">
         <p class="slogan">
           몰라도 된다! <br />
@@ -141,6 +144,8 @@ const handleSignup = async () => {
   }
 }
 
+const goHome = () => router.push('/')
+
 const goToLogin = () => {
   router.push('/login')
 }
@@ -178,7 +183,13 @@ const goToLogin = () => {
   align-items: center;
 }
 
-.logo {
+.logo-section {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.logo-icon {
   position: absolute;
   top: 30px;
   left: 30px;
