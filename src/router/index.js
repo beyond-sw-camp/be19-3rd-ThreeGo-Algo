@@ -79,7 +79,7 @@ const routes = [
 
   // 코딩 풀이
   { path: '/coding-problems', component: CodingProblemList, meta: { requiresAuth: true }},
-  { path: '/coding-problem/:problemId/solutions', component: CodingProblemDetail, meta: { requiresAuth: true }},
+  { path: '/coding-problems/:problemId/solutions', component: CodingProblemDetail, meta: { requiresAuth: true }},
   { path: '/coding-problems/:problemId/solutions/new', component: Codingpost, meta: { requiresAuth: true }},
   { path: '/coding-problems/:problemId/solutions/:solutionId', component: CodingPostDetail, meta: { requiresAuth: true }},
 
