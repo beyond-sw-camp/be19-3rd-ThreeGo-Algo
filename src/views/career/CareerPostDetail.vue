@@ -50,7 +50,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { useRoute, useRouter, onBeforeRouteUpdate } from "vue-router";
 import BackButton from "@/components/common/BackButton.vue";
 import MiniProfile from "@/components/common/MiniProfile.vue";
 import Comment from "@/components/common/Comment.vue";
@@ -59,6 +59,7 @@ import {
     fetchCareerPostDetail,
     fetchCareerComments,
     createCareerComment,
+    fetchRecentCareerPostsByCompany,
 } from "@/api/careerApi";
 import memberApi from "@/api/memberApi";
 
@@ -100,21 +101,24 @@ const loadCurrentUser = async () => {
 }
 
 // 게시글 불러오기
-const fetchPost = async () => {
+const fetchPost = async (id = route.params.postId) => {
     try {
-        post.value = await fetchCareerPostDetail(postId);
+        post.value = await fetchCareerPostDetail(id);
+
+        if (post.value?.company) {
+            const recent = await fetchRecentCareerPostsByCompany(post.value.company);
+            relatedPosts.value = recent.filter(p => p.id !== post.value.id);
+        }
     } catch (err) {
         console.error("게시글 불러오기 실패:", err);
         alert("게시글을 불러오는 중 오류가 발생했습니다.");
     }
 };
 
-// 댓글 불러오기 (정규화 포함)
-const fetchComments = async () => {
+// 댓글 불러오기
+const fetchComments = async (id = route.params.postId) => {
     try {
-        const raw = await fetchCareerComments(postId);
-
-        // 백엔드 구조 → Comment.vue 구조로 맞추기
+        const raw = await fetchCareerComments(id);
         const normalize = (nodes = []) =>
             nodes.map((n) => ({
                 id: n.commentId,
@@ -125,12 +129,12 @@ const fetchComments = async () => {
                 createdAt: n.createdAt,
                 replies: n.children ? normalize(n.children) : [],
             }));
-
         comments.value = normalize(raw);
     } catch (err) {
         console.error("댓글 불러오기 실패:", err);
     }
 };
+
 
 // 댓글 등록 (루트 댓글)
 const addComment = async ({ content }) => {
@@ -163,11 +167,25 @@ const formatDate = (date) => (date ? date.split(" ")[0].replace(/-/g, ".") : "")
 // 글쓰기 이동
 const goWritePage = () => router.push("/career-info/post");
 
+
 // onMounted 시 데이터 로드
 onMounted(async () => {
     loadCurrentUser();
     await fetchPost();
     await fetchComments();
+});
+
+// 우트 변경 감지
+onBeforeRouteUpdate(async (to, from) => {
+    console.log("라우트 변경 감지:", from.params.postId, "→", to.params.postId);
+
+    post.value = null; // 새 페이지 로드될 때 깜빡임 방지용
+    comments.value = [];
+    relatedPosts.value = [];
+
+    // 새 postId 기준으로 데이터 재로드
+    await fetchPost(to.params.postId);
+    await fetchComments(to.params.postId);
 });
 </script>
 

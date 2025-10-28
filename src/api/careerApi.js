@@ -34,3 +34,11 @@ export const createCareerComment = async (postId, content, parentId = null) => {
     })
     return res.data // commentId
 }
+
+// 특정 기업의 최근 게시물 3개 조회
+export const fetchRecentCareerPostsByCompany = async (company) => {
+    const res = await coreApi.get('/career-info/posts/recent', {
+        params: { company },
+    })
+    return res.data // 최대 3개 게시물
+}
