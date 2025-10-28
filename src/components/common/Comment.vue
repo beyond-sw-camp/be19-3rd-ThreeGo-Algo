@@ -206,6 +206,7 @@
             :targetNickname="reportTarget?.nickname ?? reportTarget?.memberNickname"
             :targetContent="reportTarget?.content" :targetId="reportTarget?.id" @submit="handleReportSubmit" />
     </div>
+    <!-- <pre>{{ comments }}</pre> -->
 </template>
 
 <script setup>
@@ -504,7 +505,7 @@ const replies = computed(() => {
 
 .mini-profile-wrapper {
     position: relative;
-    top: 6px;
+    /* top: 6px; */
 }
 
 .comment-input {

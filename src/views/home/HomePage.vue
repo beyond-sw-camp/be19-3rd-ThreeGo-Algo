@@ -3,7 +3,7 @@
     <!-- Hero Section -->
     <section class="hero-section">
       <h3>학습부터 취업까지 <img src="/src/assets/images/algo_logo.png" alt="코알라" class="kola-icon1" />와 함께 성장하세요.</h3>
-      <h1>몰라도 된다, 알고 있으면 되니까!</h1><br/>
+      <h1>몰라도 된다, 알고 있으면 되니까!</h1>
 
       <!-- 로그인 상태에 따른 조건부 렌더링 -->
       <button v-if="!isLoggedIn" class="start-btn" @click="goToLogin">지금 바로 시작하기</button>
@@ -14,7 +14,7 @@
 
       <!-- Auto Carousel Banner -->
       <div class="carousel-container">
-        <button class="carousel-arrow left" @click="prevSlide">❮</button>
+        <!-- <button class="carousel-arrow left" @click="prevSlide">❮</button> -->
 
         <div class="carousel-wrapper">
           <div class="carousel" :style="{ transform: `translateX(-${currentSlide * 100}%)` }">
@@ -40,12 +40,12 @@
           ></span>
         </div>
 
-        <button class="carousel-arrow right" @click="nextSlide">❯</button>
+        <!-- <button class="carousel-arrow right" @click="nextSlide">❯</button> -->
       </div>
     </section>
-    
+
     <div>
-        <h5 style="color: gray">#체계적학습 #기업별코테후기 #AI코드리뷰 #스터디그룹 #레벨업</h5>
+      <h5 style="color: gray">#체계적학습 #기업별코테후기 #AI코드리뷰 #스터디그룹 #레벨업</h5>
     </div>
 
     <!-- Target Audience Section -->
@@ -140,14 +140,14 @@ watch(() => route.path, () => {
 <style scoped>
 .home-container {
   text-align: center;
-  background-color: #f5fbff;
+  background: linear-gradient(#FDFEFF 0%, #E1F4FF 50%, #E1F4FF 100%);
   color: #222;
   padding-bottom: 100px;
 }
 
 .hero-section {
-  padding: 60px 20px;
-  
+  padding: 40px 20px;
+
 }
 
 .hero-section h3 {
@@ -178,7 +178,7 @@ watch(() => route.path, () => {
   cursor: pointer;
   font-size: 16px;
   font-weight: 600;
-  margin: 0 0 60px 0;
+  margin: 0 0 20px 0;
   transition: background-color 0.2s;
 }
 
@@ -195,7 +195,7 @@ watch(() => route.path, () => {
 
   /* 기존 박스 스타일 제거 */
   width: auto;
-  margin: 0 0 60px 0;
+  margin: 0 0 30px 0;
   padding: 0;
   background: none;
   border: none;
@@ -352,7 +352,7 @@ watch(() => route.path, () => {
 
 /* Audience Section */
 .audience-section {
-  background-color: #f5fbff;
+  /* background-color: #f5fbff; */
   padding: 80px 20px;
 }
 
@@ -377,6 +377,7 @@ watch(() => route.path, () => {
   vertical-align: middle;
   display: inline-block;
 }
+
 .kola-icon {
   width: 100px;
   height: auto;

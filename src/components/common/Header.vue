@@ -57,6 +57,7 @@ onMounted(() => {
     }
 })
 
+
 const goHome = () => router.push('/')
 
 const goMyPage = () => router.push('/mypage/study')

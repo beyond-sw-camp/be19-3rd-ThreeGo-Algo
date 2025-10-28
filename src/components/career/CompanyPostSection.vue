@@ -2,9 +2,11 @@
     <div class="post-section">
         <PostCount :count="posts.length" />
         <div class="post-list">
-            <PostListItem v-for="post in posts" :key="post.id" :id="post.id" :title="post.title"
-                :nickname="post.nickname" :rankName="post.rankName" :createdAt="post.createdAt" :status="post.status"
-                :likeCount="post.likeCount" :commentCount="post.commentCount" />
+            <router-link v-for="post in posts" :key="post.id" :to="`/career-info/${post.id}`" class="post-link">
+                <PostListItem :id="post.id" :title="post.title" :nickname="post.nickname" :rankName="post.rankName"
+                    :createdAt="post.createdAt" :status="post.status" :likeCount="post.likeCount"
+                    :company="post.company" :year="post.year" :commentCount="post.commentCount" />
+            </router-link>
         </div>
     </div>
 </template>
@@ -27,5 +29,15 @@ defineProps({ posts: Array })
     display: flex;
     flex-direction: column;
     gap: 6px;
+}
+
+.post-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.post-link:hover {
+    background-color: #f9f9f9;
+    border-radius: 8px;
 }
 </style>

@@ -81,7 +81,7 @@ const routes = [
   // 기업별 정보 공유
   { path: '/career-info', component: CareerInfoMainView, meta: { requiresAuth: true } },
   { path: '/career-info/post', component: CareerPostCreate, meta: { requiresAuth: true } },
-  { path: '/career-info/:id', component: CareerPostDetail, meta: { requiresAuth: true } },
+  { path: '/career-info/:postId', component: CareerPostDetail, meta: { requiresAuth: true } },
 
   // 알고리즘 학습
   { path: '/algorithm/roadmap/:roadmapId', component: AlgoMainView, meta: { requiresAuth: true } },
@@ -91,10 +91,10 @@ const routes = [
   { path: '/algorithm', redirect: '/algorithm/roadmap/1' },
 
   // 코딩 풀이
-  { path: '/coding-problems', component: CodingProblemList, meta: { requiresAuth: true }},
-  { path: '/coding-problem/:problemId/solutions', component: CodingProblemDetail, meta: { requiresAuth: true }},
-  { path: '/coding-problems/:problemId/solutions/new', component: Codingpost, meta: { requiresAuth: true }},
-  { path: '/coding-problems/:problemId/solutions/:solutionId', component: CodingPostDetail, meta: { requiresAuth: true }},
+  { path: '/coding-problems', component: CodingProblemList, meta: { requiresAuth: true } },
+  { path: '/coding-problem/:problemId/solutions', component: CodingProblemDetail, meta: { requiresAuth: true } },
+  { path: '/coding-problems/:problemId/solutions/new', component: Codingpost, meta: { requiresAuth: true } },
+  { path: '/coding-problems/:problemId/solutions/:solutionId', component: CodingPostDetail, meta: { requiresAuth: true } },
 
   // 회원 관련 (로그인 불필요)
   { path: '/signup', component: SignupPage },
@@ -142,7 +142,10 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
-})
+  scrollBehavior() {
+    return { top: 0 } // 스크롤 위치 상단으로
+  },
+});
 
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem('accessToken')
