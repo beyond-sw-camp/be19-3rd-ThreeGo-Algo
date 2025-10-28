@@ -1,7 +1,9 @@
 <template>
   <div class="login-container">
     <div class="left-side">
-      <img src="@/assets/images/algo_logo.png" alt="Logo" class="logo" />
+      <div class="logo-section" @click="goHome">
+        <img src="@/assets/images/algo_logo.png" alt="logo" class="logo-icon" />
+      </div>
 
       <div class="left-content">
         <p class="slogan">
@@ -45,11 +47,14 @@ import Input from '@/components/common/Input.vue'
 import CustomButton from '@/components/common/CustomButton.vue'
 import memberApi from '@/api/memberApi'
 
+const id = ref(0);
 const email = ref('')
 const password = ref('')
 const isError = ref(false)
 const message = ref('')
 const router = useRouter()
+
+const goHome = () => router.push('/')
 
 const goToSignup = () => {
   router.push('/signup')
@@ -80,10 +85,15 @@ const handleLogin = async () => {
 
       // 토큰에서 닉네임 추출
       const payload = JSON.parse(atob(token.split('.')[1]))
-      const nickname = response.data.nickname || payload.nickname || payload.sub || '사용자'
-      localStorage.setItem('nickname', nickname)
+      const nickname = payload.nickname || payload.sub || '사용자'
 
-      console.log('로그인 성공:', nickname)
+      const memberId = payload.memberId || payload.id || payload.userId
+      const rankName = payload.rankName || payload.rank || '코뉴비'
+
+      localStorage.setItem('nickname', nickname)
+      localStorage.setItem('memberId', memberId)
+
+      console.log('로그인 성공:', nickname, '/ memberId:', memberId, '/ rankName:', rankName)
       router.push('/')
     } else {
       isError.value = true
@@ -120,7 +130,13 @@ const handleLogin = async () => {
   overflow: hidden;
 }
 
-.logo {
+.logo-section {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.logo-icon {
   position: absolute;
   top: 30px;
   left: 30px;

@@ -92,7 +92,7 @@
       </div>
     </div>
 
-    <!-- 생성 완료 팝업 - 변경 -->
+    <!-- 생성 완료 팝업 -->
     <StudyCreationSuccessPopup
       v-model="showSuccessPopup"
       :group-id="createdGroupId"
@@ -102,15 +102,15 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import MiniProfile from '@/components/common/MiniProfile.vue';
-import StudyCreationSuccessPopup from '@/components/study-recruit/StudyCreationSuccessPopup.vue';
-// DateRangeButton은 글로벌 컴포넌트로 등록되어 있어 import 불필요
+import { ref, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import MiniProfile from '@/components/common/MiniProfile.vue'
+import StudyCreationSuccessPopup from '@/components/study-recruit/StudyCreationSuccessPopup.vue'
+import coreApi from '@/api/coreApi'
 
-
-const route = useRoute();
-const router = useRouter();
+const route = useRoute()
+const router = useRouter()
+const postId = route.query?.postId || route.params.postId || 0 // 안전하게 처리
 
 // 폼 데이터
 const formData = ref({
@@ -118,126 +118,121 @@ const formData = ref({
   description: '',
   startDate: '',
   endDate: ''
-});
+})
 
 // 스터디장 정보
 const leaderInfo = ref({
-  nickname: '라이언',
-  rankName: '코뉴비'
-});
+  nickname: '',
+  rankName: ''
+})
 
-// 승인된 스터디원 목록 (이전 페이지에서 전달받거나 API로 가져오기)
-const members = ref([]);
+// 승인된 스터디원 목록
+const members = ref([])
 
 // 팝업 및 생성된 그룹 ID
-const showSuccessPopup = ref(false);
-const createdGroupId = ref(null);
+const showSuccessPopup = ref(false)
+const createdGroupId = ref(null)
 
-// 초기 데이터 로드
-onMounted(() => {
-  // 이전 페이지에서 전달받은 데이터 로드
-  loadApprovedMembers();
-});
+// 스터디장 정보 조회
+const fetchLeaderInfo = async () => {
+  try {
+    const response = await coreApi.get(`/study-recruit/posts/${postId}`)
+    const data = response.data
 
-const loadApprovedMembers = () => {
-  // sessionStorage에서 전달받은 데이터 확인
-  const savedData = sessionStorage.getItem('createStudyGroupData');
-
-  console.log('CreateStudyGroup - savedData:', savedData);
-
-  if (savedData) {
-    try {
-      const studyGroupData = JSON.parse(savedData);
-      console.log('CreateStudyGroup - parsed data:', studyGroupData);
-
-      if (studyGroupData.approvedMembers && studyGroupData.approvedMembers.length > 0) {
-        // 실제 전달받은 데이터 사용 - 필드명 매핑
-        console.log('전달받은 승인된 멤버 사용');
-        members.value = studyGroupData.approvedMembers.map(member => ({
-          id: member.id,
-          nickname: member.name, // name -> nickname으로 매핑
-          rankName: member.rankName || '코뉴비', // rankName이 없으면 기본값
-          motivation: member.motivation
-        }));
-
-        // 스터디 정보도 함께 받았다면 폼에 미리 채우기
-        if (studyGroupData.recruitPost) {
-          formData.value.title = studyGroupData.recruitPost.title || '';
-        }
-
-        // 사용 후 삭제
-        sessionStorage.removeItem('createStudyGroupData');
-        return;
-      }
-    } catch (e) {
-      console.error('데이터 파싱 에러:', e);
+    leaderInfo.value = {
+      nickname: data.memberNickname,
+      rankName: data.rankName
     }
+    formData.value.title = data.title || ''
+  } catch (error) {
+    console.error('❌ 스터디장 정보 조회 실패:', error)
   }
+}
 
-  console.log('더미 데이터 사용');
-  // 전달받은 데이터가 없을 때 예시 데이터
-  const approvedMembers = [
-    {
-      id: 3,
-      nickname: '제이지',
-      rankName: '코좀알',
-      motivation: '알고리즘 기초부터 차근차근 배우고 싶어요! 열심히 하겠습니다 :)'
-    },
-    {
-      id: 4,
-      nickname: '프로도',
-      rankName: '코뉴비',
-      motivation: '알고리즘 기초부터 차근차근 배우고 싶어요! 열심히 하겠습니다 :)'
-    },
-    {
-      id: 6,
-      nickname: '라이라이언',
-      rankName: '코뉴비',
-      motivation: '알고리즘 기초부터 차근차근 배우고 싶어요! 열심히 하겠습니다 :)'
-    }
-  ];
-
-  members.value = approvedMembers;
-};
-
-const handleCancel = () => {
-  if (confirm('작성 중인 내용이 저장되지 않습니다. 취소하시겠습니까?')) {
-    router.back();
+// 승인된 멤버 목록 조회
+const fetchApprovedMembers = async () => {
+  try {
+    const response = await coreApi.get(`/study-recruit/posts/${postId}/members`)
+    members.value = response.data
+      .filter((m) => m.status === 'APPROVED')
+      .map((m) => ({
+        id: m.memberId,
+        nickname: m.memberNickname,
+        rankName: m.rankName || '코뉴비',
+        motivation: m.applicant
+      }))
+  } catch (error) {
+    console.error('❌ 스터디원 목록 조회 실패:', error)
   }
-};
+}
 
-const handleSubmit = () => {
+// 스터디 그룹 생성 API
+const handleSubmit = async () => {
   if (!formData.value.title.trim()) {
-    alert('스터디명을 입력해주세요.');
-    return;
+    alert('스터디명을 입력해주세요.')
+    return
   }
   if (!formData.value.description.trim()) {
-    alert('스터디 소개를 입력해주세요.');
-    return;
+    alert('스터디 소개를 입력해주세요.')
+    return
   }
   if (!formData.value.startDate || !formData.value.endDate) {
-    alert('스터디 기간을 선택해주세요.');
-    return;
+    alert('스터디 기간을 선택해주세요.')
+    return
   }
 
-  const studyGroupData = {
-    ...formData.value,
-    leaderId: leaderInfo.value.nickname,
-    memberIds: members.value.map(m => m.id),
-    memberCount: members.value.length
-  };
+  const payload = {
+    name: formData.value.title,
+    description: formData.value.description,
+    startDate: formData.value.startDate,
+    endDate: formData.value.endDate
+  }
 
-  console.log('스터디 그룹 생성:', studyGroupData);
-  
-  // API 호출 후
-  createdGroupId.value = 123; // 실제로는 API 응답에서
-  showSuccessPopup.value = true;
-};
+  try {
+    // 헤더에 POST-ID 추가해서 요청
+    const response = await coreApi.post('/study', payload, {
+      headers: {
+        'POST-ID': postId
+      }
+    })
 
-// 팝업 확인 핸들러 (선택사항)
+    createdGroupId.value = response.data.id || response.data.studyId || 0
+    showSuccessPopup.value = true
+    alert('🎉 스터디 그룹이 성공적으로 생성되었습니다!')
+  } catch (error) {
+    console.error('❌ 스터디 그룹 생성 실패:', error)
+    console.error('❌ 에러 상세:', error.response?.data)
+    alert('스터디 그룹 생성 중 오류가 발생했습니다.')
+  }
+}
+
+// 취소 버튼
+const handleCancel = () => {
+  if (confirm('작성을 취소하시겠습니까?')) {
+    router.push('/study-recruit')
+  }
+}
+
+// 생성 완료 후 스터디 메인페이지로 이동
 const handleSuccessConfirm = () => {
-  console.log('스터디 그룹으로 이동');
-};
+  console.log('🎯 생성된 스터디 ID:', createdGroupId.value)
+
+  if (createdGroupId.value) {
+    // sessionStorage에 studyId 저장
+    sessionStorage.setItem('studyId', createdGroupId.value.toString())
+
+    // 스터디 메인페이지로 이동
+    router.push(`/study/home?studyId=${createdGroupId.value}`)
+  } else {
+    // studyId가 없으면 스터디 모집 목록으로
+    router.push('/study-recruit')
+  }
+}
+
+onMounted(async () => {
+  await fetchLeaderInfo()
+  await fetchApprovedMembers()
+})
 </script>
 
 <style scoped>

@@ -49,16 +49,19 @@ const iconStyle = computed(() => ({
     font-family: 'Noto Sans KR';
     font-style: normal;
     font-weight: 400;
-    font-size: 16px;
+    font-size: 15px;
     line-height: 1;
     border-radius: 5px;
     border: none;
     padding: 0 14px;
-    display: flex;
+    display: inline-flex;
     justify-content: center;
     align-items: center;
     transition: background-color 0.15s ease, transform 0.15s ease, filter 0.15s ease;
     box-sizing: border-box;
+    white-space: nowrap;
+    width: auto;
+    min-width: fit-content;
 }
 
 .btn-icon {

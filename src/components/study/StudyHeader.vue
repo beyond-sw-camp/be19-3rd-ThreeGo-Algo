@@ -28,27 +28,87 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import MyProfileDropdown from '@/components/common/MyProfileDropdown.vue'
+import coreApi from '@/api/coreApi'
 
 const router = useRouter()
+// 사용자 정보
 const isLoggedIn = ref(true)
+const nickname = ref('')
+const rankName = ref('')
+const memberId = ref('')
 
-// 로그인 사용자 정보 예시
-const nickname = ref('알코알라')
-const rankName = ref('코알못')
+// 스터디 정보
+const studyId = ref(null)
+const isLeader = ref(false)
 
-// 메뉴 목록
-const menuItems = [
-  { label: '홈', path: '/study' },
-  { label: '게시판', path: '/study/board' },
-  { label: '설정', path: '/study/settings' }
-]
+onMounted(async () => {
+    const token = localStorage.getItem('accessToken')
+    const name = localStorage.getItem('nickname')
+    const rank = localStorage.getItem('rank')
+    const id = localStorage.getItem('memberId')
 
-// 홈으로 이동
+    if (token) {
+        isLoggedIn.value = true
+        nickname.value = name || '사용자'
+        rankName.value = rank || '코알못'
+        memberId.value = id || '0'
+    }
+
+    await checkLeaderStatus();
+})
+
+
+
+
+const menuItems = computed(() => {
+  const baseMenus = [
+    { label: '홈', path: '/study/home' },
+    { label: '게시판', path: '/study/board' }
+  ]
+
+  if (isLeader.value) {
+    baseMenus.push({ label: '설정', path: '/study/settings' })
+  }
+
+  return baseMenus
+})
+
+// ✅ 스터디장 여부 확인
+const checkLeaderStatus = async () => {
+  try {
+    studyId.value = localStorage.getItem('studyId')
+
+    if (!studyId.value) {
+      console.warn('⚠️ studyId가 없습니다.')
+      return
+    }
+
+    // 스터디 멤버 정보 조회
+    const response = await coreApi.get(`/study/${studyId.value}/members`)
+    const members = response.data
+    console.log('📋 스터디 멤버 목록:', members)
+    console.log('👤 현재 memberId:', memberId.value)
+
+    // 현재 사용자가 LEADER인지 확인
+    const currentUserMember = members.find(m => m.memberId === Number(memberId.value))
+    console.log('🔍 현재 사용자 멤버 정보:', currentUserMember)
+
+    isLeader.value = currentUserMember.role === 'LEADER'
+
+    console.log('👑 스터디장 여부:', isLeader.value)
+  } catch (error) {
+    console.error('❌ 스터디장 확인 실패:', error)
+    console.error('❌ 에러 상세:', error.response?.data)
+    isLeader.value = false
+  }
+}
+
+// Blog 로고 클릭 시 마이페이지 스터디 목록으로 이동
 const goHome = () => {
-  router.push('/study')
+  router.push('/mypage/study')
 }
 
 // 마이페이지 이동
@@ -57,10 +117,18 @@ const goMyPage = () => {
   router.push('/mypage')
 }
 
-// 로그아웃 처리
 const handleLogout = () => {
-  console.log('🚪 로그아웃 처리 완료')
+  localStorage.removeItem('accessToken')
+  localStorage.removeItem('nickname')
+  localStorage.removeItem('memberId')
+  localStorage.removeItem('rankName')
+  localStorage.removeItem('studyId')
+
   isLoggedIn.value = false
+
+  window.dispatchEvent(new Event('auth-change'))
+
+  router.push('/')
 }
 </script>
 

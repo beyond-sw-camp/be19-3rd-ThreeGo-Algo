@@ -3,18 +3,18 @@
     <!-- Hero Section -->
     <section class="hero-section">
       <h3>학습부터 취업까지 <img src="/src/assets/images/algo_logo.png" alt="코알라" class="kola-icon1" />와 함께 성장하세요.</h3>
-      <h1>몰라도 된다, 알고 있으면 되니까!</h1><br/>
+      <h1>몰라도 된다, 알고 있으면 되니까!</h1>
 
       <!-- 로그인 상태에 따른 조건부 렌더링 -->
       <button v-if="!isLoggedIn" class="start-btn" @click="goToLogin">지금 바로 시작하기</button>
       <div v-else class="welcome-message">
         <img src="/koala.svg" alt="알코알라" class="welcome-icon" />
-        <p><strong>{{ userName }}</strong>님 환영합니다</p>
+        <p><strong>{{ userName }}</strong> 님 환영합니다</p>
       </div>
 
       <!-- Auto Carousel Banner -->
       <div class="carousel-container">
-        <button class="carousel-arrow left" @click="prevSlide">❮</button>
+        <!-- <button class="carousel-arrow left" @click="prevSlide">❮</button> -->
 
         <div class="carousel-wrapper">
           <div class="carousel" :style="{ transform: `translateX(-${currentSlide * 100}%)` }">
@@ -40,12 +40,12 @@
           ></span>
         </div>
 
-        <button class="carousel-arrow right" @click="nextSlide">❯</button>
+        <!-- <button class="carousel-arrow right" @click="nextSlide">❯</button> -->
       </div>
     </section>
-    
+
     <div>
-        <h5 style="color: gray">#체계적학습 #기업별코테후기 #AI코드리뷰 #스터디그룹 #레벨업</h5>
+      <h5 style="color: gray">#체계적학습 #기업별코테후기 #AI코드리뷰 #스터디그룹 #레벨업</h5>
     </div>
 
     <!-- Target Audience Section -->
@@ -61,7 +61,9 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount, computed } from 'vue'
+import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+
 import home_books from '@/assets/images/home_books.png'
 import robot from '@/assets/images/robot.png'
 import home_career from '@/assets/images/home_career.png'
@@ -71,67 +73,35 @@ import for1 from '@/assets/images/01_for.png'
 import for2 from '@/assets/images/02_for.png'
 import for3 from '@/assets/images/03_for.png'
 import for4 from '@/assets/images/04_for.png'
-import { useRouter } from 'vue-router'
 
 const router = useRouter()
+const route = useRoute()
 const goToLogin = () => router.push('/login')
 
-// 로그인 상태 확인
-const userInfo = ref(null)
+// ✅ 로그인 상태 관리
+const isLoggedIn = ref(false)
+const userName = ref('')
 
-// 로그인 여부 계산
-const isLoggedIn = computed(() => userInfo.value !== null)
-
-// 사용자 이름 (닉네임 또는 이메일의 @ 앞부분 사용)
-const userName = computed(() => {
-  if (!userInfo.value) return ''
-  return userInfo.value.nickname || userInfo.value.email?.split('@')[0] || '사용자'
-})
-
-// 로그인 상태 확인 함수
+// ✅ 로그인 여부 체크 (accessToken & nickname)
 const checkLoginStatus = () => {
-  const storedUser = localStorage.getItem('user')
-  if (storedUser) {
-    try {
-      userInfo.value = JSON.parse(storedUser)
-    } catch (e) {
-      console.error('사용자 정보 파싱 오류:', e)
-      localStorage.removeItem('user')
-    }
+  const token = localStorage.getItem('accessToken')
+  const nickname = localStorage.getItem('nickname')
+
+  if (token && nickname) {
+    isLoggedIn.value = true
+    userName.value = nickname
+  } else {
+    isLoggedIn.value = false
   }
 }
 
+// ✅ 배너 관련
 const banners = [
-  {
-    number: '01',
-    title: '알고리즘 학습 로드맵',
-    desc: '개념부터 실전까지 이어지는 학습 로드맵으로 방향을 잃지 않고 성장하세요.',
-    image: home_books
-  },
-  {
-    number: '02',
-    title: 'AI 코드 피드백',
-    desc: 'AI가 당신의 코드를 코칭해드립니다.',
-    image: robot
-  },
-  {
-    number: '03',
-    title: '기업별 정보 공유',
-    desc: '기업별 후기와 인증 정보를 모아 코딩테스트 준비를 도와드립니다.',
-    image: home_career
-  },
-  {
-    number: '04',
-    title: '스터디',
-    desc: '스터디 그룹을 만들어 함께 배우며 성장하세요.',
-    image: home_study
-  },
-  {
-    number: '05',
-    title: '포인트 & 등급제',
-    desc: '활동으로 포인트를 얻고 성장의 단계를 경험하세요.',
-    image: home_rank
-  }
+  { number: '01', title: '알고리즘 학습 로드맵', desc: '개념부터 실전까지 이어지는 학습 로드맵으로 방향을 잃지 않고 성장하세요.', image: home_books },
+  { number: '02', title: 'AI 코드 피드백', desc: 'AI가 당신의 코드를 코칭해드립니다.', image: robot },
+  { number: '03', title: '기업별 정보 공유', desc: '기업별 후기와 인증 정보를 모아 코딩테스트 준비를 도와드립니다.', image: home_career },
+  { number: '04', title: '스터디', desc: '스터디 그룹을 만들어 함께 배우며 성장하세요.', image: home_study },
+  { number: '05', title: '포인트 & 등급제', desc: '활동으로 포인트를 얻고 성장의 단계를 경험하세요.', image: home_rank }
 ]
 
 const forImages = [for1, for2, for3, for4]
@@ -139,39 +109,45 @@ const forImages = [for1, for2, for3, for4]
 const currentSlide = ref(0)
 let interval
 
-const nextSlide = () => {
-  currentSlide.value = (currentSlide.value + 1) % banners.length
-}
-
-const prevSlide = () => {
-  currentSlide.value = (currentSlide.value - 1 + banners.length) % banners.length
-}
-
-const goToSlide = (index) => {
-  currentSlide.value = index
-}
+const nextSlide = () => (currentSlide.value = (currentSlide.value + 1) % banners.length)
+const prevSlide = () => (currentSlide.value = (currentSlide.value - 1 + banners.length) % banners.length)
+const goToSlide = (index) => (currentSlide.value = index)
 
 onMounted(() => {
   checkLoginStatus()
-  interval = setInterval(() => {
-    nextSlide()
-  }, 3000) // 3초마다 자동 슬라이드
+
+  // ✅ 로그인 상태 변화 감지 (다른 탭에서 localStorage 변경될 때)
+  window.addEventListener('storage', checkLoginStatus)
+
+  // ✅ 로그인/로그아웃 시 실시간 갱신 (같은 탭)
+  window.addEventListener('auth-change', checkLoginStatus)
+
+  interval = setInterval(() => nextSlide(), 3000)
 })
 
-onBeforeUnmount(() => clearInterval(interval))
+onBeforeUnmount(() => {
+  clearInterval(interval)
+  window.removeEventListener('storage', checkLoginStatus)
+  window.removeEventListener('auth-change', checkLoginStatus)
+})
+
+// ✅ 라우트 변경 감지 (로그아웃 후 홈으로 돌아왔을 때 실시간 갱신)
+watch(() => route.path, () => {
+  checkLoginStatus()
+}, { immediate: true })
 </script>
 
 <style scoped>
 .home-container {
   text-align: center;
-  background-color: #f5fbff;
+  background: linear-gradient(#FDFEFF 0%, #E1F4FF 50%, #E1F4FF 100%);
   color: #222;
   padding-bottom: 100px;
 }
 
 .hero-section {
-  padding: 60px 20px;
-  
+  padding: 40px 20px;
+
 }
 
 .hero-section h3 {
@@ -202,7 +178,7 @@ onBeforeUnmount(() => clearInterval(interval))
   cursor: pointer;
   font-size: 16px;
   font-weight: 600;
-  margin: 0 0 60px 0;
+  margin: 0 0 20px 0;
   transition: background-color 0.2s;
 }
 
@@ -215,12 +191,15 @@ onBeforeUnmount(() => clearInterval(interval))
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  margin: 0 0 60px 0;
-  padding: 16px 28px;
-  background-color: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(0, 168, 255, 0.15);
+  gap: 8px;
+
+  /* 기존 박스 스타일 제거 */
+  width: auto;
+  margin: 0 0 30px 0;
+  padding: 0;
+  background: none;
+  border: none;
+  box-shadow: none;
 }
 
 .welcome-icon {
@@ -373,7 +352,7 @@ onBeforeUnmount(() => clearInterval(interval))
 
 /* Audience Section */
 .audience-section {
-  background-color: #f5fbff;
+  /* background-color: #f5fbff; */
   padding: 80px 20px;
 }
 
@@ -398,6 +377,7 @@ onBeforeUnmount(() => clearInterval(interval))
   vertical-align: middle;
   display: inline-block;
 }
+
 .kola-icon {
   width: 100px;
   height: auto;

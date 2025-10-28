@@ -6,7 +6,7 @@
         </h3>
 
         <!-- 게시글 목록 -->
-        <ul class="related-list">
+        <ul v-if="posts.length" class="related-list">
             <li v-for="post in posts" :key="post.id" class="related-item">
                 <router-link :to="`/career-info/${post.id}`" class="item-link">
                     <div class="title-row">
@@ -32,12 +32,15 @@
             </li>
         </ul>
 
+        <p v-else class="no-related">아직 다른 정보글이 없습니다.</p>
+
         <!-- 작성 버튼 -->
         <CustomButton variant="primary" width="100%" @click="handleWriteClick">
             + 기업 정보 공유글 작성하기
         </CustomButton>
     </div>
 </template>
+
 
 <script setup>
 import CustomButton from "@/components/common/CustomButton.vue";
@@ -137,5 +140,12 @@ const handleWriteClick = () => {
     width: 16px;
     height: 16px;
     opacity: 0.7;
+}
+
+.no-related {
+    text-align: center;
+    color: #999;
+    font-size: 14px;
+    margin-bottom: 16px;
 }
 </style>

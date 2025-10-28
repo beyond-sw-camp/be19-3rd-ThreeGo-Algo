@@ -14,8 +14,8 @@ const router = useRouter();
 const route = useRoute();
 
 const goToManagement = () => {
-  const studyId = route.params.id; // 현재 게시물 ID 가져오기
-  router.push(`/study-recruit/manage/${studyId}`);
+  const postId = route.params.postId; // 현재 게시물 ID 가져오기
+  router.push(`/study-recruit/manage/${postId}`);
 };
 </script>
 

@@ -22,8 +22,10 @@
           <div class="author-info">
             <MiniProfile :nickname="post.writer" :rankName="post.rankName" />
             <span class="post-date">{{ post.createdAt }}</span>
-            <button class="action-link">수정</button>
-            <button class="action-link">삭제</button>
+            <template v-if="isWriter">
+              <button class="action-link" @click="goToEditPage">수정</button>
+              <button class="action-link" @click="deletePost">삭제</button>
+            </template>
           </div>
 
           <!-- 일정 및 진행 방식 섹션 -->
@@ -59,21 +61,7 @@
           <!-- 모집 목적 섹션 -->
           <div class="section">
             <h3 class="section-title">모집 목적</h3>
-            <div class="section-content">
-              <p>{{ post.content }}</p>
-            </div>
-          </div>
-
-          <!-- 준비 내용 섹션 -->
-          <div class="section">
-            <h3 class="section-title">준비 내용</h3>
-            <div class="section-content">
-              <ul>
-                <li>CS 핵심 주제: 운영체제, 네트워크, 데이터베이스, 알고리즘</li>
-                <li>프로젝트 질문·분석 프로젝트 중심으로 예상 질문 리스트 작성</li>
-                <li>기타: 카카오 인재상 기반 질의/설명 질문 대비</li>
-              </ul>
-            </div>
+            <div class="section-content" v-html="post.content"></div>
           </div>
 
           <!-- 댓글 섹션 -->
@@ -81,20 +69,20 @@
             :comments="comments"
             :currentUser="currentUser"
             @submit-comment="addComment"
+            @submit-reply="addReply"
+            @edit-comment="editComment"
+            @delete-comment="deleteComment"
+            @edit-reply="editReply"
+            @delete-reply="deleteReply"
           />
         </div>
 
-        <!-- 우측 박스 영역 (신청자 / 작성자 분기) -->
-        <div class="side-box">
-          <RecruitManagement v-if="isWriter" />
-
+        <!-- 우측 박스 영역 -->
+        <div class="side-box" v-if="post.title">
+          <RecruitManagement v-if="isWriter" :postId="route.params.postId"/>
           <template v-else>
-            <ApplyStudyBox v-if="!isApplied" @apply="handleApply" />
-            <AfterApplyStudyBox
-              v-else
-              :status="applyStatus"
-              @cancel="handleCancel"
-            />
+            <ApplyStudyBox v-if="!isApplied" :dDay="0" @apply="handleApply" />
+            <AfterApplyStudyBox v-else :status="applyStatus" @cancel="handleCancel" />
           </template>
         </div>
       </div>
@@ -102,9 +90,9 @@
 
   </div>
 </template>
-
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import { useRouter, useRoute } from "vue-router";
 import BackButton from "@/components/common/BackButton.vue";
 import MiniProfile from "@/components/common/MiniProfile.vue";
 import Comment from "@/components/common/Comment.vue";
@@ -112,70 +100,266 @@ import RecruitBadge from "@/components/study-recruit/RecruitBadge.vue";
 import ApplyStudyBox from "@/components/study-recruit/ApplyStudyBox.vue";
 import AfterApplyStudyBox from "@/components/study-recruit/AfterApplyStudyBox.vue";
 import RecruitManagement from "@/components/study-recruit/RecruitManagement.vue";
+import coreApi from "@/api/coreApi";
 
-// 스터디 모집글 더미 데이터
+const router = useRouter();
+const route = useRoute();
+const postId = route.params.postId;
+
 const post = ref({
-  title: "카카오 면접 대비 스터디",
-  status: "OPEN",
-  writer: "라이언",
-  rankName: "코뉴비",
-  createdAt: "2025.09.13 14:06",
-  content:
-    "2025 상반기 카카오 개발직군 1차/2차 면접 대비 스터디를 참여할 분들을 모집합니다.\n코딩테스트를 통과한 이후 면접 실전 감각을 유지하고,\nCS 기업기 + 프로젝트 기반 질문 대비를 중심으로 준비할 예정입니다.",
-  memberLimit: 20,
-  studyPeriod: "면접",
-  startDate: "2025.10.01",
-  endDate: "2025.10.31",
+  title: "",
+  status: "",
+  writer: "",
+  rankName: "",
+  createdAt: "",
+  content: "",
+  memberLimit: 0,
+  studyPeriod: "",
+  startDate: "",
+  endDate: "",
 });
 
-// 상태 관리
-const isWriter = ref(true); // 작성자 시점 여부
+const comments = ref([]);
+const isWriter = ref(false);
 const isApplied = ref(false);
-const applyStatus = ref("pending"); // pending | approved | rejected
+const applyStatus = ref("pending");
+const currentUser = ref([]);
+const currentMemberId = ref(null);
 
-// 현재 사용자 정보
-const currentUser = ref({
-  nickname: "나",
-  rankName: "코뉴비"
-});
+// 신청 상태 확인
+const fetchApplyStatus = async () => {
+  try {
+    const response = await coreApi.get(`/study-recruit/posts/${postId}/applicants/me`);
 
-const comments = ref([
-  {
-    id: 1,
-    nickname: "라이언",
-    rankName: "코뉴비",
-    content: "도움이 많이 될 것 같네요! 신청해봅니다!!",
-    createdAt: "2025.11.14 18:12"
-  },
-  {
-    id: 2,
-    nickname: "제이지",
-    rankName: "코좀알",
-    content: "저도 카카오 면접 준비 중인데 함께하고 싶습니다!",
-    createdAt: "2025.11.15 10:30"
-  },
-]);
-
-// 함수들
-const handleApply = () => {
-  isApplied.value = true;
-  applyStatus.value = "pending";
+    if (response.data) {
+      isApplied.value = true;
+      applyStatus.value = response.data.status; // 예: "PENDING", "APPROVED", "REJECTED"
+    } else {
+      isApplied.value = false;
+      applyStatus.value = null;
+    }
+  } catch (error) {
+    // 404 에러는 신청하지 않은 것으로 간주
+    if (error.response?.status === 404) {
+      isApplied.value = false;
+      applyStatus.value = null;
+    } else {
+      isApplied.value = false;
+      applyStatus.value = null;
+    }
+  }
 };
 
-const handleCancel = () => {
-  isApplied.value = false;
-  applyStatus.value = "";
+// 게시물 상세조회 (작성자 여부 + 신청상태까지 반영)
+const fetchPostDetail = async () => {
+  try {
+    const response = await coreApi.get(`/study-recruit/posts/${postId}`);
+    const data = response.data;
+
+    post.value = {
+      title: data.title,
+      status: data.status,
+      writer: data.memberNickname,
+      rankName: data.rankName,
+      createdAt: data.createdAt || "",
+      content: data.content,
+      memberLimit: data.capacity,
+      studyPeriod: data.studyCategory || "-",
+      startDate: data.startDate,
+      endDate: data.endDate,
+    };
+
+    // 작성자 여부 판별
+    const writerId = Number(data.memberId);
+    isWriter.value = currentMemberId.value === writerId;
+
+    // 작성자 아닌 경우 → 신청 상태 확인
+    if (!isWriter.value) {
+      await fetchApplyStatus();
+    }
+
+  } catch (error) {
+    console.error("❌ 스터디 모집글 상세조회 실패:", error);
+  }
 };
 
-const addComment = (text) => {
-  const newComment = {
-    id: comments.value.length + 1,
-    author: "나",
-    content: text,
-    date: new Date().toISOString().slice(0, 16).replace("T", " "),
+
+// 신청하기
+const handleApply = async (applicantText) => {
+  try {
+    await coreApi.post(`/study-recruit/posts/${postId}/applicants`, {
+      applicant: applicantText
+    });
+    alert("스터디 신청이 완료되었습니다!");
+    isApplied.value = true;
+    applyStatus.value = "PENDING";
+  } catch (error) {
+    alert("신청 중 오류가 발생했습니다.");
+  }
+};
+
+
+// 신청 취소
+const handleCancel = async () => {
+  try {
+    await coreApi.delete(`/study-recruit/posts/${postId}/applicants`);
+    alert("신청이 취소되었습니다.");
+    isApplied.value = false;
+    applyStatus.value = null;
+  } catch (error) {
+    alert("신청 취소 중 오류가 발생했습니다.");
+  }
+};
+
+// 댓글 조회
+const fetchComments = async () => {
+  try {
+    const response = await coreApi.get(`/study-recruit/posts/${postId}/comments`);
+
+    const all = response.data.map(c => {
+      const mapped = {
+        id: c.id,
+        userId: c.memberId, // ✅ Comment 컴포넌트가 기대하는 필드명
+        nickname: c.memberNickname,
+        memberNickname: c.memberNickname, // ✅ isMyComment fallback용
+        rankName: c.rankName || c.rank || c.memberRank || '코뉴비',
+        content: c.content,
+        createdAt: c.createdAt,
+        parentId: c.parentId,
+        visibility: c.visibility || 'Y' // ✅ visibility 필드 추가 (기본값 'Y')
+      };
+
+      return mapped;
+    });
+    const parents = all.filter(c => !c.parentId);
+    comments.value = parents.map(p => ({
+      ...p,
+      replies: all.filter(c => c.parentId === p.id)
+    }));
+  } catch (error) {
+    console.error("❌ 댓글 조회 실패:", error);
+  }
+};
+
+// 댓글 작성
+const addComment = async (commentData) => {
+  try {
+    await coreApi.post(`/study-recruit/comments/${postId}`, { content: commentData.content });
+    await fetchComments();
+  } catch (error) {
+    console.error("❌ 댓글 작성 실패:", error);
+  }
+};
+
+// 답글 작성
+const addReply = async (replyData) => {
+  try {
+    await coreApi.post(`/study-recruit/comments/${postId}`, {
+      content: replyData.content,
+      parentId: replyData.commentId,
+    });
+    await fetchComments();
+  } catch (error) {
+    console.error("❌ 답글 작성 실패:", error);
+  }
+};
+
+// 댓글 수정
+const editComment = async (payload) => {
+  const { commentId, content } = payload; 
+  try {
+    const response = await coreApi.put(`/study-recruit/comments/${commentId}`, {
+      content
+    });
+    await fetchComments(response);
+  } catch (error) {
+    console.error('❌ 댓글 수정 실패:', error);
+    console.error('❌ 에러 상세:', error.response?.data);
+    alert('댓글 수정 중 오류가 발생했습니다.');
+  }
+};
+
+// 댓글 삭제
+const deleteComment = async (commentId) => {
+  if (!confirm('정말로 이 댓글을 삭제하시겠습니까?')) return
+
+  try {
+    const response = await coreApi.delete(`/study-recruit/comments/${commentId}`)
+    await fetchComments(response)
+  } catch (error) {
+    console.error('❌ 댓글 삭제 실패:', error)
+    alert('댓글 삭제 중 오류가 발생했습니다.')
+  }
+}
+
+// 대댓글 수정
+const editReply = async (payload) => {
+  const { replyId, content } = payload;
+  try {
+    const response = await coreApi.put(`/study-recruit/comments/${replyId}`, {
+      content
+    });
+    await fetchComments();
+  } catch (error) {
+    console.error('❌ 대댓글 수정 실패:', error);
+    console.error('❌ 에러 상세:', error.response?.data);
+    alert('대댓글 수정 중 오류가 발생했습니다.');
+  }
+};
+
+// 대댓글 삭제
+const deleteReply = async ({ replyId }) => {
+  if (!confirm('정말로 이 답글을 삭제하시겠습니까?')) return;
+
+  try {
+    const response = await coreApi.delete(`/study-recruit/comments/${replyId}`);
+    await fetchComments();
+  } catch (error) {
+    console.error('❌ 대댓글 삭제 실패:', error);
+    console.error('❌ 에러 상세:', error.response?.data);
+    alert('대댓글 삭제 중 오류가 발생했습니다.');
+  }
+};
+
+// 수정 버튼
+const goToEditPage = () => {
+  router.push({
+    path: "/study-recruit/post",
+    query: { mode: "edit", id: postId },
+  });
+};
+
+// 삭제 버튼
+const deletePost = async () => {
+  if (!confirm("정말 이 모집글을 삭제하시겠습니까?")) return;
+  try {
+    await coreApi.delete(`/study-recruit/posts/${postId}`);
+    alert("모집글이 삭제되었습니다.");
+    router.push("/study-recruit");
+  } catch (error) {
+    console.error("❌ 모집글 삭제 실패:", error);
+    alert("삭제 중 오류가 발생했습니다.");
+  }
+};
+
+onMounted(async () => {
+  // localStorage에서 사용자 정보 가져오기
+  const storedMemberId = localStorage.getItem("memberId");
+  const storedNickname = localStorage.getItem("nickname");
+  const storedRankName = localStorage.getItem("rankName");
+
+  currentMemberId.value = storedMemberId ? Number(storedMemberId) : 0;
+  currentUser.value = {
+    id: currentMemberId.value, // ✅ Comment 컴포넌트가 userId와 비교하는 필드
+    nickname: storedNickname || "사용자",
+    rankName: storedRankName || "코뉴비"
   };
-  comments.value.push(newComment);
-};
+
+  console.log('👤 댓글 작성자 정보:', currentUser.value);
+
+  await fetchPostDetail();
+  await fetchComments();
+});
 </script>
 
 <style scoped>

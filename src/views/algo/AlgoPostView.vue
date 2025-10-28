@@ -4,6 +4,8 @@
             <template v-if="post">
                 <el-breadcrumb :separator-icon="ArrowRight">
                     <el-breadcrumb-item :to="{ path: '/algorithm' }">알고리즘 학습</el-breadcrumb-item>
+                    <el-breadcrumb-item :to="{ path: `/algorithm/roadmap/${post.roadmapId}` }">{{ post.roadmapTitle
+                        }}</el-breadcrumb-item>
                     <el-breadcrumb-item>{{ post.title }}</el-breadcrumb-item>
                 </el-breadcrumb>
 
@@ -164,6 +166,7 @@ async function getPostDetail() {
         post.value = response.data;
 
         await getPostComments();
+        console.log(post.value);
     } catch (error) {
         console.error('게시물 상세 정보 불러오기 실패:', error);
     }

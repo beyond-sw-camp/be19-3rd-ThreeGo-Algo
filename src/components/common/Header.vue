@@ -57,17 +57,24 @@ onMounted(() => {
     }
 })
 
+
 const goHome = () => router.push('/')
 
-const goMyPage = () => router.push('/mypage')
+const goMyPage = () => router.push('/mypage/study')
 
 const handleLogout = () => {
     console.log('🚪 로그아웃 처리 완료')
     localStorage.removeItem('accessToken')
     localStorage.removeItem('nickname')
     localStorage.removeItem('rank')
+    localStorage.removeItem('memberId')
+    localStorage.removeItem('studyId')
 
     isLoggedIn.value = false
+
+    // ✅ 커스텀 이벤트 발생 (HomePage가 실시간으로 감지)
+    window.dispatchEvent(new Event('auth-change'))
+
     router.push('/')
 }
 </script>

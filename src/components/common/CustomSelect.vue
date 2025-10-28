@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 
 const props = defineProps({
   options: {
@@ -18,9 +18,14 @@ const props = defineProps({
   onSelect: {
     type: Function,
   },
+  initialValue: { type: String, default: '' },
 })
 
 const selectedValue = ref('')
+
+watch(() => props.initialValue, (v) => {
+  selectedValue.value = v
+})
 
 const iconSrc = computed(() => {
   if (!props.icon) return ''
@@ -28,7 +33,10 @@ const iconSrc = computed(() => {
 })
 
 function handleSelect(value) {
-  props.onSelect?.(value)
+  const selectedOption = props.options.find(option => option.value === value)
+  if (selectedOption) {
+    props.onSelect?.(selectedOption)
+  }
 }
 </script>
 

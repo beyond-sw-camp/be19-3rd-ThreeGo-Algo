@@ -74,11 +74,8 @@
                                 </el-dropdown>
                             </template>
 
-                            <template v-else-if="comment.visibility === 'N'">
-                            </template>
-
-                            <template v-else>
-                                <!-- 신고 버튼 (남의 댓글) -->
+                            <!-- 신고 버튼 (남의 댓글이고 visibility가 Y인 경우) -->
+                            <template v-else-if="!isMyComment(comment) && comment.visibility === 'Y'">
                                 <el-button type="text" class="report-btn" @click="handleReport(comment)">
                                     <img src="@/assets/icons/report.svg" alt="신고" class="report-icon" />
                                     신고
@@ -171,10 +168,8 @@
                                         </el-dropdown>
                                     </template>
 
-                                    <template v-else-if="reply.visibility === 'N'"></template>
-
-                                    <template v-else>
-                                        <!-- 신고 버튼 (남의 답글) -->
+                                    <!-- 신고 버튼 (남의 답글이고 visibility가 Y인 경우) -->
+                                    <template v-else-if="!isMyReply(reply) && reply.visibility === 'Y'">
                                         <el-button type="text" class="report-btn" @click="handleReportReply(reply)">
                                             <img src="@/assets/icons/report.svg" alt="신고" class="report-icon" />
                                             신고
@@ -206,6 +201,7 @@
             :targetNickname="reportTarget?.nickname ?? reportTarget?.memberNickname"
             :targetContent="reportTarget?.content" :targetId="reportTarget?.id" @submit="handleReportSubmit" />
     </div>
+    <!-- <pre>{{ comments }}</pre> -->
 </template>
 
 <script setup>
@@ -504,7 +500,7 @@ const replies = computed(() => {
 
 .mini-profile-wrapper {
     position: relative;
-    top: 6px;
+    /* top: 6px; */
 }
 
 .comment-input {
