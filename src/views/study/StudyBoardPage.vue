@@ -27,7 +27,7 @@
         </div>
 
         <div class="create-btn">
-          <CustomButton height="sm" @click="handleCreatePost">+ 게시물 작성하기</CustomButton>
+          <CustomButton height="sm" @click="handleCreatePost">+ 게시글 작성하기</CustomButton>
         </div>
       </div>
 
