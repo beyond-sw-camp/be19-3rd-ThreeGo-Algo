@@ -6,7 +6,7 @@
     <div class="study-footer">
       <MiniProfile 
         :nickname="nickname"
-        rankName="코뉴비"
+        :rankName="rankName"
       />
       
       <div class="member-count">
@@ -48,6 +48,11 @@ const props = defineProps({
   memberCount: {
     type: Number,
     required: true
+  },
+  rankName: {        
+    type: String,
+    required: false,
+    default: '코뉴비'
   }
 })
 
@@ -60,8 +65,8 @@ const handleCardClick = () => {
 
 <style scoped>
 .study-card {
-  width: 270px;
-  height: 170px;
+  width: 100px;
+  height: 150px;
   background: white;
   border: 1px solid #D9D9D9;
   border-radius: 16px;
