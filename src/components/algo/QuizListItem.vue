@@ -1,10 +1,11 @@
 <template>
-    <div class="quiz-item" :class="[{ solved: props.solved }, { active: props.isActive }]" @click="emit('click', props.quiz.id)">
+    <div class="quiz-item" :class="[{ solved: props.solved }, { active: props.isActive }]"
+        @click="emit('click', props.quiz.id)">
         <div class="quiz-info">
             <span class="quiz-title">Quiz {{ index + 1 }}. {{ quiz.question }}</span>
         </div>
 
-        <img v-if="props.solved" class="check-icon" :src="checkIcon" />
+        <img v-if="props.isSolved" class="check-icon" :src="checkIcon" />
     </div>
 </template>
 
@@ -15,8 +16,9 @@ import { defineEmits } from 'vue';
 const props = defineProps({
     quiz: { type: Object, required: true },
     solved: { type: Boolean, default: false },
-    index: {type: Number, required: true},
-    isActive: { type: Boolean, default: false }
+    index: { type: Number, required: true },
+    isActive: { type: Boolean, default: false },
+    isSolved: { type: Boolean, required: true }
 });
 
 const emit = defineEmits(['click']);
@@ -85,8 +87,19 @@ const checkIcon = checkIconSvg;
 }
 
 @keyframes pulse {
-    0% { transform: scale(1); box-shadow: 0 0 0 rgba(10, 162, 235, 0); }
-    50% { transform: scale(1.05); box-shadow: 0 0 10px rgba(10, 162, 235, 0.3); }
-    100% { transform: scale(1.03); box-shadow: 0 0 8px rgba(10, 162, 235, 0.4); }
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 rgba(10, 162, 235, 0);
+    }
+
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 10px rgba(10, 162, 235, 0.3);
+    }
+
+    100% {
+        transform: scale(1.03);
+        box-shadow: 0 0 8px rgba(10, 162, 235, 0.4);
+    }
 }
 </style>

@@ -48,12 +48,12 @@ const menuItems = [
 onMounted(() => {
     const token = localStorage.getItem('accessToken')
     const name = localStorage.getItem('nickname')
-    const rank = localStorage.getItem('rankName')
+    const rank = localStorage.getItem('rank')
 
     if (token) {
         isLoggedIn.value = true
         nickname.value = name || '사용자'
-        rankName.value = rank || '코신'
+        rankName.value = rank
     }
 })
 
@@ -65,6 +65,7 @@ const handleLogout = () => {
     console.log('🚪 로그아웃 처리 완료')
     localStorage.removeItem('accessToken')
     localStorage.removeItem('nickname')
+    localStorage.removeItem('rank')
     localStorage.removeItem('memberId')
     localStorage.removeItem('studyId')
 

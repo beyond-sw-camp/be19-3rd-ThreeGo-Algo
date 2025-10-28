@@ -75,15 +75,19 @@ const handleLogin = async () => {
     if (token) {
       localStorage.setItem('accessToken', token)
 
-      // 토큰에서 사용자 정보 추출
+      const response = await memberApi.get('/member/rank');
+      const rank = response.data.rankName;
+      localStorage.setItem('rank', rank);
+
+      // 토큰에서 닉네임 추출
       const payload = JSON.parse(atob(token.split('.')[1]))
       const nickname = payload.nickname || payload.sub || '사용자'
+      
       const memberId = payload.memberId || payload.id || payload.userId
       const rankName = payload.rankName || payload.rank || '코뉴비'
 
       localStorage.setItem('nickname', nickname)
       localStorage.setItem('memberId', memberId)
-      localStorage.setItem('rankName', rankName)
 
       console.log('로그인 성공:', nickname, '/ memberId:', memberId, '/ rankName:', rankName)
       router.push('/')
