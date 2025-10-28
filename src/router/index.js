@@ -53,6 +53,7 @@ import StudyPostDetail from '@/views/study/StudyPostDetail.vue'
 
 import StudyRoadmapManagePage from '@/views/study/StudyRoadmapManagePage.vue'
 import StudyDeletePage from '@/views/study/StudyDeletePage.vue'
+import MyDashboard from '@/views/mypage/MyDashboard.vue'
 
 const routes = [
   // 기본 홈
@@ -136,6 +137,7 @@ const routes = [
 
   // 마이페이지 라우트
   { path: '/mypage/study', component: MyStudyPage },
+  { path: '/mypage/dashboard', component: MyDashboard},
 
 ]
 
