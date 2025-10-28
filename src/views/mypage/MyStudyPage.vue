@@ -54,7 +54,7 @@ import coreApi from '@/api/coreApi'
 import MyBanner from '@/components/mypage/MyBanner.vue'
 import StudyCard from '@/components/mypage/StudyCard.vue'
 
-// ✅ 상태값
+
 const studies = ref([])
 const searchQuery = ref('')
 const showOnlyActive = ref(false)
@@ -62,7 +62,6 @@ const currentPage = ref(1)
 const totalPages = ref(1)
 const isLoading = ref(false)
 
-// ✅ 필터링된 스터디 목록
 const filteredStudies = computed(() => {
   const now = new Date()
   return studies.value.filter((s) => {
@@ -74,7 +73,7 @@ const filteredStudies = computed(() => {
   })
 })
 
-// ✅ 페이지 이동
+
 const prevPage = () => {
   if (currentPage.value > 1) {
     currentPage.value--
@@ -120,7 +119,7 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* 🧩 전체 레이아웃 */
+
 .my-study-page {
   display: flex;
   width: 100%;
@@ -129,7 +128,6 @@ onMounted(() => {
   font-family: 'Noto Sans KR', sans-serif;
 }
 
-/* 🧩 좌측 패널 */
 .left-panel {
   width: 260px;
   min-height: 100vh;
@@ -139,7 +137,6 @@ onMounted(() => {
   box-sizing: border-box;
 }
 
-/* 🧩 우측 메인 */
 .right-panel {
   flex: 1;
   padding: 40px 60px;
@@ -147,7 +144,6 @@ onMounted(() => {
   box-sizing: border-box;
 }
 
-/* 🧱 배너 */
 :deep(.my-banner) {
   width: 100%;
   background-color: #e4f5ff;
@@ -160,24 +156,22 @@ onMounted(() => {
   margin-bottom: 24px;
 }
 
-/* 🔍 필터 */
 .filter-section {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
   gap: 16px;
   margin-bottom: 28px;
+  width: 100%;
+  max-width: 500px;      
+  margin-left: auto;
+  margin-right: auto;     
+  justify-content: flex-start;
 }
 
-.checkbox-label {
-  font-size: 14px;
-  color: #555;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  user-select: none;
+.checkbox-label,
+.search-input {
+  margin-top: 30px;  
 }
-
 .search-input {
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -187,17 +181,19 @@ onMounted(() => {
   background-color: #fff;
 }
 
-/* 🧩 카드 영역 */
 .study-list {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* 카드 최소 너비 200px */
   gap: 28px 24px;
   justify-items: center;
+  max-width: 50%;     
+  margin: 0 auto;  
 }
 
 /* 🧱 StudyCard 디자인 */
 :deep(.study-card) {
   width: 100%;
+  max-width: 270px;    
   background: #fff;
   border: 1px solid #e5e5e5;
   border-radius: 12px;
@@ -212,7 +208,6 @@ onMounted(() => {
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* 📄 페이지네이션 */
 .pagination {
   display: flex;
   justify-content: center;

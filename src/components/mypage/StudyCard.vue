@@ -65,7 +65,7 @@ const handleCardClick = () => {
 
 <style scoped>
 .study-card {
-  width: 100px;
+  width: 200px;
   height: 150px;
   background: white;
   border: 1px solid #D9D9D9;
