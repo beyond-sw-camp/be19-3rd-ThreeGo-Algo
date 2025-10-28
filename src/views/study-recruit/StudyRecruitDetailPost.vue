@@ -74,7 +74,7 @@
             @delete-comment="deleteComment"
             @edit-reply="editReply"
             @delete-reply="deleteReply"
-/>
+          />
         </div>
 
         <!-- ✅ 우측 박스 영역 -->
