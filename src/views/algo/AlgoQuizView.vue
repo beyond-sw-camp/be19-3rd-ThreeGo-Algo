@@ -1,17 +1,19 @@
 <template>
-    <div class="algo-quiz-container">
+    <div class="algo-quiz-container" v-if="currentQuiz">
         <div class="breadcrumb-container">
             <el-breadcrumb :separator-icon="ArrowRight">
                 <el-breadcrumb-item :to="{ path: '/algorithm' }">알고리즘 학습</el-breadcrumb-item>
-                <el-breadcrumb-item :to="{ path: `/algorithm/roadmap/${dummyPostDetail.roadmapId}` }">{{dummyPostDetail.title }}</el-breadcrumb-item>
-                <!-- TODO 학습 게시물로 이동 -->
-                <el-breadcrumb-item :to="{ path: `/algorithm/post/${dummyPostDetail.postId}` }">{{ dummyPostDetail.roadmapTitle }}</el-breadcrumb-item>
+                <el-breadcrumb-item :to="{ path: `/algorithm/roadmap/${currentQuiz.roadmapId}` }">{{
+                    currentQuiz.roadmapTitle
+                    }}</el-breadcrumb-item>
+                <el-breadcrumb-item :to="{ path: `/algorithm/post/${currentQuiz.postId}` }">{{
+                    currentQuiz.postTitle }}</el-breadcrumb-item>
                 <el-breadcrumb-item>퀴즈</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
 
         <div class="roadmap-title">
-            <p>🎯 {{ dummyPostDetail.title }} 퀴즈</p>
+            <p>🎯 {{ currentQuiz.postTitle }} 퀴즈</p>
         </div>
         <hr />
 
@@ -19,14 +21,15 @@
             <div class="quiz-main">
                 <p class="quiz-title"><span>Q. </span>{{ currentQuiz.question }}</p>
 
-                <QuizOption :options="currentQuiz.options" :quizId="currentQuiz.id" @submit="handleSubmit" />
+                <QuizOption :options="currentQuiz.options" :key="currentQuiz.id" :quizId="currentQuiz.id" @submit="handleSubmit" />
             </div>
 
             <div class="quiz-sidebar">
                 <p>📚 퀴즈 목록</p>
                 <div class="quiz-list-wrapper">
-                    <QuizListItem v-for="(quiz, index) in quizzes" :key="quiz.id" :quiz="quiz" :isActive="quiz.id === currentQuizId"
-                        :solved="solvedQuizIds.includes(quiz.id)" :index="index" @click="handleQuizClick(quiz.id)" />
+                    <QuizListItem v-for="(quiz, index) in quizzes" :key="quiz.id" :quiz="quiz"
+                        :isActive="quiz.id === currentQuizId" :isSolved="quiz.isSolved" :index="index"
+                        @click="handleQuizClick(quiz.id)" />
                 </div>
             </div>
         </div>
@@ -37,81 +40,57 @@
         @confirm="handleConfirm('correct')" />
 
     <OneButtonPopup v-model="popup.alreadySolved" title="👍 이미 맞힌 퀴즈예요!" subtitle="다음 퀴즈에 도전하여 학습을 이어가 보세요!"
-        confirmText="확인" image="/src/assets/images/level_up1_1.png" confirmVariant="primary" :showCancel="false"
+        confirmText="확인" image="/src/assets/images/algo_quiz_already.png" confirmVariant="primary" :showCancel="false"
         @confirm="handleConfirm('alreadySolved')" />
 
     <OneButtonPopup v-model="popup.wrong" title="😢 아쉽게도 틀렸어요." subtitle="개념을 복습하고 다시 도전해보세요!" confirmText="확인"
-        image="/src/assets/images/level_up1_1.png" confirmVariant="primary" :showCancel="false"
+        image="/src/assets/images/algo_quiz_wrong.png" confirmVariant="primary" :showCancel="false"
         @confirm="handleConfirm('wrong')" />
 </template>
 
 <script setup>
-import { ref, computed, reactive } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { ref, watch, computed, reactive, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
 import QuizListItem from '@/components/algo/QuizListItem.vue';
 import QuizOption from '@/components/algo/QuizOption.vue';
 import OneButtonPopup from '@/components/common/OneButtonPopup.vue';
 import { ArrowRight } from '@element-plus/icons-vue'
+import coreApi from '@/api/coreApi';
 
 const route = useRoute();
-const router = useRouter();
-
-const currentPostId = ref(Number(route.params.postId));
-const currentQuizId = ref(Number(route.params.quizId) || null);
 
 const quizzes = ref([]);
-const solvedQuizIds = ref([]);
-
-const dummyQuizzes = [
-    {
-        id: 12,
-        question: '피보나치 수열의 점화식은 무엇인가?',
-        type: 'MULTIPLE_CHOICE',
-        options: [
-            { id: 1, optionText: 'F(n) = F(n-1) + F(n-2)', isCorrect: true },
-            { id: 2, optionText: 'F(n) = F(n-1) * 2', isCorrect: false },
-            { id: 3, optionText: 'F(n) = n', isCorrect: false },
-        ],
-    },
-    {
-        id: 13,
-        question: '스택은 FILO?',
-        type: 'OX',
-        options: [
-            { id: 4, optionText: 'O', isCorrect: true },
-            { id: 5, optionText: 'X', isCorrect: false },
-        ],
-    },
-    {
-        id: 14,
-        question: '큐는 FILO?',
-        type: 'OX',
-        options: [
-            { id: 4, optionText: 'X', isCorrect: true },
-            { id: 5, optionText: 'O', isCorrect: false },
-        ],
-    }
-];
-
-const dummyPostDetail = {
-    postId: 1,
-    roadmapId: 1,
-    roadmapTitle: "스택",
-    title: "자료구조",
-    solvedQuizIds: [12],
-};
-
-quizzes.value = dummyQuizzes;
-solvedQuizIds.value = dummyPostDetail.solvedQuizIds;
+const postId = ref(null);
+const currentQuizId = ref(null);
 
 const currentQuiz = computed(() =>
-    quizzes.value.find((q) => q.id === currentQuizId.value)
+    quizzes.value.find(q => q.id === currentQuizId.value)
 );
+
+async function getQuiz() {
+    try {
+        postId.value = Number(route.params.postId);
+        currentQuizId.value = Number(route.params.quizId);
+
+        const response = await coreApi.get(`/algo/posts/${postId.value}/quizzes`);
+        quizzes.value = response.data;
+    } catch (error) {
+        console.error('게시물 상세 정보 불러오기 실패:', error);
+    }
+}
 
 function handleQuizClick(quizId) {
     currentQuizId.value = quizId;
-    router.push(`/algorithm/post/${currentPostId.value}/quiz/${quizId}`);
 }
+
+watch(
+    () => route.params.quizId,
+    (newQuizId) => {
+        if (newQuizId) {
+            currentQuizId.value = Number(newQuizId);
+        }
+    }
+);
 
 const popup = reactive({
     correct: false,
@@ -119,25 +98,37 @@ const popup = reactive({
     alreadySolved: false
 })
 
-const handleConfirm = (type) => {
+const handleConfirm = async (type) => {
     popup[type] = false;
-}
 
-function handleSubmit({ quizId, selectedOption }) {
-    console.log('제출된 퀴즈:', quizId, selectedOption);
-
-    if (selectedOption && selectedOption.isCorrect) {
-        if (!dummyPostDetail.solvedQuizIds.includes(quizId)) {
-            dummyPostDetail.solvedQuizIds.push(quizId);
-            solvedQuizIds.value = [...dummyPostDetail.solvedQuizIds];
-            popup.correct = true;
-        } else {
-            popup.alreadySolved = true;
+    try {
+        if (type === 'correct') {
+            await getQuiz();
         }
-    } else {
-        popup.wrong = true;
+    } catch (error) {
+        console.error('정답 제출 실패:', error);
     }
 }
+
+async function handleSubmit({ quizId, isCorrect }) {
+    try {
+        if (isCorrect) {
+            if (!currentQuiz.value.isSolved) {
+                await coreApi.post(`/algo/quizzes/${quizId}/answers`);
+
+                popup.correct = true;
+            } else {
+                popup.alreadySolved = true;
+            }
+        } else {
+            popup.wrong = true;
+        }
+    } catch (error) {
+        console.error('정답 제출 실패:', error);
+    }
+}
+
+onMounted(getQuiz);
 </script>
 
 <style scoped>

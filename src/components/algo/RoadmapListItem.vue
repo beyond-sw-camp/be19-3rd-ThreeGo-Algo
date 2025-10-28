@@ -1,6 +1,6 @@
 <template>
   <div class="roadmap-item" :class="{ active: isActive }" @click="emit('click')">
-    <div v-if="index > 9" class="roadmap-number">{{ index + 1 }}</div>
+    <div v-if="index > 8" class="roadmap-number">{{ index + 1 }}</div>
     <div v-else class="roadmap-number">0{{ index + 1 }}</div>
     <span class="roadmap-title">{{ title }}</span>
   </div>

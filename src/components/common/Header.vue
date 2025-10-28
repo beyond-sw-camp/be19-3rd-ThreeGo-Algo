@@ -35,7 +35,7 @@ import MyProfileDropdown from '@/components/common/MyProfileDropdown.vue'
 const router = useRouter()
 const isLoggedIn = ref(false)
 const nickname = ref('')
-const rankName = ref('코잘알')
+const rankName = ref('')
 
 const menuItems = [
     { label: '알고리즘학습', path: '/algorithm' },
@@ -48,10 +48,12 @@ const menuItems = [
 onMounted(() => {
     const token = localStorage.getItem('accessToken')
     const name = localStorage.getItem('nickname')
+    const rank = localStorage.getItem('rank')
 
     if (token) {
         isLoggedIn.value = true
         nickname.value = name || '사용자'
+        rankName.value = rank
     }
 })
 
@@ -63,6 +65,7 @@ const handleLogout = () => {
     console.log('🚪 로그아웃 처리 완료')
     localStorage.removeItem('accessToken')
     localStorage.removeItem('nickname')
+    localStorage.removeItem('rank')
     localStorage.removeItem('memberId')
 
     isLoggedIn.value = false
