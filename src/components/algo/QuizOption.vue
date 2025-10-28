@@ -44,8 +44,9 @@ function selectOption(index) {
 
 function submitAnswer() {
   if (selectedIndex.value === null) return alert('보기를 선택해주세요!');
-  const selectedOption = options[selectedIndex.value];
-  emit('submit', { quizId, selectedOption });
+  const isCorrect = options[selectedIndex.value].correct;
+
+  emit('submit', { quizId, isCorrect });
 }
 </script>
 

@@ -74,9 +74,13 @@ const handleLogin = async () => {
     if (token) {
       localStorage.setItem('accessToken', token)
 
+      const response = await memberApi.get('/member/rank');
+      const rank = response.data.rankName;
+      localStorage.setItem('rank', rank);
+
       // 토큰에서 닉네임 추출
       const payload = JSON.parse(atob(token.split('.')[1]))
-      const nickname = payload.nickname || payload.sub || '사용자'
+      const nickname = response.data.nickname || payload.nickname || payload.sub || '사용자'
       localStorage.setItem('nickname', nickname)
 
       console.log('로그인 성공:', nickname)
