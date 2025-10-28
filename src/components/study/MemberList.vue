@@ -1,30 +1,43 @@
 <template>
-  <div class="member-list-item">
-    <div class="member-select">
+  <div 
+    class="member-list-item" 
+    :class="{ selected: selected }"
+    @click="$emit('click')"
+  >
+    <div class="col col-checkbox">
       <input
         type="radio"
         name="selectedMember"
-        :value="no"
-        v-model="selectedMember"
+        :checked="selected"
+        @click.stop="$emit('click')"
       />
+    </div>
+    
+    <div class="col col-no">
       <span class="member-no">{{ displayNo }}</span>
     </div>
     
-    <div class="mini-profile">
-      <img :src="rankImage" :alt="rankName" class="mini-profile-img" />
-      <span>{{ nickname }}</span>
+    <div class="col col-nickname">
+      <MiniProfile 
+        :nickname="nickname" 
+        :rankName="rankName" 
+      />
     </div>
     
-    <span class="member-rank">{{ rankName }}</span>
+    <div class="col col-rank">
+      <span class="member-rank">{{ rankName }}</span>
+    </div>
     
-    <StudyRole :variant="role" />
+    <div class="col col-role">
+      <StudyRole :variant="role" />
+    </div>
   </div>
 </template>
 
 <script setup>
-import { defineProps, ref, computed } from 'vue'
-import { rankImages } from '@/constants/rankImages.js'
+import { defineProps, computed, defineEmits } from 'vue'
 import StudyRole from './StudyRole.vue'
+import MiniProfile from '../common/MiniProfile.vue'
 
 const props = defineProps({
   no: {
@@ -43,12 +56,15 @@ const props = defineProps({
     type: String,
     required: true,
     validator: (value) => ['member', 'leader', 'invalid'].includes(value)
+  },
+  selected: {
+    type: Boolean,
+    default: false
   }
 })
 
-const selectedMember = ref(null)
+defineEmits(['click'])
 
-const rankImage = computed(() => rankImages[props.rankName])
 const displayNo = computed(() => props.no)
 </script>
 
@@ -56,22 +72,57 @@ const displayNo = computed(() => props.no)
 .member-list-item {
   display: flex;
   align-items: center;
-  gap: 100px;
+  justify-content: space-between;
   width: 100%;
-  padding: 16px 24px;
+  padding: 16px 20px;
   border-bottom: 1px solid #EFEFEF;
   box-sizing: border-box;
+  cursor: pointer;
+  transition: background-color 0.2s;
 }
 
-.member-select {
+.member-list-item:hover {
+  background: #f0faff;
+}
+
+.member-list-item.selected {
+  background: #e6f6ff;
+  border-left: 4px solid #0aa2eb;
+}
+
+.col {
   display: flex;
   align-items: center;
-  gap: 70px;
-  min-width: 60px;
-  flex-shrink: 0;
 }
 
-.member-select input[type="radio"] {
+.col-checkbox {
+  width: 60px;
+  justify-content: center;
+}
+
+.col-no {
+  width: 80px;
+  justify-content: center;
+}
+
+.col-nickname {
+  flex: 1;
+  margin-left: 100px;
+  justify-content: flex-start;
+}
+
+.col-rank {
+  width: 150px;
+  justify-content: center;
+  margin-right: 40px;
+}
+
+.col-role {
+  width: 150px;
+  justify-content: center;
+}
+
+.col-checkbox input[type="radio"] {
   accent-color: #007bff;
   width: 16px;
   height: 16px;
@@ -83,33 +134,10 @@ const displayNo = computed(() => props.no)
   font-size: 14px;
   font-weight: 500;
   color: #333;
-  width: 30px;
-  text-align: center;
-}
-
-.mini-profile {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  font-family: 'Noto Sans KR';
-  min-width: 100px;
-  flex-shrink: 0;
-}
-
-.mini-profile-img {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
-  flex-shrink: 0;
 }
 
 .member-rank {
   font-size: 14px;
   color: #383838;
-  min-width: 100px;
-  text-align: center;
-  flex-shrink: 0;
 }
 </style>

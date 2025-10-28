@@ -2,7 +2,10 @@
   <div class="study-roadmap-manage-page">
     <!-- 좌측 사이드바 -->
     <aside class="sidebar">
-      <StudyProfile />
+      <StudyProfile 
+          nickname="알코알라"
+          rankName="코신"
+          role="leader"/>
       <StudySetting :userRole="userRole" :currentRoute="currentRoute" />
     </aside>
 
@@ -19,7 +22,7 @@
       <!-- 로드맵 등록 버튼 -->
       <div class="roadmap-header">
         <p class="header-text">💡 제목을 클릭하면 해당 로드맵의 마일스톤 목록 조회가 가능합니다!</p>
-        <el-button type="primary" class="add-btn" @click="handleOpenRoadmapModal">+ 로드맵 등록</el-button>
+        <CustomButton @click="handleOpenRoadmapModal">+ 로드맵 등록</CustomButton>
       </div>
 
       <!-- 로드맵 리스트 -->
@@ -55,15 +58,15 @@
 
       <!-- 하단 버튼 -->
       <div class="actions">
-        <el-button type="primary">수정</el-button>
-        <el-button type="danger">삭제</el-button>
+        <CustomButton @click="modifyRoadMap" height="sm">수정</CustomButton>
+        <CustomButton variant="danger" @click="deleteRoadMap" height="sm">삭제</CustomButton>
       </div>
 
       <!-- 마일스톤 목록 (선택된 로드맵이 있을 때만 표시) -->
       <div v-if="showMilestoneList" class="milestone-section">
         <div class="milestone-header">
           <h3 class="milestone-title">{{ selectedRoadmapTitle }} - 마일스톤 목록</h3>
-          <el-button type="primary" class="add-btn" @click="handleOpenMilestoneModal">+ 마일스톤 등록</el-button>
+          <CustomButton @click="handleOpenMilestoneModal">+ 마일스톤 등록</CustomButton>
         </div>
 
         <div class="milestone-list">
@@ -96,8 +99,8 @@
 
         <!-- 마일스톤 하단 버튼 -->
         <div class="milestone-actions">
-          <el-button type="primary">수정</el-button>
-          <el-button type="danger">삭제</el-button>
+          <CustomButton @click="modifyMilestone" height="sm">수정</CustomButton>
+          <CustomButton variant="danger" height="sm" @click="deleteMilestone">삭제</CustomButton>
         </div>
       </div>
 
@@ -126,9 +129,10 @@ import StudyProfile from '@/components/study/StudyProfile.vue'
 import StudySetting from '@/components/study/StudySetting.vue'
 import bannerBoard from '@/assets/images/study_blog_banner_setting.png'
 import StudyModal from '@/components/study/StudyModal.vue'
+import CustomButton from '@/components/common/CustomButton.vue'
 
 const route = useRoute()
-const userRole = ref('admin')
+const userRole = ref('leader')
 const currentRoute = computed(() => route.path)
 
 const selectedRoadmap = ref(null)
@@ -165,7 +169,6 @@ const showMilestonesAndSelect = (roadmapId) => {
   }
 }
 
-// ✅ 모달 관련 상태
 const showRoadmapModal = ref(false)
 const showMilestoneModal = ref(false)
 
@@ -290,7 +293,7 @@ const handleSubmitMilestone = (data) => {
 
 .col.title {
   flex: 1.8;
-  text-align: left;
+  text-align: center;
   padding-left: 20px;
 }
 
@@ -308,7 +311,7 @@ const handleSubmitMilestone = (data) => {
 .col.desc {
   flex: 1.5;
   color: #777;
-  text-align: left;
+  text-align: center;
 }
 
 .col.created {

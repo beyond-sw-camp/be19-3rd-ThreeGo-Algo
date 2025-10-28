@@ -2,18 +2,17 @@
   <div class="study-delete-page">
     <!-- 좌측 사이드바 -->
     <aside class="sidebar">
-      <StudyProfile />
+      <StudyProfile 
+          nickname="알코알라"
+          rankName="코신"
+          role="leader"/>
       <StudySetting :userRole="userRole" :currentRoute="currentRoute" />
     </aside>
 
-    <!-- 메인 컨텐츠 -->
     <main class="main-content">
 
-
-      <!-- ① 상단 경고 박스 -->
       <Warning class="warning-box" />
 
-      <!-- ② 실제 해체 안내 및 버튼 -->
       <CloseStudy
         title="스터디 해체 전 주의사항"
         color="#FF2B2B"
@@ -43,7 +42,7 @@ import CloseStudy from '@/components/study/CloseStudy.vue'
 const route = useRoute()
 const router = useRouter()
 
-const userRole = ref('admin')
+const userRole = ref('leader')
 const currentRoute = computed(() => route.path)
 
 const confirmDelete = () => {

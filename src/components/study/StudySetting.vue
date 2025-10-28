@@ -6,7 +6,7 @@
     </div>
 
     <!-- 관리자 메뉴 -->
-    <div v-if="userRole === 'admin'" class="menu-list">
+    <div v-if="userRole === 'leader'" class="menu-list">
       <div 
         v-for="(item, index) in adminMenuItems" 
         :key="item.id"
