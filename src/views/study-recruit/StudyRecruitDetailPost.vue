@@ -22,8 +22,10 @@
           <div class="author-info">
             <MiniProfile :nickname="post.writer" :rankName="post.rankName" />
             <span class="post-date">{{ post.createdAt }}</span>
-            <button class="action-link" @click="goToEditPage">수정</button>
-            <button class="action-link" @click="deletePost">삭제</button>
+            <template v-if="isWriter">
+              <button class="action-link" @click="goToEditPage">수정</button>
+              <button class="action-link" @click="deletePost">삭제</button>
+            </template>
           </div>
 
           <!-- 일정 및 진행 방식 섹션 -->
@@ -59,9 +61,7 @@
           <!-- 모집 목적 섹션 -->
           <div class="section">
             <h3 class="section-title">모집 목적</h3>
-            <div class="section-content">
-              <p>{{ post.content }}</p>
-            </div>
+            <div class="section-content" v-html="post.content"></div>
           </div>
 
           <!-- 댓글 섹션 -->
