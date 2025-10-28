@@ -77,7 +77,7 @@
           />
         </div>
 
-        <!-- ✅ 우측 박스 영역 -->
+        <!-- 우측 박스 영역 -->
         <div class="side-box" v-if="post.title">
           <RecruitManagement v-if="isWriter" :postId="route.params.postId"/>
           <template v-else>
@@ -123,20 +123,17 @@ const comments = ref([]);
 const isWriter = ref(false);
 const isApplied = ref(false);
 const applyStatus = ref("pending");
-const currentUser = ref({ nickname: "나", rankName: "코뉴비" });
-const currentUserId = ref(null); 
+const currentUser = ref([]);
 const currentMemberId = ref(null);
 
-// ✅ 신청 상태 확인
+// 신청 상태 확인
 const fetchApplyStatus = async () => {
   try {
-    // 백엔드 API: GET /study-recruit/posts/{postId}/applicants/me 또는 my-application
     const response = await coreApi.get(`/study-recruit/posts/${postId}/applicants/me`);
 
     if (response.data) {
       isApplied.value = true;
       applyStatus.value = response.data.status; // 예: "PENDING", "APPROVED", "REJECTED"
-      console.log("✅ 신청 상태:", response.data.status);
     } else {
       isApplied.value = false;
       applyStatus.value = null;
@@ -144,18 +141,16 @@ const fetchApplyStatus = async () => {
   } catch (error) {
     // 404 에러는 신청하지 않은 것으로 간주
     if (error.response?.status === 404) {
-      console.log("✅ 신청 내역 없음");
       isApplied.value = false;
       applyStatus.value = null;
     } else {
-      console.error("❌ 신청 상태 확인 실패:", error);
       isApplied.value = false;
       applyStatus.value = null;
     }
   }
 };
 
-// ✅ 게시물 상세조회 (작성자 여부 + 신청상태까지 반영)
+// 게시물 상세조회 (작성자 여부 + 신청상태까지 반영)
 const fetchPostDetail = async () => {
   try {
     const response = await coreApi.get(`/study-recruit/posts/${postId}`);
@@ -174,16 +169,11 @@ const fetchPostDetail = async () => {
       endDate: data.endDate,
     };
 
-    // ✅ 작성자 여부 판별
+    // 작성자 여부 판별
     const writerId = Number(data.memberId);
     isWriter.value = currentMemberId.value === writerId;
 
-    // ✅ 디버깅 로그
-    console.log("👤 currentMemberId:", currentMemberId.value);
-    console.log("🧑‍💻 writerId:", writerId);
-    console.log("✅ isWriter:", isWriter.value);
-
-    // ✅ 작성자 아닌 경우 → 신청 상태 확인
+    // 작성자 아닌 경우 → 신청 상태 확인
     if (!isWriter.value) {
       await fetchApplyStatus();
     }
@@ -194,7 +184,7 @@ const fetchPostDetail = async () => {
 };
 
 
-// ✅ 3️⃣ 신청하기
+// 신청하기
 const handleApply = async (applicantText) => {
   try {
     await coreApi.post(`/study-recruit/posts/${postId}/applicants`, {
@@ -204,13 +194,12 @@ const handleApply = async (applicantText) => {
     isApplied.value = true;
     applyStatus.value = "PENDING";
   } catch (error) {
-    console.error("❌ 스터디 신청 실패:", error);
     alert("신청 중 오류가 발생했습니다.");
   }
 };
 
 
-// ✅ 4️⃣ 신청 취소
+// 신청 취소
 const handleCancel = async () => {
   try {
     await coreApi.delete(`/study-recruit/posts/${postId}/applicants`);
@@ -218,23 +207,26 @@ const handleCancel = async () => {
     isApplied.value = false;
     applyStatus.value = null;
   } catch (error) {
-    console.error("❌ 신청 취소 실패:", error);
     alert("신청 취소 중 오류가 발생했습니다.");
   }
 };
 
-// ✅ 댓글 조회
+// 댓글 조회
 const fetchComments = async () => {
   try {
     const response = await coreApi.get(`/study-recruit/posts/${postId}/comments`);
-    const all = response.data.map(c => ({
-      id: c.id,
-      nickname: c.memberNickname,
-      rankName: c.rankName,
-      content: c.content,
-      createdAt: c.createdAt,
-      parentId: c.parentId
-    }));
+
+    const all = response.data.map(c => {
+
+      return {
+        id: c.id,
+        nickname: c.memberNickname,
+        rankName: c.rankName || c.rank || c.memberRank || '코뉴비',
+        content: c.content,
+        createdAt: c.createdAt,
+        parentId: c.parentId
+      };
+    });
     const parents = all.filter(c => !c.parentId);
     comments.value = parents.map(p => ({
       ...p,
@@ -245,7 +237,7 @@ const fetchComments = async () => {
   }
 };
 
-// ✅ 댓글 작성
+// 댓글 작성
 const addComment = async (commentData) => {
   try {
     await coreApi.post(`/study-recruit/comments/${postId}`, { content: commentData.content });
@@ -255,7 +247,7 @@ const addComment = async (commentData) => {
   }
 };
 
-// ✅ 답글 작성
+// 답글 작성
 const addReply = async (replyData) => {
   try {
     await coreApi.post(`/study-recruit/comments/${postId}`, {
@@ -268,15 +260,14 @@ const addReply = async (replyData) => {
   }
 };
 
-// ✅ 댓글 수정
+// 댓글 수정
 const editComment = async (payload) => {
-  const { commentId, content } = payload; // 구조분해 확실히!
+  const { commentId, content } = payload; 
   try {
     const response = await coreApi.put(`/study-recruit/comments/${commentId}`, {
       content
     });
-    console.log('✅ 댓글 수정 성공:', response.data);
-    await fetchComments();
+    await fetchComments(response);
   } catch (error) {
     console.error('❌ 댓글 수정 실패:', error);
     console.error('❌ 에러 상세:', error.response?.data);
@@ -284,28 +275,26 @@ const editComment = async (payload) => {
   }
 };
 
-// ✅ 댓글 삭제
+// 댓글 삭제
 const deleteComment = async (commentId) => {
   if (!confirm('정말로 이 댓글을 삭제하시겠습니까?')) return
 
   try {
     const response = await coreApi.delete(`/study-recruit/comments/${commentId}`)
-    console.log('✅ 댓글 삭제 성공:', response.data)
-    await fetchComments()
+    await fetchComments(response)
   } catch (error) {
     console.error('❌ 댓글 삭제 실패:', error)
     alert('댓글 삭제 중 오류가 발생했습니다.')
   }
 }
 
-// ✅ 대댓글 수정
+// 대댓글 수정
 const editReply = async (payload) => {
   const { replyId, content } = payload;
   try {
     const response = await coreApi.put(`/study-recruit/comments/${replyId}`, {
       content
     });
-    console.log('✅ 대댓글 수정 성공:', response.data);
     await fetchComments();
   } catch (error) {
     console.error('❌ 대댓글 수정 실패:', error);
@@ -314,13 +303,12 @@ const editReply = async (payload) => {
   }
 };
 
-// ✅ 대댓글 삭제
+// 대댓글 삭제
 const deleteReply = async ({ replyId }) => {
   if (!confirm('정말로 이 답글을 삭제하시겠습니까?')) return;
 
   try {
     const response = await coreApi.delete(`/study-recruit/comments/${replyId}`);
-    console.log('✅ 대댓글 삭제 성공:', response.data);
     await fetchComments();
   } catch (error) {
     console.error('❌ 대댓글 삭제 실패:', error);
@@ -329,7 +317,7 @@ const deleteReply = async ({ replyId }) => {
   }
 };
 
-// ✅ 수정 버튼
+// 수정 버튼
 const goToEditPage = () => {
   router.push({
     path: "/study-recruit/post",
@@ -337,7 +325,7 @@ const goToEditPage = () => {
   });
 };
 
-// ✅ 삭제 버튼
+// 삭제 버튼
 const deletePost = async () => {
   if (!confirm("정말 이 모집글을 삭제하시겠습니까?")) return;
   try {
@@ -351,9 +339,16 @@ const deletePost = async () => {
 };
 
 onMounted(async () => {
-  // ✅ localStorage에서 memberId 가져오기
+  // localStorage에서 사용자 정보 가져오기
   const storedMemberId = localStorage.getItem("memberId");
+  const storedNickname = localStorage.getItem("nickname");
+  const storedRankName = localStorage.getItem("rankName");
+
   currentMemberId.value = storedMemberId ? Number(storedMemberId) : 0;
+  currentUser.value = {
+    nickname: storedNickname,
+    rankName: storedRankName
+  };
 
   await fetchPostDetail();
   await fetchComments();

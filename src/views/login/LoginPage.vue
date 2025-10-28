@@ -78,11 +78,13 @@ const handleLogin = async () => {
       const payload = JSON.parse(atob(token.split('.')[1]))
       const nickname = payload.nickname || payload.sub || '사용자'
       const memberId = payload.memberId || payload.id || payload.userId
+      const rankName = payload.rankName || payload.rank || '코뉴비'
 
       localStorage.setItem('nickname', nickname)
       localStorage.setItem('memberId', memberId)
+      localStorage.setItem('rankName', rankName)
 
-      console.log('로그인 성공:', nickname, '/ memberId:', memberId)
+      console.log('로그인 성공:', nickname, '/ memberId:', memberId, '/ rankName:', rankName)
       router.push('/')
     } else {
       isError.value = true
