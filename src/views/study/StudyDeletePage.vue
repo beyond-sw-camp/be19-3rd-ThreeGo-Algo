@@ -56,19 +56,20 @@ const confirmDelete = () => {
 <style scoped>
 .study-delete-page {
   display: flex;
-  gap: 40px;
+  gap: 20px;
   padding: 40px 80px;
 }
 
 .sidebar {
-  width: 240px;
+  width: 200px;
+  margin-left: 150px;
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
 .main-content {
-  flex: 1;
+  width: 1000px;
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -27,7 +27,7 @@
         </div>
 
         <div class="create-btn">
-          <CustomButton height="sm" @click="handleCreatePost">+ 게시물 작성하기</CustomButton>
+          <CustomButton height="sm" @click="handleCreatePost">+ 게시글 작성하기</CustomButton>
         </div>
       </div>
 
@@ -194,5 +194,6 @@ const handlePostClick = (postId) => {
   width: 50%;
   max-width: 1100px;
   margin-top: 10px;
+  padding-bottom: 50px;
 }
 </style>

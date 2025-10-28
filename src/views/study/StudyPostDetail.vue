@@ -1,7 +1,7 @@
 <template>
   <div class="post-detail-page">
     <div class="header-section">
-      <p class="study-recruit-main">스터디 모집 게시판</p>
+      <p class="study-recruit-main">스터디 게시판</p>
       <div class="back-button-wrapper">
         <BackButton text="목록으로 돌아가기" to="/study/board" />
       </div>

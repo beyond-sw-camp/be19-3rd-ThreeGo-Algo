@@ -201,17 +201,19 @@ const handleSubmitMilestone = (data) => {
 }
 
 .sidebar {
-  width: 240px;
+  width: 200px;
+  margin-left: 150px;
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
 .main-content {
-  flex: 1;
+  width: 900px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  align-items: center;
+  gap: 32px;
 }
 
 /* 로드맵 상단 헤더 */
