@@ -56,7 +56,7 @@
       <!-- 하단 버튼 -->
       <div class="actions">
         <CustomButton @click="openRoadmapEditModal" height="sm">수정</CustomButton>
-        <CustomButton variant="danger" @click="deleteRoadmap" height="sm">삭제</CustomButton>
+        <CustomButton variant="danger" @click="confirmDeleteRoadmap" height="sm">삭제</CustomButton>
       </div>
 
       <!-- 마일스톤 목록 (선택된 로드맵이 있을 때만 표시) -->
@@ -97,7 +97,7 @@
         <!-- 마일스톤 하단 버튼 -->
         <div class="milestone-actions">
           <CustomButton @click="openMilestoneEditModal" height="sm">수정</CustomButton>
-          <CustomButton variant="danger" height="sm" @click="deleteMilestone">삭제</CustomButton>
+          <CustomButton variant="danger" height="sm" @click="confirmDeleteMilestone">삭제</CustomButton>
         </div>
       </div>
 
@@ -118,6 +118,28 @@
         @close="closeModal"
         @submit="handleMilestoneSubmit"
       />
+
+      <!-- 로드맵 삭제 확인 팝업 -->
+      <TwoButtonPopup
+        v-model="showDeleteRoadmapPopup"
+        title="로드맵 삭제"
+        subtitle="정말로 이 로드맵을 삭제하시겠습니까?"
+        confirmText="삭제"
+        cancelText="취소"
+        confirmVariant="danger"
+        @confirm="deleteRoadmap"
+      />
+
+      <!-- 마일스톤 삭제 확인 팝업 -->
+      <TwoButtonPopup
+        v-model="showDeleteMilestonePopup"
+        title="마일스톤 삭제"
+        subtitle="정말로 이 마일스톤을 삭제하시겠습니까?"
+        confirmText="삭제"
+        cancelText="취소"
+        confirmVariant="danger"
+        @confirm="deleteMilestone"
+      />
     </main>
   </div>
 </template>
@@ -131,6 +153,7 @@ import StudySetting from '@/components/study/StudySetting.vue'
 import bannerBoard from '@/assets/images/study_blog_banner_setting.png'
 import StudyModal from '@/components/study/StudyModal.vue'
 import CustomButton from '@/components/common/CustomButton.vue'
+import TwoButtonPopup from '@/components/common/TwoButtonPopup.vue'
 import coreApi from '@/api/coreApi'
 
 const route = useRoute()
@@ -156,6 +179,10 @@ const showRoadmapModal = ref(false)
 const showMilestoneModal = ref(false)
 const isEditMode = ref(false)
 const modalType = ref('')
+
+// 삭제 확인 팝업 상태
+const showDeleteRoadmapPopup = ref(false)
+const showDeleteMilestonePopup = ref(false)
 
 // 모달 타이틀 computed
 const roadmapModalTitle = computed(() => 
@@ -211,9 +238,6 @@ const fetchMilestones = async (roadmapId) => {
   }
 }
 
-// ======================
-// 선택 관련
-// ======================
 const selectRoadmap = (id) => {
   selectedRoadmap.value = id
   const found = roadmaps.value.find(r => r.id === id)
@@ -247,6 +271,16 @@ const openRoadmapEditModal = () => {
     alert('수정할 로드맵을 선택해주세요!')
     return
   }
+  
+  const selected = roadmaps.value.find(r => r.id === selectedRoadmap.value)
+  if (selected) {
+    selectedRoadmapData.value = {
+      title: selected.title,
+      description: selected.description,
+      order: selected.order || 0
+    }
+  }
+  
   isEditMode.value = true
   modalType.value = 'roadmap'
   showRoadmapModal.value = true
@@ -268,15 +302,16 @@ const openMilestoneEditModal = () => {
     alert('수정할 마일스톤을 선택해주세요!')
     return
   }
-
+  
   const selected = milestones.value.find(m => m.milestoneId === selectedMilestone.value)
   if (selected) {
     selectedMilestoneData.value = {
       title: selected.milestoneTitle,
-      description: selected.milestoneDescription
+      description: selected.milestoneDescription,
+      order: selected.order || 0
     }
   }
-
+  
   isEditMode.value = true
   modalType.value = 'milestone'
   showMilestoneModal.value = true
@@ -307,7 +342,7 @@ const createRoadmap = async (data) => {
       order: data.order
     })
     
-    alert(`로드맵 등록 완료!\n제목: ${data.title}`)
+    alert(`로드맵 등록 완료!`)
     await fetchRoadmaps()
     closeModal()
   } catch (error) {
@@ -338,16 +373,15 @@ const updateRoadmap = async (data) => {
   }
 }
 
-const deleteRoadmap = async () => {
+const confirmDeleteRoadmap = () => {
   if (!selectedRoadmap.value) {
     alert('삭제할 로드맵을 선택해주세요!')
     return
   }
+  showDeleteRoadmapPopup.value = true
+}
 
-  if (!confirm('정말로 이 로드맵을 삭제하시겠습니까?')) {
-    return
-  }
-
+const deleteRoadmap = async () => {
   try {
     await coreApi.delete(`/study/roadmap/roadmaps/${selectedRoadmap.value}`)
     alert('로드맵이 삭제되었습니다!')
@@ -377,7 +411,7 @@ const createMilestone = async (data) => {
       order: data.order
     })
     
-    alert(`마일스톤 등록 완료!\n제목: ${data.title}`)
+    alert(`마일스톤 등록 완료!`)
     await fetchMilestones(selectedRoadmap.value)
     closeModal()
   } catch (error) {
@@ -411,16 +445,15 @@ const updateMilestone = async (data) => {
   }
 }
 
-const deleteMilestone = async () => {
+const confirmDeleteMilestone = () => {
   if (!selectedMilestone.value) {
     alert('삭제할 마일스톤을 선택해주세요!')
     return
   }
+  showDeleteMilestonePopup.value = true
+}
 
-  if (!confirm('정말로 이 마일스톤을 삭제하시겠습니까?')) {
-    return
-  }
-
+const deleteMilestone = async () => {
   try {
     await coreApi.delete(
       `/study/milestones/${selectedMilestone.value}`
@@ -435,7 +468,6 @@ const deleteMilestone = async () => {
   }
 }
 </script>
-
 <style scoped>
 .study-roadmap-manage-page {
   display: flex;
