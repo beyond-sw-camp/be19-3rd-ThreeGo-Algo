@@ -5,14 +5,17 @@
             <button class="reset-btn" @click="$emit('reset')">초기화</button>
         </div>
 
+        <!-- 인증 필터 -->
         <label class="checkbox-item">
             <input type="checkbox" v-model="localVerified" @change="emitChange" />
             인증된 글만 보기
         </label>
 
+        <!-- 기업 필터 -->
         <div class="company-filter">
             <h4>기업</h4>
-            <div v-for="c in companies" :key="c" class="checkbox-item">
+            <div v-if="companies.length === 0" class="no-company">표시할 기업이 없습니다.</div>
+            <div v-else v-for="c in companies" :key="c" class="checkbox-item">
                 <input type="checkbox" :value="c" v-model="localCompanies" @change="emitChange" />
                 <span>{{ c }}</span>
             </div>
@@ -22,31 +25,34 @@
 
 <script setup>
 import { ref, watch } from 'vue'
+
 const props = defineProps({
     showVerifiedOnly: Boolean,
     selectedCompanies: Array,
+    companies: { //부모에서 전달받을 기업 목록
+        type: Array,
+        default: () => []
+    }
 })
 const emit = defineEmits(['updateFilters', 'reset'])
 
+
+
+// 로컬 상태 (props 변경 감지)
 const localVerified = ref(props.showVerifiedOnly)
 const localCompanies = ref([...props.selectedCompanies])
-const companies = ['네이버', '카카오', '삼성전자', '현대오토에버', 'LG전자', 'SK', '쿠팡']
 
 const emitChange = () => {
-    emit('updateFilters', { showVerifiedOnly: localVerified.value, selectedCompanies: localCompanies.value })
+    emit('updateFilters', {
+        showVerifiedOnly: localVerified.value,
+        selectedCompanies: localCompanies.value
+    })
 }
 
-watch(
-    () => props.showVerifiedOnly,
-    newVal => (localVerified.value = newVal)
-)
-
-watch(
-    () => props.selectedCompanies,
-    newVal => (localCompanies.value = [...newVal])
-)
+// 부모 값 변화 시 반영
+watch(() => props.showVerifiedOnly, newVal => (localVerified.value = newVal))
+watch(() => props.selectedCompanies, newVal => (localCompanies.value = [...newVal]))
 </script>
-
 
 <style scoped>
 .filter-card {
@@ -92,5 +98,11 @@ watch(
     margin-top: 14px;
     margin-bottom: 8px;
     color: #2b1a0d;
+}
+
+.no-company {
+    font-size: 14px;
+    color: #a3a3a3;
+    margin-bottom: 6px;
 }
 </style>

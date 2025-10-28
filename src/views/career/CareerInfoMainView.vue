@@ -17,11 +17,13 @@
 
                 <div class="filter-selects">
                     <CustomSelect :options="companyOptions" placeholder="모든 기업" icon="company.svg"
-                        :onSelect="handleCompanySelect" />
+                        :initialValue="selectedCompany" :onSelect="handleCompanySelect" />
+
                     <CustomSelect :options="yearOptions" placeholder="모든 년도" icon="calendar.svg"
-                        :onSelect="handleYearSelect" />
+                        :initialValue="selectedYear" :onSelect="handleYearSelect" />
+
                     <CustomSelect :options="verifiedOptions" placeholder="전체 보기" icon="certification.svg"
-                        :onSelect="handleVerifiedSelect" />
+                        :initialValue="selectedVerified" :onSelect="handleVerifiedSelect" />
                 </div>
             </div>
 
@@ -30,7 +32,8 @@
                 <CompanyPostSection :posts="displayedPosts" />
 
                 <CompanyFilterSidebar :showVerifiedOnly="showVerifiedOnly" :selectedCompanies="selectedCompanies"
-                    @updateFilters="updateFilters" @reset="resetFilters" @create="goToCreatePage" />
+                    :companies="companiesForSidebar" @updateFilters="updateFilters" @reset="resetFilters"
+                    @create="goToCreatePage" />
             </div>
         </div>
     </div>
@@ -51,7 +54,7 @@ import bannerImage from '@/assets/images/banner-career.png'
 
 const router = useRouter()
 
-// 상태
+// 상태 관리
 const searchKeyword = ref('')
 const selectedCompany = ref('ALL')
 const selectedYear = ref('ALL')
@@ -61,43 +64,85 @@ const selectedCompanies = ref([])
 
 const allPosts = ref([])
 
-// 게시글 불러오기
+const companiesForSidebar = computed(() => {
+    const names = allPosts.value.map(p => p.company).filter(Boolean)
+    const uniqueNames = [...new Set(names)]
+    // 가나다순 정렬
+    return uniqueNames.sort((a, b) => a.localeCompare(b, 'ko'))
+})
+
+// 프론트에서 필터링 처리
+const displayedPosts = computed(() => {
+    return allPosts.value.filter(post => {
+        // 검색어 필터
+        const matchKeyword =
+            !searchKeyword.value ||
+            post.title?.includes(searchKeyword.value) ||
+            post.company?.includes(searchKeyword.value)
+
+        // 기업 필터
+        let matchCompany = true
+        if (selectedCompanies.value.length > 0) {
+            // 사이드바에서 선택된 기업 우선 적용
+            matchCompany = selectedCompanies.value.includes(post.company)
+        } else if (selectedCompany.value !== 'ALL') {
+            // 드롭다운 선택 적용
+            matchCompany = post.company === selectedCompany.value
+        }
+
+        // 연도 필터
+        const matchYear =
+            selectedYear.value === 'ALL' ||
+            String(post.year) === String(selectedYear.value)
+
+        // 인증 상태 필터
+        let matchVerified = true
+        if (selectedVerified.value !== 'ALL') {
+            if (selectedVerified.value === 'UNVERIFIED') {
+                // NONE, PENDING, REJECTED 포함
+                matchVerified = ['NONE', 'PENDING', 'REJECTED'].includes(post.status)
+            } else {
+                matchVerified = post.status === selectedVerified.value
+            }
+        }
+
+        // 사이드바: 인증된 글만 보기
+        const matchShowVerified =
+            !showVerifiedOnly.value || post.status === 'APPROVED'
+
+        return (
+            matchKeyword &&
+            matchCompany &&
+            matchYear &&
+            matchVerified &&
+            matchShowVerified
+        )
+    })
+})
+
+// 최초 한 번만 전체 데이터 fetch
 const fetchPosts = async () => {
     try {
-        const params = {}
-        if (selectedCompany.value !== 'ALL') params.company = selectedCompany.value
-        if (selectedYear.value !== 'ALL') params.year = selectedYear.value
-        if (selectedVerified.value !== 'ALL') params.status = selectedVerified.value
-        if (searchKeyword.value) params.keyword = searchKeyword.value
-
-        const res = await fetchCareerPosts(params)
+        const res = await fetchCareerPosts()
         allPosts.value = res
     } catch (err) {
         console.error('❌ 게시글 불러오기 실패:', err)
     }
 }
+onMounted(fetchPosts)
 
-// 화면 로드 시 초기 데이터 가져오기
-onMounted(() => {
-    fetchPosts()
-})
-
-// 필터링은 서버 기반으로 (즉시 fetch)
-const handleSearch = async (keyword) => {
+// 이벤트 핸들러 (서버 재요청 없음)
+const handleSearch = (keyword) => {
     searchKeyword.value = keyword
-    await fetchPosts()
 }
-const handleCompanySelect = async (val) => {
+const handleCompanySelect = (val) => {
     selectedCompany.value = val
-    await fetchPosts()
 }
-const handleYearSelect = async (val) => {
+const handleYearSelect = (val) => {
     selectedYear.value = val
-    await fetchPosts()
 }
-const handleVerifiedSelect = async (val) => {
+const handleVerifiedSelect = (val) => {
     selectedVerified.value = val
-    await fetchPosts()
 }
 
 const resetFilters = () => {
@@ -106,19 +151,35 @@ const resetFilters = () => {
     selectedCompany.value = 'ALL'
     selectedYear.value = 'ALL'
     selectedVerified.value = 'ALL'
-    fetchPosts()
+    searchKeyword.value = ''
 }
+
 const updateFilters = (filters) => {
     showVerifiedOnly.value = filters.showVerifiedOnly
-    selectedCompanies.value = filters.selectedCompanies
-    fetchPosts()
+    selectedCompanies.value = [...filters.selectedCompanies]
 }
 
 const goToCreatePage = () => router.push('/career-info/post')
 
-const displayedPosts = computed(() => allPosts.value)
+// 예시용 옵션 (필요 시 실제 API나 상수로 교체)
+const companyOptions = [
+    { label: '모든 기업', value: 'ALL' },
+    { label: '삼성전자', value: '삼성전자' },
+    { label: '카카오', value: '카카오' },
+    { label: '네이버', value: '네이버' },
+]
+const yearOptions = [
+    { label: '모든 년도', value: 'ALL' },
+    { label: '2025', value: '_2025' },
+    { label: '2024', value: '_2024' },
+    { label: '2023', value: '_2023' },
+]
+const verifiedOptions = [
+    { label: '전체 보기', value: 'ALL' },
+    { label: '인증된 글만', value: 'APPROVED' },
+    { label: '미인증 글만', value: 'UNVERIFIED' },
+]
 </script>
-
 
 <style scoped>
 .company-info-page {
