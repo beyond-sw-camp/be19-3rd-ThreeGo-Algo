@@ -45,6 +45,7 @@ import Input from '@/components/common/Input.vue'
 import CustomButton from '@/components/common/CustomButton.vue'
 import memberApi from '@/api/memberApi'
 
+const id = ref(0);
 const email = ref('')
 const password = ref('')
 const isError = ref(false)
@@ -74,12 +75,21 @@ const handleLogin = async () => {
     if (token) {
       localStorage.setItem('accessToken', token)
 
+      const response = await memberApi.get('/member/rank');
+      const rank = response.data.rankName;
+      localStorage.setItem('rank', rank);
+
       // 토큰에서 닉네임 추출
       const payload = JSON.parse(atob(token.split('.')[1]))
       const nickname = payload.nickname || payload.sub || '사용자'
-      localStorage.setItem('nickname', nickname)
+      
+      const memberId = payload.memberId || payload.id || payload.userId
+      const rankName = payload.rankName || payload.rank || '코뉴비'
 
-      console.log('로그인 성공:', nickname)
+      localStorage.setItem('nickname', nickname)
+      localStorage.setItem('memberId', memberId)
+
+      console.log('로그인 성공:', nickname, '/ memberId:', memberId, '/ rankName:', rankName)
       router.push('/')
     } else {
       isError.value = true

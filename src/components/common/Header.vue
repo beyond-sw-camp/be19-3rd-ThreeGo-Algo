@@ -31,49 +31,50 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import MyProfileDropdown from '@/components/common/MyProfileDropdown.vue'
-import memberApi from '@/api/memberApi'
 
 const router = useRouter()
 const isLoggedIn = ref(false)
 const nickname = ref('')
-const rankName = ref('코잘알')
+const rankName = ref('')
 
 const menuItems = [
     { label: '알고리즘학습', path: '/algorithm' },
-    { label: '코딩풀이', path: '/problems' },
+    { label: '코딩풀이', path: '/coding-problems' },
     { label: '기업정보공유', path: '/career-info' },
     { label: '스터디모집', path: '/study-recruit' },
 
 ]
 
-onMounted(async () => {
+onMounted(() => {
     const token = localStorage.getItem('accessToken')
-    if (!token) return
+    const name = localStorage.getItem('nickname')
+    const rank = localStorage.getItem('rank')
 
-    try {
-        const res = await memberApi.get('/member/rank', {
-            headers: { Authorization: `Bearer ${token}` },
-        })
+    if (token) {
         isLoggedIn.value = true
-        nickname.value = res.data.nickname
-        rankName.value = res.data.rankName
-        console.log('✅ 현재 로그인 사용자:', res.data)
-    } catch (err) {
-        console.error('❌ 사용자 정보 불러오기 실패:', err)
+        nickname.value = name || '사용자'
+        rankName.value = rank
     }
 })
 
 
 const goHome = () => router.push('/')
 
-const goMyPage = () => router.push('/mypage')
+const goMyPage = () => router.push('/mypage/study')
 
 const handleLogout = () => {
     console.log('🚪 로그아웃 처리 완료')
     localStorage.removeItem('accessToken')
     localStorage.removeItem('nickname')
+    localStorage.removeItem('rank')
+    localStorage.removeItem('memberId')
+    localStorage.removeItem('studyId')
 
     isLoggedIn.value = false
+
+    // ✅ 커스텀 이벤트 발생 (HomePage가 실시간으로 감지)
+    window.dispatchEvent(new Event('auth-change'))
+
     router.push('/')
 }
 </script>

@@ -42,11 +42,17 @@ import StudyMainPage from '@/views/study/StudyMainPage.vue'
 import StudyBoardPage from '@/views/study/StudyBoardPage.vue'
 import StudySettingPage from '@/views/study/StudySettingPage.vue'
 import StudyRoadmapDemoPage from '@/views/demo/StudyRoadmapDemoPage.vue'
+import MyStudyPage from '@/views/mypage/MyStudyPage.vue'
+import StudyPostCreate from '@/views/study/StudyPostCreate.vue'
 
 import CodingProblemList from '@/views/coding/CodingProblemList.vue'
 import CodingProblemDetail from '@/views/coding/CodingProblemDetail.vue'
 import Codingpost from '@/views/coding/Codingpost.vue'
 import CodingPostDetail from '@/views/coding/CodingPostDetail.vue'
+import StudyPostDetail from '@/views/study/StudyPostDetail.vue'
+
+import StudyRoadmapManagePage from '@/views/study/StudyRoadmapManagePage.vue'
+import StudyDeletePage from '@/views/study/StudyDeletePage.vue'
 
 const routes = [
   // 기본 홈
@@ -56,14 +62,21 @@ const routes = [
   // 스터디 모집
   { path: '/study-recruit', name: 'StudyRecruit', component: StudyRecruitMain, meta: { requiresAuth: true } },
   { path: '/study-recruit/post', name: 'StudyRecruitPost', component: StudyRecruitPost, meta: { requiresAuth: true } },
-  { path: '/study-recruit/:id', name: 'StudyRecruitDetail', component: StudyRecruitDetailPost, meta: { requiresAuth: true } },
-  { path: '/study-recruit/manage/:id', name: 'StudyRecruitManage', component: StudyRecruitManage, meta: { requiresAuth: true } },
+  { path: '/study-recruit/:postId', name: 'StudyRecruitDetail', component: StudyRecruitDetailPost, meta: { requiresAuth: true } },
+  { path: '/study-recruit/manage/:postId', name: 'StudyRecruitManage', component: StudyRecruitManage, meta: { requiresAuth: true } },
   { path: '/study-recruit/create-study', name: 'CreateStudyGroup', component: CreateStudyGroup, meta: { requiresAuth: true } },
 
   // 스터디
-  { path: '/study', component: StudyMainPage, meta: { requiresAuth: true } },
+  { path: '/study/home', component: StudyMainPage, meta: { requiresAuth: true } },
   { path: '/study/board', component: StudyBoardPage, meta: { requiresAuth: true } },
   { path: '/study/settings', component: StudySettingPage, meta: { requiresAuth: true } },
+
+  { path: '/study/settings/member', component: StudySettingPage, meta: { requiresAuth: true } },
+  { path: '/study/settings/roadmap', component: StudyRoadmapManagePage, meta: { requiresAuth: true } },
+  { path: '/study/settings/delete', component: StudyDeletePage, meta: { requiresAuth: true } },
+
+  { path: '/study/board/new', component: StudyPostCreate, meta: { requiresAuth: true } },
+  { path: '/study/board/post/:id', component: StudyPostDetail, meta: { requiresAuth: true } },
 
   // 기업별 정보 공유
   { path: '/career-info', component: CareerInfoMainView, meta: { requiresAuth: true } },
@@ -120,6 +133,10 @@ const routes = [
   { path: '/algorithm', redirect: '/algorithm/roadmap/1' },
   { path: '/algorithm/post/:postId/quiz/:quizId', component: AlgoQuizView },
   { path: '/algorithm/post/:postId', component: AlgoPostView },
+
+  // 마이페이지 라우트
+  { path: '/mypage/study', component: MyStudyPage },
+
 ]
 
 const router = createRouter({
