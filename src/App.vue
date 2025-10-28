@@ -22,7 +22,7 @@ import Footer from './components/common/Footer.vue'
 const route = useRoute()
 
 const hideHeaderFooter = computed(() => {
-  return route.path === '/signup' || route.path === '/login'
+  return route.path === '/signup' || route.path === '/login' || route.path === '/algo-terms'
 })
 
 const isStudyPage = computed(() => {

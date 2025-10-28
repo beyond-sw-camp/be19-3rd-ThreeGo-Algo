@@ -36,6 +36,7 @@ import CareerPostDetail from '@/views/career/CareerPostDetail.vue'
 import SignupPage from '@/views/login/SignupPage.vue'
 import InputDemoPage from '@/views/demo/InputDemoPage.vue'
 import LoginPage from '@/views/login/LoginPage.vue'
+import AlgoTerms from '@/views/home/AlgoTerms.vue'
 
 import StudyDemoPage from '@/views/demo/StudyDemoPage.vue'
 import StudyMainPage from '@/views/study/StudyMainPage.vue'
@@ -58,6 +59,7 @@ const routes = [
   // 기본 홈
   { path: '/', component: NewHomeView },
   { path: '/home', component: NewHomeView },
+  { path: '/algo-terms', component: AlgoTerms },
 
   // 스터디 모집
   { path: '/study-recruit', name: 'StudyRecruit', component: StudyRecruitMain, meta: { requiresAuth: true } },
@@ -91,10 +93,10 @@ const routes = [
   { path: '/algorithm', redirect: '/algorithm/roadmap/1' },
 
   // 코딩 풀이
-  { path: '/coding-problems', component: CodingProblemList, meta: { requiresAuth: true }},
-  { path: '/coding-problems/:problemId/solutions', component: CodingProblemDetail, meta: { requiresAuth: true }},
-  { path: '/coding-problems/:problemId/solutions/new', component: Codingpost, meta: { requiresAuth: true }},
-  { path: '/coding-problems/:problemId/solutions/:solutionId', component: CodingPostDetail, meta: { requiresAuth: true }},
+  { path: '/coding-problems', component: CodingProblemList, meta: { requiresAuth: true } },
+  { path: '/coding-problems/:problemId/solutions', component: CodingProblemDetail, meta: { requiresAuth: true } },
+  { path: '/coding-problems/:problemId/solutions/new', component: Codingpost, meta: { requiresAuth: true } },
+  { path: '/coding-problems/:problemId/solutions/:solutionId', component: CodingPostDetail, meta: { requiresAuth: true } },
 
   // 회원 관련 (로그인 불필요)
   { path: '/signup', component: SignupPage },
