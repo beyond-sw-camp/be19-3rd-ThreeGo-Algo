@@ -1,14 +1,16 @@
 <template>
   <div class="problem-list-page">
     <!-- 상단 제목 -->
-    <div><TabTitle title="코딩 문제 목록" /></div>
+    <TabTitle title="코딩 문제 목록" />
 
     <div class="spacer"></div>
 
     <!-- 카테고리 탭 -->
     <TabMenu
       :items="categoryItems"
-      :onClick="handleCategoryChange"
+      :selected="selectedCategory"
+      @click="handleCategoryChange"
+      @onClick="handleCategoryChange"
     />
 
     <div class="divider"></div>
@@ -18,27 +20,31 @@
       <Select
         :options="sortOptions"
         placeholder="정렬 기준"
-        :onSelect="handleSortChange" />
+        :value="selectedSort"
+        @change="handleSortChange"
+        @onSelect="handleSortChange"
+      />
       <div class="search-wrapper">
         <SearchBar
           placeholder="문제명을 검색해보세요"
           button-text="검색"
           v-model="keyword"
-          @search="fetchProblems" />
+          @search="fetchProblems"
+        />
       </div>
     </div>
 
     <!-- 문제 카드 목록 -->
     <div class="problem-grid">
       <ProblemCard
-        v-for="problem in filteredProblems"
-        :key="problem.id"
-        :platform="problem.platform"
-        :difficulty="problem.difficulty"
-        :problem-title="problem.title"
-        :post-count="problem.postCount"
-        :link="problem.link"
-        @click="handleCardClick(problem)" />
+      v-for="problem in problems"
+      :key="problem.problemId"
+      :platform="problem.platform"
+      :difficulty="problem.difficulty"
+      :problem-title="problem.problemTitle"
+      :post-count="problem.postCount"
+      :link="problem.problemUrl"
+      @click="handleCardClick(problem.problemId)" />
     </div>
 
     <!-- 로딩 -->
@@ -47,125 +53,88 @@
     </div>
 
     <!-- 데이터 없을 때 -->
-    <div v-if="!loading && filteredProblems.length === 0" class="no-data">
+    <div v-if="!loading && problems.length === 0" class="no-data">
       <el-empty description="등록된 문제가 없습니다" />
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import TabTitle from '@/components/common/TabTitle.vue'
+import { ref, onMounted } from 'vue'
+import coreApi from '@/api/coreApi'
 import TabMenu from '@/components/common/TabMenu.vue'
+import Select from '@/components/common/CustomSelect.vue'
 import ProblemCard from '@/components/coding/ProblemCard.vue'
 import SearchBar from '@/components/common/SearchBar.vue'
-import Select from '@/components/common/CustomSelect.vue'
-import axios from '@/plugins/axios.js'
+import TabTitle from '@/components/common/TabTitle.vue'
 
-// 상태
-const problems = ref([
-  {
-    id: 1,
-    platform: 'BOJ',
-    difficulty: '실버3',
-    title: '문제 제목 1',
-    postCount: 5,
-    link: 'https://www.acmicpc.net/problem/1',
-  },
-  {
-    id: 2,
-    platform: 'PGS',
-    difficulty: '실버1',
-    title: '문제 제목 2',
-    postCount: 3,
-    link: 'https://programmers.co.kr/learn/courses/30/lessons/1',
-  },
-  {
-    id: 3,
-    platform: 'ETC',
-    difficulty: '브론즈2',
-    title: '문제 제목 3',
-    postCount: 0,
-    link: '',
-  },
-  {
-    id: 4,
-    platform: 'BOJ',
-    difficulty: '골드5',
-    title: '문제 제목 4',
-    postCount: 10,
-    link: 'https://www.acmicpc.net/problem/2',
-  },
-  {
-    id: 5,
-    platform: 'PGS',
-    difficulty: '브론즈1',
-    title: '문제 제목 5',
-    postCount: 2,
-    link: 'https://programmers.co.kr/learn/courses/30/lessons/2',
-  },
-]);
+import { useRouter } from 'vue-router'
+const router = useRouter()
+
+const problems = ref([])
 const keyword = ref('')
 const selectedCategory = ref('ALL')
-const selectedSort = ref('recent')
-
+const selectedSort = ref('createdAt')
 const loading = ref(false)
 
-// 카테고리 탭 데이터
+// ✅ 플랫폼 탭 (백엔드 Platform enum 기반)
 const categoryItems = [
-  { value: 'all', label: '전체' },
+  { value: 'ALL', label: '전체' },
   { value: 'PGS', label: '프로그래머스' },
   { value: 'BOJ', label: '백준' },
-  { value: 'ETC', label: '리트코드' }
+  { value: 'ETC', label: '리트코드' },
 ]
 
-// 정렬 옵션
+// ✅ 정렬 옵션
 const sortOptions = [
-  { label: '최근 등록순', value: 'recent' },
-  { label: '풀이 많은 순', value: 'popular' },
-  { label: '난이도 낮은 순', value: 'easy' },
-  { label: '난이도 높은 순', value: 'hard' },
+  { label: '최신순', value: 'createdAt' },
+  { label: '게시글 많은 순', value: 'postCount' },
+  { label: '난이도 낮은 순', value: 'difficultyAsc' },
+  { label: '난이도 높은 순', value: 'difficultyDesc' },
 ]
 
-// 문제 데이터 가져오기 (백엔드 API)
+function handleCardClick(problemId) {
+  router.push(`/coding-problems/${problemId}/solutions/`)
+}
+
+// ✅ 문제 목록 조회 API
 async function fetchProblems() {
   loading.value = true
   try {
-    const response = await axios.get('/coding-problem/posts', {
-      params: {
-        keyword: keyword.value,
-        platform: selectedCategory.value === 'ALL' ? null : selectedCategory.value,
-        sort: selectedSort.value,
-      },
-    })
-    problems.value = response.data
-  } catch (error) {
-    console.error('문제 목록 불러오기 실패:', error)
+    const params = {
+      keyword: keyword.value || null,
+      platform: selectedCategory.value === 'ALL' ? null : selectedCategory.value,
+      sortBy: selectedSort.value,
+      page: 0,
+      size: 100,
+    }
+
+    const { data } = await coreApi.get('/coding-problem/posts', { params })
+    problems.value = data || []
+  } catch (err) {
+    console.error('문제 목록 불러오기 실패:', err)
   } finally {
     loading.value = false
   }
 }
 
-// 정렬 변경 핸들러
-function handleSortChange(value) {
-  selectedSort.value = value
+// ✅ 카테고리 변경
+function handleCategoryChange(value) {
+  console.log('카테고리 변경됨:', value)
+  selectedCategory.value = value?.value || value // ✅ TabMenu가 객체/문자열 둘 다 가능
   fetchProblems()
 }
 
-// 카드 클릭 핸들러
-function handleCardClick(postId) {
-  console.log('문제 클릭:', problem.title)
-  // 라우터 이동 가능 (예: 상세 페이지)
-  router.push(`/coding-problems/posts/${postId}`)
+// ✅ 정렬 변경
+function handleSortChange(value) {
+  console.log('정렬 기준 변경됨:', value)
+  selectedSort.value = value?.value || value
+  fetchProblems()
 }
 
-// 필터링된 문제 목록 계산
-const filteredProblems = computed(() => {
-  if (!keyword.value) return problems.value
-  return problems.value.filter((p) =>
-    p.title.toLowerCase().includes(keyword.value.toLowerCase())
-  )
-})
+function handleSearch() {
+  fetchProblems()
+}
 
 onMounted(() => {
   fetchProblems()
@@ -181,7 +150,7 @@ onMounted(() => {
   font-family: 'Noto Sans KR', sans-serif;
 }
 
-/* 카테고리 탭 영역 */
+/* 카테고리 탭 */
 .category-tabs {
   display: flex;
   justify-content: flex-start;
@@ -202,11 +171,11 @@ onMounted(() => {
   max-width: 400px;
 }
 
-/* 카드 그리드 정렬 */
+/* 카드 그리드 */
 .problem-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 28px 22px; /* 가로세로 동일한 여백 */
+  gap: 28px 22px;
   justify-items: center;
 }
 
@@ -219,13 +188,12 @@ onMounted(() => {
 }
 
 .spacer {
-  height: 36px; /* 상단 제목과 카테고리 탭 사이의 여백 */
+  height: 36px;
 }
 
 .divider {
   height: 1px;
   background-color: #e0e0e0;
-  margin: 16px 0; /* 구분선의 상하 여백 */
+  margin: 16px 0;
 }
 </style>
-

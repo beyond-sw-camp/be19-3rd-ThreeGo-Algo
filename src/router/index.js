@@ -91,10 +91,10 @@ const routes = [
   { path: '/algorithm', redirect: '/algorithm/roadmap/1' },
 
   // 코딩 풀이
-  { path: '/coding-problems', component: CodingProblemList, meta: { requiresAuth: true } },
-  { path: '/coding-problem/:problemId/solutions', component: CodingProblemDetail, meta: { requiresAuth: true } },
-  { path: '/coding-problems/:problemId/solutions/new', component: Codingpost, meta: { requiresAuth: true } },
-  { path: '/coding-problems/:problemId/solutions/:solutionId', component: CodingPostDetail, meta: { requiresAuth: true } },
+  { path: '/coding-problems', component: CodingProblemList, meta: { requiresAuth: true }},
+  { path: '/coding-problems/:problemId/solutions', component: CodingProblemDetail, meta: { requiresAuth: true }},
+  { path: '/coding-problems/:problemId/solutions/new', component: Codingpost, meta: { requiresAuth: true }},
+  { path: '/coding-problems/:problemId/solutions/:solutionId', component: CodingPostDetail, meta: { requiresAuth: true }},
 
   // 회원 관련 (로그인 불필요)
   { path: '/signup', component: SignupPage },

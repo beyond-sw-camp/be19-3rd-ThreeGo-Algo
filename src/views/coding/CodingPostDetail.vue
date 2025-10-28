@@ -1,122 +1,131 @@
 <template>
-    <div class="solution-detail-page">
-
+  <div class="solution-detail-page">
     <!-- 문제 정보 배너 -->
     <div class="problem-banner">
-        <span class="banner-label">
-        <span class="problem-name">{{ problemTitle }}</span>에 대한 코딩풀이 </span>
+      <span class="banner-label">
+        <span class="problem-name">{{ problemTitle }}</span>에 대한 코딩풀이
+      </span>
     </div>
     
     <!-- 뒤로가기 -->
-    <BackButton text="목록으로 돌아가기" to="/codingProblemList" />
+    <BackButton 
+      text="목록으로 돌아가기" 
+      :to="`/coding-problems/${problemId}/solutions/`" 
+    />
 
     <!-- 게시물 헤더 -->
     <div class="post-header">
-        <h1 class="post-title">{{ postTitle }}</h1>
-        <MiniProfile :nickname="nickname" :rankName="memberRank" />
-        <span class="post-date">{{ createdAt }}</span>
+      <h1 class="post-title">{{ postTitle }}</h1>
+      <MiniProfile :nickname="nickname" :rankName="memberRank" />
+      <span class="post-date">{{ createdAt }}</span>
     </div>
 
     <!-- 게시물 내용 -->
     <div class="post-content-section">
-        <div v-html="postContent" class="post-content"></div>
+      <div v-html="postContent" class="post-content"></div>
     </div>
 
     <!-- AI 피드백 섹션 -->
     <div class="ai-feedback-section">
-        <h2 class="section-title">AI 피드백</h2>
+      <h2 class="section-title">AI 피드백</h2>
 
-        <!-- AI 피드백 로딩 중 -->
-        <div v-if="isAiLoading" class="ai-loading">
-        
+      <!-- AI 피드백 로딩 중 -->
+      <div v-if="isAiLoading" class="ai-loading">
         <div class="loading-spinner">
-            <el-icon class="is-loading" :size="60" color="#0AA2EB">
+          <el-icon class="is-loading" :size="60" color="#0AA2EB">
             <Loading />
-            </el-icon>
+          </el-icon>
         </div>
         <p class="loading-text">
-            AI가 풀이를 열심히 분석하고 있어요 🤖<br />
-            조금만 기다려주세요, 곧 피드백을 드릴게요!
+          AI가 풀이를 열심히 분석하고 있어요 🤖<br />
+          조금만 기다려주세요, 곧 피드백을 드릴게요!
         </p>
-        </div>
+      </div>
 
-        <!-- AI 피드백 완료 -->
-        <div v-else class="ai-feedback-content">
+      <!-- AI 피드백 완료 -->
+      <div v-else class="ai-feedback-content">
         <!-- 시간 복잡도 -->
         <div class="feedback-card">
-            <div class="card-header">
+          <div class="card-header">
             <h3>⏱️ 시간 복잡도</h3>
-            </div>
-            <div class="card-content">
-            <p class="big-o-badge">{{ aiBigO }}</p>
-            </div>
+          </div>
+          <div class="card-content">
+            <p class="big-o-badge">{{ aiBigO || '분석 중...' }}</p>
+          </div>
         </div>
 
         <!-- 잘한 점 -->
         <div class="feedback-card good">
-            <div class="card-header">
+          <div class="card-header">
             <h3>👍 잘한 점</h3>
-            </div>
-            <div class="card-content">
-            <ul>
-                <li v-for="(item, index) in aiGood" :key="index">{{ item }}</li>
+          </div>
+          <div class="card-content">
+            <ul v-if="aiGood.length > 0">
+              <li v-for="(item, index) in aiGood" :key="index">{{ item }}</li>
             </ul>
-            </div>
+            <p v-else>아직 피드백이 없습니다.</p>
+          </div>
         </div>
 
         <!-- 개선할 점 -->
         <div class="feedback-card bad">
-            <div class="card-header">
+          <div class="card-header">
             <h3>💡 개선할 점</h3>
-            </div>
-            <div class="card-content">
-            <ul>
-                <li v-for="(item, index) in aiBad" :key="index">{{ item }}</li>
+          </div>
+          <div class="card-content">
+            <ul v-if="aiBad.length > 0">
+              <li v-for="(item, index) in aiBad" :key="index">{{ item }}</li>
             </ul>
-            </div>
+            <p v-else>아직 피드백이 없습니다.</p>
+          </div>
         </div>
 
         <!-- 개선 방향 -->
         <div class="feedback-card plan">
-            <div class="card-header">
+          <div class="card-header">
             <h3>🚀 개선 방향</h3>
-            </div>
-            <div class="card-content">
-            <p>{{ aiPlan }}</p>
-            </div>
+          </div>
+          <div class="card-content">
+            <p>{{ aiPlan || '아직 피드백이 없습니다.' }}</p>
+          </div>
         </div>
-        </div>
+      </div>
     </div>
 
     <!-- 오른쪽 사이드바 -->
     <div class="right-sidebar">
-        <!-- 다른 풀이 목록 -->
-        <div class="other-solutions">
-        <h3 class="sidebar-title">더 많은 <span class="highlight">{{ problemTitle }}</span> 풀이글 보기</h3>
+      <!-- 다른 풀이 목록 -->
+      <div class="other-solutions">
+        <h3 class="sidebar-title">
+          더 많은 <span class="highlight">{{ problemTitle }}</span> 풀이글 보기
+        </h3>
         
-        <div class="solution-list">
-            <PostListItem
+        <div class="solution-list" v-if="otherSolutions.length > 0">
+          <PostListItem
             v-for="solution in otherSolutions"
-            :key="solution.id"
-            :id="solution.id"
-            :title="solution.title"
+            :key="solution.postId"
+            :id="solution.postId"
+            :title="solution.postTitle"
             :nickname="solution.nickname"
-            :rankName="solution.rankName"
+            :rankName="solution.memberRank"
             :createdAt="solution.createdAt"
             :likeCount="solution.likeCount"
-            :commentCount="solution.commentCount"/>
+            :commentCount="solution.commentCount"
+            @click="handleSolutionClick(solution.postId)"
+          />
         </div>
-        </div>
+        <p v-else class="no-solutions-text">다른 풀이가 없습니다.</p>
+      </div>
 
-        <!-- AI 피드백 요청 카드 -->
-        <div class="ai-request-card">
+      <!-- AI 피드백 요청 카드 -->
+      <div class="ai-request-card">
         <div class="koala-background"></div>
         <CustomButton
           variant="primary"
           height="md"
           width="100%"
           class="action-button"
-          @click="handleRequestAiFeedback"
+          @click="handleWriteSolution"
         >
           풀이글 작성하러 가기
         </CustomButton>
@@ -125,7 +134,6 @@
 
     <!-- 댓글 섹션 -->
     <div class="comment-wrapper">
-      <h2 class="section-title">댓글 {{ commentCount }}</h2>
       <Comment
         :comments="comments"
         :currentUser="currentUser"
@@ -143,226 +151,211 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import { useRoute, useRouter, onBeforeRouteUpdate } from 'vue-router'
 import { Loading } from '@element-plus/icons-vue'
+import coreApi from '@/api/coreApi'
+
 import BackButton from '@/components/common/BackButton.vue'
 import MiniProfile from '@/components/common/MiniProfile.vue'
 import CustomButton from '@/components/common/CustomButton.vue'
 import PostListItem from '@/components/common/PostListItem.vue'
 import Comment from '@/components/common/Comment.vue'
 
-import { useRouter } from 'vue-router'
-
+// 라우터
+const route = useRoute()
 const router = useRouter()
+const problemId = Number(route.params.problemId)
+const solutionId = ref(Number(route.params.solutionId))
 
-// Props 정의
-const props = defineProps({
-  problemTitle: {
-    type: String,
-    default: '두 수의 합'
-  },
-  problemPlatform: {
-    type: String,
-    default: 'BOJ'
-  },
-  problemDifficulty: {
-    type: String,
-    default: '실버3'
-  },
-  postTitle: {
-    type: String,
-    default: '입출력의 시작, 두 수를 더해보자 (A+B 풀이)'
-  },
-  postContent: {
-    type: String,
-    default: ''
-  },
-  aiBigO: {
-    type: String,
-    default: 'O(1)'
-  },
-  aiGood: {
-    type: Array,
-    default: () => []
-  },
-  aiBad: {
-    type: Array,
-    default: () => []
-  },
-  aiPlan: {
-    type: String,
-    default: ''
-  },
-  commentCount: {
-    type: Number,
-    default: 0
-  },
-  likeCount: {
-    type: Number,
-    default: 0
-  },
-  nickname: {
-    type: String,
-    default: '리아이긴'
-  },
-  memberRank: {
-    type: String,
-    default: '코알못'
-  },
-  createdAt: {
-    type: String,
-    default: '2025.07.13 14:06'
-  }
-})
-
-// 상태
+// 상태값
+const postDetail = ref(null)
+const comments = ref([])
+const otherSolutions = ref([])
 const isAiLoading = ref(true)
 
-// 더미 데이터
-const postContent = ref(`
-  <p>오늘은 백준의 가장 기본 문제인데, 알고리즘의 첫걸음인 A+B (1000번) 문제를 풀어보려고 해요.</p>
-  <p>정말 간단한 문제지만 입출력 형식을 정확하게 이해하는 게 중요한 문제입니다. ^^</p>
-  <br>
-  <pre><code>import java.util.Scanner;
+const currentUser = ref({ nickname: '', rankName: '' })
 
-public class Main {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int A = sc.nextInt();
-        int B = sc.nextInt();
-        System.out.println(A + B);
+// Computed
+const problemTitle = computed(() => postDetail.value?.problemTitle || '문제 제목')
+const postTitle = computed(() => postDetail.value?.postTitle || '')
+const postContent = computed(() => postDetail.value?.postContent || '')
+const nickname = computed(() => postDetail.value?.nickname || '')
+const memberRank = computed(() => postDetail.value?.memberRank || '')
+const createdAt = computed(() => postDetail.value?.createdAt || '')
+const commentCount = computed(() => postDetail.value?.commentCount || 0)
+const aiBigO = computed(() => postDetail.value?.aiBigO || '')
+const aiPlan = computed(() => postDetail.value?.aiPlan || '')
+const aiGood = computed(() => {
+  const raw = postDetail.value?.aiGood
+  if (!raw) return []
+  try { return JSON.parse(raw) } catch { return raw.split(',').map(i => i.trim()) }
+})
+const aiBad = computed(() => {
+  const raw = postDetail.value?.aiBad
+  if (!raw) return []
+  try { return JSON.parse(raw) } catch { return raw.split(',').map(i => i.trim()) }
+})
+
+// API: 게시물 상세 조회
+const fetchPostDetail = async () => {
+  try {
+    const name = localStorage.getItem('nickname');
+        const rank = localStorage.getItem('rank');
+        
+      currentUser.value = {
+            nickname: name,
+            rankName: rank
+        };
+    const { data } = await coreApi.get(`/coding/posts/${solutionId.value}`)
+    postDetail.value = data
+    if (data.aiBigO) {
+      isAiLoading.value = false
+    } else {
+      startAiPolling()
     }
-}</code></pre>
-  <br>
-  <p>사실상 "Hello, Algorithm 🎉" 수준의 문제지만,</p>
-  <p>백준 입출력 구조에 익숙해지는 데는 꽤 괜찮은 문제라고 생각합니다!</p>
-  <br>
-  <p>다들 풀어보세요 ~~</p>
-`)
+  } catch (err) {
+    console.error('❌ 게시물 상세 조회 실패:', err)
+    alert('게시물을 불러올 수 없습니다.')
+  }
+}
 
-const aiGood = ref([
-  '코드 구조가 깔끔하고 읽기 쉽습니다',
-  '적절한 변수명을 사용하여 가독성이 좋습니다',
-  '입출력 처리가 정확합니다'
-])
-
-const aiBad = ref([
-  'Scanner 사용 후 close()를 호출하지 않았습니다',
-  '예외 처리가 없어 잘못된 입력 시 에러가 발생할 수 있습니다'
-])
-
-const aiPlan = ref('Scanner를 try-with-resources 구문으로 감싸서 자동으로 close되도록 하고, 입력값 검증 로직을 추가하면 더 안정적인 코드가 될 것입니다.')
-
-const currentUser = ref({
-  id: 1,
-  nickname: '김멍띠',
-  rankName: '코신'
-})
-
-const comments = ref([
-  {
-    id: 1,
-    userId: 2,
-    nickname: '라이언',
-    rankName: '코잘알',
-    content: '코테 준비가 막막했는데 공유 감사합니다! 감사합니다 많이 배워갑니다 👍👍',
-    createdAt: '2025.07.13 18:06',
-    replies: [
-      {
-        id: 101,
-        userId: 3,
-        nickname: '머스크스',
-        rankName: '코알못',
-        content: '좋은 내용 감사합니다~',
-        createdAt: '2025.07.14 09:12'
+// API: AI 피드백 폴링
+const startAiPolling = () => {
+  const interval = setInterval(async () => {
+    try {
+      const { data } = await coreApi.get(`/coding/posts/${solutionId.value}`)
+      if (data.aiBigO) {
+        postDetail.value = data
+        isAiLoading.value = false
+        clearInterval(interval)
       }
-    ]
-  },
-  {
-    id: 2,
-    userId: 4,
-    nickname: '뀨아이',
-    rankName: '코뉴비',
-    content: '덕분에 이해가 쏙쏙 되었습니다! 감사한다 잘 참고해 갈 것 같어요!',
-    createdAt: '2025.11.14 18:12',
-    replies: []
-  }
-])
+    } catch {}
+  }, 5000)
 
-const otherSolutions = ref([
-  {
-    id: 2,
-    title: '가장 단순하지만 가장 중요하다 — A+B 문제 분석',
-    nickname: '안안라이',
-    rankName: '코좀알',
-    createdAt: '2025.10.13',
-    likeCount: 123,
-    commentCount: 123
-  },
-  {
-    id: 3,
-    title: 'Hello Algorithm! 첫 문제 A+B',
-    nickname: '리이긴',
-    rankName: '코신',
-    createdAt: '2025.10.13',
-    likeCount: 123,
-    commentCount: 123
-  },
-  {
-    id: 4,
-    title: 'A+B로 시작하는 나의 코딩 여정 📚',
-    nickname: '하이긴',
-    rankName: '코알못',
-    createdAt: '2025.10.13',
-    likeCount: 123,
-    commentCount: 123
-  }
-])
+  setTimeout(() => clearInterval(interval), 120000)
+}
 
-// AI 피드백 로딩 시뮬레이션
-onMounted(() => {
-  setTimeout(() => {
-    isAiLoading.value = false
-  }, 3000)
+/* 이벤트 */
+const handleWriteSolution = () => {
+  if (!problem.value) {
+    alert('문제 정보를 불러오는 중입니다.')
+    return
+  }
+
+  // problemId를 경로에 포함하여 전달
+  router.push({
+    path: `/coding-problems/${problemId}/solutions/`,
+    // query: {
+    //   problemTitle: problem.value.problemTitle
+    // }
+  })
+}
+
+// API: 댓글 조회
+const fetchComments = async () => {
+  try {
+        
+    const { data } = await coreApi.get(`/coding/posts/${solutionId.value}/comments`)
+    comments.value = (data)
+  } catch (err) {
+    console.error('댓글 조회 실패:', err)
+  }
+}
+
+const transformCommentsForUI = (backendComments) =>
+  backendComments.map(c => ({
+    id: c.commentId,
+    userId: c.memberId,
+    nickname: c.nickname,
+    rankName: c.memberRank,
+    content: c.content,
+    createdAt: c.createdAt,
+    visibility: c.visibility,
+    replies: c.children?.map(r => ({
+      id: r.commentId,
+      userId: r.memberId,
+      nickname: r.nickname,
+      rankName: r.memberRank,
+      content: r.content,
+      createdAt: r.createdAt,
+    })) || [],
+  }))
+
+// API: 같은 문제 다른 풀이 조회
+const fetchOtherSolutions = async () => {
+  try {
+    const { data } = await coreApi.get(`/coding-problem/${problemId}/posts`, {
+      params: { page: 0, size: 4 },
+    })
+    otherSolutions.value = (data || []).filter(p => p.postId !== solutionId.value).slice(0, 3)
+  } catch (err) {
+    console.error('❌ 다른 풀이 조회 실패:', err)
+  }
+}
+
+// 댓글 핸들러
+const handleSubmitComment = async (data) => {
+  await coreApi.post(`/coding/posts/${solutionId.value}/comments`, { content: data.content })
+  await fetchComments()
+  await fetchPostDetail()
+}
+
+const handleSubmitReply = async (data) => {
+  await coreApi.post(`/coding/posts/${solutionId.value}/comments`, {
+    content: data.content,
+    parentId: data.commentId,
+  })
+  await fetchComments()
+  await fetchPostDetail()
+}
+
+const handleEditComment = async (data) => {
+  await coreApi.put(`/coding/comments/${data.commentId}`, { content: data.content })
+  await fetchComments()
+}
+
+const handleDeleteComment = async (commentId) => {
+  await coreApi.delete(`/coding/comments/${commentId}`)
+  await fetchComments()
+  await fetchPostDetail()
+}
+
+const handleEditReply = handleEditComment
+
+const handleDeleteReply = async (data) => {
+  await coreApi.delete(`/coding/comments/${data.replyId}`)
+  await fetchComments()
+  await fetchPostDetail()
+}
+
+// UI 이벤트
+const handleSolutionClick = (id) => {
+  router.push(`/coding-problems/${problemId}/solutions/${id}`)
+}
+
+// 🔹 route param 변경 감지 (같은 컴포넌트 재사용 시)
+onBeforeRouteUpdate(async (to, from, next) => {
+  console.log('라우트 변경 감지:', from.params.solutionId, '→', to.params.solutionId)
+  solutionId.value = Number(to.params.solutionId)
+  postDetail.value = null
+  comments.value = []
+  otherSolutions.value = []
+  await fetchPostDetail()
+  await fetchComments()
+  await fetchOtherSolutions()
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+  next()
 })
 
-// 이벤트 핸들러
-const handleRequestAiFeedback = () => {
-  router.push(`/codingpost`)
-}
-
-const handleSubmitComment = (data) => {
-  console.log('댓글 작성:', data)
-}
-
-const handleSubmitReply = (data) => {
-  console.log('답글 작성:', data)
-}
-
-const handleEditComment = (data) => {
-  console.log('댓글 수정:', data)
-}
-
-const handleDeleteComment = (commentId) => {
-  console.log('댓글 삭제:', commentId)
-}
-
-const handleEditReply = (data) => {
-  console.log('답글 수정:', data)
-}
-
-const handleDeleteReply = (data) => {
-  console.log('답글 삭제:', data)
-}
-
-const handleReportComment = (comment) => {
-  console.log('댓글 신고:', comment)
-}
-
-const handleReportReply = (reply) => {
-  console.log('답글 신고:', reply)
-}
+// Lifecycle: 최초 데이터 로딩
+onMounted(async () => {
+  await fetchPostDetail()
+  await fetchComments()
+  await fetchOtherSolutions()
+})
 </script>
+
 
 <style scoped>
 .solution-detail-page {
@@ -376,7 +369,6 @@ const handleReportReply = (reply) => {
   position: relative;
 }
 
-/* 왼쪽 메인 컨텐츠 */
 .solution-detail-page > *:not(.right-sidebar) {
   grid-column: 1;
 }
@@ -386,7 +378,6 @@ const handleReportReply = (reply) => {
   grid-row: 1 / span 10;
 }
 
-/* 문제 배너 */
 .problem-banner {
   margin: 24px 0 16px;
 }
@@ -403,7 +394,6 @@ const handleReportReply = (reply) => {
   font-weight: 600;
 }
 
-/* 게시물 헤더 */
 .post-header {
   margin: 32px 0;
 }
@@ -422,7 +412,6 @@ const handleReportReply = (reply) => {
   margin-left: 12px;
 }
 
-/* 게시물 내용 */
 .post-content-section {
   background: #fff;
   border: 1px solid #E4E7ED;
@@ -449,7 +438,7 @@ const handleReportReply = (reply) => {
 
 .post-content code {
   font-family: 'Courier New', monospace;
-  font-size: 16px;
+  font-size: 14px;
   color: #E83E8C;
 }
 
@@ -457,7 +446,6 @@ const handleReportReply = (reply) => {
   color: #303133;
 }
 
-/* AI 피드백 섹션 */
 .ai-feedback-section {
   background: #fff;
   border: 1px solid #E4E7ED;
@@ -473,7 +461,6 @@ const handleReportReply = (reply) => {
   margin-bottom: 24px;
 }
 
-/* AI 로딩 */
 .ai-loading {
   display: flex;
   flex-direction: column;
@@ -481,12 +468,6 @@ const handleReportReply = (reply) => {
   justify-content: center;
   padding: 80px 20px;
   gap: 20px;
-}
-
-.koala-image-center {
-  width: 200px;
-  height: 200px;
-  object-fit: contain;
 }
 
 .loading-spinner {
@@ -500,7 +481,6 @@ const handleReportReply = (reply) => {
   line-height: 1.6;
 }
 
-/* AI 피드백 카드 */
 .ai-feedback-content {
   display: flex;
   flex-direction: column;
@@ -546,7 +526,7 @@ const handleReportReply = (reply) => {
   display: inline-block;
   background: #0AA2EB;
   color: #fff;
-  padding: 2px 16px;
+  padding: 8px 16px;
   border-radius: 20px;
   font-size: 16px;
   font-weight: 600;
@@ -572,7 +552,6 @@ const handleReportReply = (reply) => {
   font-weight: 700;
 }
 
-/* 오른쪽 사이드바 */
 .right-sidebar {
   position: sticky;
   top: 24px;
@@ -603,9 +582,14 @@ const handleReportReply = (reply) => {
   flex-direction: column;
 }
 
-/* AI 요청 카드 */
+.no-solutions-text {
+  text-align: center;
+  color: #909399;
+  font-size: 14px;
+  padding: 20px 0;
+}
+
 .ai-request-card {
-  
   border-radius: 12px;
   padding: 24px;
   display: flex;
@@ -635,7 +619,6 @@ const handleReportReply = (reply) => {
   z-index: 1;
 }
 
-/* 댓글 섹션 */
 .comment-wrapper {
   grid-column: 1 / -1;
   background: #fff;
@@ -645,7 +628,6 @@ const handleReportReply = (reply) => {
   margin-top: 40px;
 }
 
-/* 반응형 */
 @media (max-width: 1200px) {
   .solution-detail-page {
     grid-template-columns: 1fr;
