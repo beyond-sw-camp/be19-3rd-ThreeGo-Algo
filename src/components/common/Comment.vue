@@ -154,9 +154,7 @@
                                         <MiniProfile :nickname="reply.nickname || reply.memberNickname"
                                             :rankName="reply.rankName || reply.memberRank" />
                                     </div>
-                                    <span class="reply-time">{{
-                                        formatCreatedAt(reply.createdAt)
-                                    }}</span>
+                                    <span class="reply-time">{{ formatCreatedAt(reply.createdAt) }}</span>
 
                                     <template v-if="isMyReply(reply) && reply.visibility === 'Y'">
                                         <!-- 케밥 메뉴 (본인 답글) -->

@@ -105,7 +105,6 @@ async function getPostsByRoadmap(roadmapId) {
                     solvedQuizIds: post.solvedQuizIds || []
                 }))
             };
-            console.log(currentRoadmap);
         }
     } catch (error) {
         console.error(`로드맵(${roadmapId})의 게시물 리스트 불러오기 실패:`, error);
