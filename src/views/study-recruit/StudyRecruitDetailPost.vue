@@ -217,15 +217,19 @@ const fetchComments = async () => {
     const response = await coreApi.get(`/study-recruit/posts/${postId}/comments`);
 
     const all = response.data.map(c => {
-
-      return {
+      const mapped = {
         id: c.id,
+        userId: c.memberId, // ✅ Comment 컴포넌트가 기대하는 필드명
         nickname: c.memberNickname,
+        memberNickname: c.memberNickname, // ✅ isMyComment fallback용
         rankName: c.rankName || c.rank || c.memberRank || '코뉴비',
         content: c.content,
         createdAt: c.createdAt,
-        parentId: c.parentId
+        parentId: c.parentId,
+        visibility: c.visibility || 'Y' // ✅ visibility 필드 추가 (기본값 'Y')
       };
+
+      return mapped;
     });
     const parents = all.filter(c => !c.parentId);
     comments.value = parents.map(p => ({
@@ -346,9 +350,12 @@ onMounted(async () => {
 
   currentMemberId.value = storedMemberId ? Number(storedMemberId) : 0;
   currentUser.value = {
-    nickname: storedNickname,
-    rankName: storedRankName
+    id: currentMemberId.value, // ✅ Comment 컴포넌트가 userId와 비교하는 필드
+    nickname: storedNickname || "사용자",
+    rankName: storedRankName || "코뉴비"
   };
+
+  console.log('👤 댓글 작성자 정보:', currentUser.value);
 
   await fetchPostDetail();
   await fetchComments();
