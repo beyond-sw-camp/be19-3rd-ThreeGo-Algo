@@ -85,17 +85,22 @@
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount, reactive } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import TabTitle from '@/components/common/TabTitle.vue'
-// CustomButton과 DateRangeButton은 글로벌 컴포넌트로 등록되어 있어 import 불필요
+import coreApi from '@/api/coreApi'
 
 const router = useRouter()
+const route = useRoute()
 
-// jQuery와 Summernote 동적 로드
+// 현재 모드 (등록 / 수정)
+const mode = ref(route.query.mode || 'create')   // 'create' or 'edit'
+const postId = ref(route.query.id || null)
+
+// jQuery & Summernote 관련
 let $ = null
-let editor = null
-
 const editorContainer = ref(null)
+
+// 폼 데이터
 const formData = reactive({
   title: '',
   interviewType: '',
@@ -105,17 +110,14 @@ const formData = reactive({
   content: ''
 })
 
-const emit = defineEmits(['submit', 'previous'])
-
 // Summernote 초기화
 const initializeSummernote = () => {
   if (!window.jQuery || !window.jQuery.fn.summernote) {
-    console.error('Summernote not loaded')
+    console.error('❌ Summernote not loaded')
     return
   }
 
   $ = window.jQuery
-  
   $(editorContainer.value).summernote({
     placeholder: '스터디 내용을 작성해주세요...',
     height: 400,
@@ -139,11 +141,13 @@ const initializeSummernote = () => {
     }
   })
 
-  // 초기 내용 설정
-  $(editorContainer.value).summernote('code', formData.content)
+  // ✏️ 수정 모드일 때 초기 내용 반영
+  if (mode.value === 'edit' && formData.content) {
+    $(editorContainer.value).summernote('code', formData.content)
+  }
 }
 
-// 폼 검증
+// ✅ 폼 검증
 const validateForm = () => {
   if (!formData.title.trim()) {
     alert('제목을 입력해주세요.')
@@ -164,26 +168,74 @@ const validateForm = () => {
   return true
 }
 
-const handleSubmit = () => {
-  if (validateForm()) {
-    // TODO: 실제로는 API 호출하여 데이터 저장
-    console.log('제출 데이터:', formData)
+// ✅ 등록/수정 공용 핸들러
+const handleSubmit = async () => {
+  if (!validateForm()) return
 
-    // 성공 메시지 표시
-    alert('스터디 모집글이 등록되었습니다!')
+  const postData = {
+    title: formData.title,
+    content: formData.content,
+    capacity: formData.memberCount,
+    startDate: formData.startDate,
+    endDate: formData.endDate,
+  }
 
-    // 메인 페이지로 이동
-    router.push('/study-recruit')
+  try {
+    let response
+    if (mode.value === 'edit' && postId.value) {
+      // ✏️ 수정
+      response = await coreApi.put(`/study-recruit/posts/${postId.value}`, postData)
+      alert('스터디 모집글이 수정되었습니다!')
+      router.push(`/study-recruit/${postId.value}`)
+    } else {
+      // 🆕 등록
+      response = await coreApi.post('/study-recruit/posts', postData)
+      alert('스터디 모집글이 등록되었습니다!')
+      router.push('/study-recruit')
+    }
+
+    console.log('✅ 성공:', response.data)
+  } catch (error) {
+    console.error('❌ 등록/수정 실패:', error.response?.data || error.message)
+    alert('등록 또는 수정 중 오류가 발생했습니다.')
   }
 }
 
+// ✅ 뒤로가기
 const handlePrevious = () => {
-  // 뒤로가기 (메인 페이지로)
   router.push('/study-recruit')
 }
 
-onMounted(() => {
-  // Summernote 스크립트 로드
+// ✅ 수정 모드일 경우 기존 게시글 불러오기
+const fetchPostDetail = async () => {
+  if (mode.value !== 'edit' || !postId.value) return
+
+  try {
+    const response = await coreApi.get(`/study-recruit/posts/${postId.value}`)
+    const data = response.data
+
+    formData.title = data.title
+    formData.memberCount = data.capacity
+    formData.startDate = data.startDate
+    formData.endDate = data.endDate
+    formData.content = data.content
+
+    console.log('✏️ 수정 모드 데이터 로드 완료:', formData)
+
+    // summernote가 로드된 후 내용 반영
+    setTimeout(() => {
+      if (window.jQuery && $(editorContainer.value)) {
+        $(editorContainer.value).summernote('code', formData.content)
+      }
+    }, 500)
+  } catch (error) {
+    console.error('❌ 수정 모드 데이터 로드 실패:', error)
+  }
+}
+
+// ✅ Summernote 로드 & 초기화
+onMounted(async () => {
+  // CSS 추가
   if (!document.querySelector('#summernote-css')) {
     const link = document.createElement('link')
     link.id = 'summernote-css'
@@ -192,32 +244,39 @@ onMounted(() => {
     document.head.appendChild(link)
   }
 
+  const loadSummernote = () => {
+    const summernoteScript = document.createElement('script')
+    summernoteScript.src = 'https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js'
+    summernoteScript.onload = () => {
+      const langScript = document.createElement('script')
+      langScript.src = 'https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/lang/summernote-ko-KR.min.js'
+      langScript.onload = () => {
+        initializeSummernote()
+        fetchPostDetail() // ✏️ 수정 모드일 경우 데이터 로드
+      }
+      document.body.appendChild(langScript)
+    }
+    document.body.appendChild(summernoteScript)
+  }
+
   if (!window.jQuery) {
     const jqueryScript = document.createElement('script')
     jqueryScript.src = 'https://code.jquery.com/jquery-3.6.0.min.js'
-    jqueryScript.onload = () => {
-      const summernoteScript = document.createElement('script')
-      summernoteScript.src = 'https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js'
-      summernoteScript.onload = () => {
-        const langScript = document.createElement('script')
-        langScript.src = 'https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/lang/summernote-ko-KR.min.js'
-        langScript.onload = initializeSummernote
-        document.body.appendChild(langScript)
-      }
-      document.body.appendChild(summernoteScript)
-    }
+    jqueryScript.onload = loadSummernote
     document.body.appendChild(jqueryScript)
   } else {
-    initializeSummernote()
+    loadSummernote()
   }
 })
 
+// ✅ 언마운트 시 Summernote 해제
 onBeforeUnmount(() => {
-  if ($ && editorContainer.value) {
+  if (window.jQuery && editorContainer.value) {
     $(editorContainer.value).summernote('destroy')
   }
 })
 </script>
+
 
 <style scoped>
 .study-recruit-post-page {
