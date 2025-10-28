@@ -7,7 +7,7 @@
       <div class="badge-group">
         <StudyRole variant="member" />
         <StudyRole variant="admin" />
-        <StudyRole variant="invalid" />
+        <StudyRole variant="NOT_MEMBER" />
       </div>
 
       <HomeBanner 
@@ -139,7 +139,7 @@ const members = ref([
   { id: 1, nickname: '코알못', rankName: '코알못', role: 'member' },
   { id: 2, nickname: '알코알라', rankName: '코신', role: 'admin' },
   { id: 3, nickname: '개발왕', rankName: '코좀알', role: 'member' },
-  { id: 4, nickname: '참여못함', rankName: '코좀알', role: 'invalid' }
+  { id: 4, nickname: '참여못함', rankName: '코좀알', role: 'NOT_MEMBER' }
 ])
 
 
