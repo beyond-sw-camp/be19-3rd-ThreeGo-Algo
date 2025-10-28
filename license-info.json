@@ -1,0 +1,777 @@
+{
+  "@babel/helper-string-parser@7.27.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/babel/babel",
+    "publisher": "The Babel Team",
+    "url": "https://babel.dev/team",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@babel/helper-string-parser",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@babel/helper-string-parser/LICENSE"
+  },
+  "@babel/helper-validator-identifier@7.27.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/babel/babel",
+    "publisher": "The Babel Team",
+    "url": "https://babel.dev/team",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@babel/helper-validator-identifier",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@babel/helper-validator-identifier/LICENSE"
+  },
+  "@babel/parser@7.28.4": {
+    "licenses": "MIT",
+    "repository": "https://github.com/babel/babel",
+    "publisher": "The Babel Team",
+    "url": "https://babel.dev/team",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@babel/parser",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@babel/parser/LICENSE"
+  },
+  "@babel/types@7.28.4": {
+    "licenses": "MIT",
+    "repository": "https://github.com/babel/babel",
+    "publisher": "The Babel Team",
+    "url": "https://babel.dev/team",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@babel/types",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@babel/types/LICENSE"
+  },
+  "@codemirror/autocomplete@6.19.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/codemirror/autocomplete",
+    "publisher": "Marijn Haverbeke",
+    "email": "marijn@haverbeke.berlin",
+    "url": "http://marijnhaverbeke.nl",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@codemirror/autocomplete",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@codemirror/autocomplete/LICENSE"
+  },
+  "@codemirror/commands@6.10.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/codemirror/commands",
+    "publisher": "Marijn Haverbeke",
+    "email": "marijn@haverbeke.berlin",
+    "url": "http://marijnhaverbeke.nl",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@codemirror/commands",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@codemirror/commands/LICENSE"
+  },
+  "@codemirror/language@6.11.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/codemirror/language",
+    "publisher": "Marijn Haverbeke",
+    "email": "marijn@haverbeke.berlin",
+    "url": "http://marijnhaverbeke.nl",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@codemirror/language",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@codemirror/language/LICENSE"
+  },
+  "@codemirror/lint@6.9.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/codemirror/lint",
+    "publisher": "Marijn Haverbeke",
+    "email": "marijn@haverbeke.berlin",
+    "url": "http://marijnhaverbeke.nl",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@codemirror/lint",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@codemirror/lint/LICENSE"
+  },
+  "@codemirror/search@6.5.11": {
+    "licenses": "MIT",
+    "repository": "https://github.com/codemirror/search",
+    "publisher": "Marijn Haverbeke",
+    "email": "marijn@haverbeke.berlin",
+    "url": "http://marijnhaverbeke.nl",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@codemirror/search",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@codemirror/search/LICENSE"
+  },
+  "@codemirror/state@6.5.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/codemirror/state",
+    "publisher": "Marijn Haverbeke",
+    "email": "marijn@haverbeke.berlin",
+    "url": "http://marijnhaverbeke.nl",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@codemirror/state",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@codemirror/state/LICENSE"
+  },
+  "@codemirror/view@6.38.6": {
+    "licenses": "MIT",
+    "repository": "https://github.com/codemirror/view",
+    "publisher": "Marijn Haverbeke",
+    "email": "marijn@haverbeke.berlin",
+    "url": "http://marijnhaverbeke.nl",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@codemirror/view",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@codemirror/view/LICENSE"
+  },
+  "@ctrl/tinycolor@3.6.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/scttcper/tinycolor",
+    "publisher": "Scott Cooper",
+    "email": "scttcper@gmail.com",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@ctrl/tinycolor",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@ctrl/tinycolor/LICENSE"
+  },
+  "@element-plus/icons-vue@2.3.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/element-plus/element-plus-icons",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@element-plus/icons-vue",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@element-plus/icons-vue/LICENSE"
+  },
+  "@floating-ui/core@1.7.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/floating-ui/floating-ui",
+    "publisher": "atomiks",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@floating-ui/core",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@floating-ui/core/LICENSE"
+  },
+  "@floating-ui/dom@1.7.4": {
+    "licenses": "MIT",
+    "repository": "https://github.com/floating-ui/floating-ui",
+    "publisher": "atomiks",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@floating-ui/dom",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@floating-ui/dom/LICENSE"
+  },
+  "@floating-ui/utils@0.2.10": {
+    "licenses": "MIT",
+    "repository": "https://github.com/floating-ui/floating-ui",
+    "publisher": "atomiks",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@floating-ui/utils",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@floating-ui/utils/LICENSE"
+  },
+  "@jridgewell/sourcemap-codec@1.5.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jridgewell/sourcemaps",
+    "publisher": "Justin Ridgewell",
+    "email": "justin@ridgewell.name",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@jridgewell/sourcemap-codec",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@jridgewell/sourcemap-codec/LICENSE"
+  },
+  "@lezer/common@1.3.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/lezer-parser/common",
+    "publisher": "Marijn Haverbeke",
+    "email": "marijn@haverbeke.berlin",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@lezer/common",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@lezer/common/LICENSE"
+  },
+  "@lezer/highlight@1.2.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/lezer-parser/highlight",
+    "publisher": "Marijn Haverbeke",
+    "email": "marijn@haverbeke.berlin",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@lezer/highlight",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@lezer/highlight/LICENSE"
+  },
+  "@lezer/lr@1.4.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/lezer-parser/lr",
+    "publisher": "Marijn Haverbeke",
+    "email": "marijn@haverbeke.berlin",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@lezer/lr",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@lezer/lr/LICENSE"
+  },
+  "@marijn/find-cluster-break@1.0.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/marijnh/find-cluster-break",
+    "publisher": "Marijn Haverbeke",
+    "email": "marijn@haverbeke.berlin",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@marijn/find-cluster-break",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@marijn/find-cluster-break/LICENSE"
+  },
+  "@sxzz/popperjs-es@2.11.7": {
+    "licenses": "MIT",
+    "repository": "https://github.com/popperjs/popper-core",
+    "publisher": "Federico Zivolo",
+    "email": "federico.zivolo@gmail.com",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@popperjs/core",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@popperjs/core/LICENSE.md"
+  },
+  "@types/lodash-es@4.17.12": {
+    "licenses": "MIT",
+    "repository": "https://github.com/DefinitelyTyped/DefinitelyTyped",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@types/lodash-es",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@types/lodash-es/LICENSE"
+  },
+  "@types/lodash@4.17.20": {
+    "licenses": "MIT",
+    "repository": "https://github.com/DefinitelyTyped/DefinitelyTyped",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@types/lodash",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@types/lodash/LICENSE"
+  },
+  "@types/web-bluetooth@0.0.16": {
+    "licenses": "MIT",
+    "repository": "https://github.com/DefinitelyTyped/DefinitelyTyped",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@types/web-bluetooth",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@types/web-bluetooth/LICENSE"
+  },
+  "@vue/compiler-core@3.5.22": {
+    "licenses": "MIT",
+    "repository": "https://github.com/vuejs/core",
+    "publisher": "Evan You",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@vue/compiler-core",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@vue/compiler-core/LICENSE"
+  },
+  "@vue/compiler-dom@3.5.22": {
+    "licenses": "MIT",
+    "repository": "https://github.com/vuejs/core",
+    "publisher": "Evan You",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@vue/compiler-dom",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@vue/compiler-dom/LICENSE"
+  },
+  "@vue/compiler-sfc@3.5.22": {
+    "licenses": "MIT",
+    "repository": "https://github.com/vuejs/core",
+    "publisher": "Evan You",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@vue/compiler-sfc",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@vue/compiler-sfc/LICENSE"
+  },
+  "@vue/compiler-ssr@3.5.22": {
+    "licenses": "MIT",
+    "repository": "https://github.com/vuejs/core",
+    "publisher": "Evan You",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@vue/compiler-ssr",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@vue/compiler-ssr/LICENSE"
+  },
+  "@vue/devtools-api@6.6.4": {
+    "licenses": "MIT",
+    "repository": "https://github.com/vuejs/vue-devtools",
+    "publisher": "Guillaume Chau",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@vue/devtools-api"
+  },
+  "@vue/devtools-api@7.7.7": {
+    "licenses": "MIT",
+    "repository": "https://github.com/vuejs/devtools",
+    "publisher": "webfansplz",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/pinia/node_modules/@vue/devtools-api",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/pinia/node_modules/@vue/devtools-api/LICENSE"
+  },
+  "@vue/devtools-kit@7.7.7": {
+    "licenses": "MIT",
+    "repository": "https://github.com/vuejs/devtools",
+    "publisher": "webfansplz",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/pinia/node_modules/@vue/devtools-kit",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/pinia/node_modules/@vue/devtools-kit/LICENSE"
+  },
+  "@vue/devtools-shared@7.7.7": {
+    "licenses": "MIT",
+    "repository": "https://github.com/vuejs/devtools",
+    "publisher": "webfansplz",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/pinia/node_modules/@vue/devtools-shared",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/pinia/node_modules/@vue/devtools-shared/LICENSE"
+  },
+  "@vue/reactivity@3.5.22": {
+    "licenses": "MIT",
+    "repository": "https://github.com/vuejs/core",
+    "publisher": "Evan You",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@vue/reactivity",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@vue/reactivity/LICENSE"
+  },
+  "@vue/runtime-core@3.5.22": {
+    "licenses": "MIT",
+    "repository": "https://github.com/vuejs/core",
+    "publisher": "Evan You",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@vue/runtime-core",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@vue/runtime-core/LICENSE"
+  },
+  "@vue/runtime-dom@3.5.22": {
+    "licenses": "MIT",
+    "repository": "https://github.com/vuejs/core",
+    "publisher": "Evan You",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@vue/runtime-dom",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@vue/runtime-dom/LICENSE"
+  },
+  "@vue/server-renderer@3.5.22": {
+    "licenses": "MIT",
+    "repository": "https://github.com/vuejs/core",
+    "publisher": "Evan You",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@vue/server-renderer",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@vue/server-renderer/LICENSE"
+  },
+  "@vue/shared@3.5.22": {
+    "licenses": "MIT",
+    "repository": "https://github.com/vuejs/core",
+    "publisher": "Evan You",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@vue/shared",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@vue/shared/LICENSE"
+  },
+  "@vueuse/core@9.13.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/vueuse/vueuse",
+    "publisher": "Anthony Fu",
+    "email": "https://github.com/antfu",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@vueuse/core",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@vueuse/core/LICENSE"
+  },
+  "@vueuse/metadata@9.13.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/vueuse/vueuse",
+    "publisher": "Anthony Fu",
+    "email": "https://github.com/antfu",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@vueuse/metadata",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@vueuse/metadata/LICENSE"
+  },
+  "@vueuse/shared@9.13.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/vueuse/vueuse",
+    "publisher": "Anthony Fu",
+    "email": "https://github.com/antfu",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@vueuse/shared",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@vueuse/shared/LICENSE"
+  },
+  "algo-frontend@0.0.0": {
+    "licenses": "UNLICENSED",
+    "private": true,
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/LICENSE.txt"
+  },
+  "async-validator@4.2.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/yiminghe/async-validator",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/async-validator",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/async-validator/LICENSE.md"
+  },
+  "asynckit@0.4.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/alexindigo/asynckit",
+    "publisher": "Alex Indigo",
+    "email": "iam@alexindigo.com",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/asynckit",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/asynckit/LICENSE"
+  },
+  "axios@1.12.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/axios/axios",
+    "publisher": "Matt Zabriskie",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/axios",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/axios/LICENSE"
+  },
+  "birpc@2.6.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/antfu-collective/birpc",
+    "publisher": "Anthony Fu",
+    "email": "anthonyfu117@hotmail.com",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/birpc",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/birpc/LICENSE"
+  },
+  "call-bind-apply-helpers@1.0.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/ljharb/call-bind-apply-helpers",
+    "publisher": "Jordan Harband",
+    "email": "ljharb@gmail.com",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/call-bind-apply-helpers",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/call-bind-apply-helpers/LICENSE"
+  },
+  "canvas-confetti@1.9.4": {
+    "licenses": "ISC",
+    "repository": "https://github.com/catdad/canvas-confetti",
+    "publisher": "Kiril Vatev",
+    "email": "vatev.1@gmail.com",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/canvas-confetti",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/canvas-confetti/LICENSE"
+  },
+  "codemirror@6.0.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/codemirror/basic-setup",
+    "publisher": "Marijn Haverbeke",
+    "email": "marijn@haverbeke.berlin",
+    "url": "http://marijnhaverbeke.nl",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/codemirror",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/codemirror/LICENSE"
+  },
+  "combined-stream@1.0.8": {
+    "licenses": "MIT",
+    "repository": "https://github.com/felixge/node-combined-stream",
+    "publisher": "Felix Geisendörfer",
+    "email": "felix@debuggable.com",
+    "url": "http://debuggable.com/",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/combined-stream",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/combined-stream/License"
+  },
+  "copy-anything@4.0.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/mesqueeb/copy-anything",
+    "publisher": "Luca Ban - Mesqueeb",
+    "url": "https://cycraft.co",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/copy-anything",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/copy-anything/LICENSE"
+  },
+  "crelt@1.0.6": {
+    "licenses": "MIT",
+    "repository": "https://github.com/marijnh/crelt",
+    "publisher": "Marijn Haverbeke",
+    "email": "marijn@haverbeke.berlin",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/crelt",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/crelt/LICENSE"
+  },
+  "csstype@3.1.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/frenic/csstype",
+    "publisher": "Fredrik Nicol",
+    "email": "fredrik.nicol@gmail.com",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/csstype",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/csstype/LICENSE"
+  },
+  "dayjs@1.11.18": {
+    "licenses": "MIT",
+    "repository": "https://github.com/iamkun/dayjs",
+    "publisher": "iamkun",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/dayjs",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/dayjs/LICENSE"
+  },
+  "delayed-stream@1.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/felixge/node-delayed-stream",
+    "publisher": "Felix Geisendörfer",
+    "email": "felix@debuggable.com",
+    "url": "http://debuggable.com/",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/delayed-stream",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/delayed-stream/License"
+  },
+  "dunder-proto@1.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/es-shims/dunder-proto",
+    "publisher": "Jordan Harband",
+    "email": "ljharb@gmail.com",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/dunder-proto",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/dunder-proto/LICENSE"
+  },
+  "element-plus@2.11.5": {
+    "licenses": "MIT",
+    "repository": "https://github.com/element-plus/element-plus",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/element-plus",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/element-plus/README.md"
+  },
+  "entities@4.5.0": {
+    "licenses": "BSD-2-Clause",
+    "repository": "https://github.com/fb55/entities",
+    "publisher": "Felix Boehm",
+    "email": "me@feedic.com",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/entities",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/entities/LICENSE"
+  },
+  "es-define-property@1.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/ljharb/es-define-property",
+    "publisher": "Jordan Harband",
+    "email": "ljharb@gmail.com",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/es-define-property",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/es-define-property/LICENSE"
+  },
+  "es-errors@1.3.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/ljharb/es-errors",
+    "publisher": "Jordan Harband",
+    "email": "ljharb@gmail.com",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/es-errors",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/es-errors/LICENSE"
+  },
+  "es-object-atoms@1.1.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/ljharb/es-object-atoms",
+    "publisher": "Jordan Harband",
+    "email": "ljharb@gmail.com",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/es-object-atoms",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/es-object-atoms/LICENSE"
+  },
+  "es-set-tostringtag@2.1.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/es-shims/es-set-tostringtag",
+    "publisher": "Jordan Harband",
+    "email": "ljharb@gmail.com",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/es-set-tostringtag",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/es-set-tostringtag/LICENSE"
+  },
+  "estree-walker@2.0.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Rich-Harris/estree-walker",
+    "publisher": "Rich Harris",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/estree-walker",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/estree-walker/LICENSE"
+  },
+  "follow-redirects@1.15.11": {
+    "licenses": "MIT",
+    "repository": "https://github.com/follow-redirects/follow-redirects",
+    "publisher": "Ruben Verborgh",
+    "email": "ruben@verborgh.org",
+    "url": "https://ruben.verborgh.org/",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/follow-redirects",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/follow-redirects/LICENSE"
+  },
+  "form-data@4.0.4": {
+    "licenses": "MIT",
+    "repository": "https://github.com/form-data/form-data",
+    "publisher": "Felix Geisendörfer",
+    "email": "felix@debuggable.com",
+    "url": "http://debuggable.com/",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/form-data",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/form-data/License"
+  },
+  "function-bind@1.1.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Raynos/function-bind",
+    "publisher": "Raynos",
+    "email": "raynos2@gmail.com",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/function-bind",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/function-bind/LICENSE"
+  },
+  "get-intrinsic@1.3.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/ljharb/get-intrinsic",
+    "publisher": "Jordan Harband",
+    "email": "ljharb@gmail.com",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/get-intrinsic",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/get-intrinsic/LICENSE"
+  },
+  "get-proto@1.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/ljharb/get-proto",
+    "publisher": "Jordan Harband",
+    "email": "ljharb@gmail.com",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/get-proto",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/get-proto/LICENSE"
+  },
+  "gopd@1.2.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/ljharb/gopd",
+    "publisher": "Jordan Harband",
+    "email": "ljharb@gmail.com",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/gopd",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/gopd/LICENSE"
+  },
+  "has-symbols@1.1.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/inspect-js/has-symbols",
+    "publisher": "Jordan Harband",
+    "email": "ljharb@gmail.com",
+    "url": "http://ljharb.codes",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/has-symbols",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/has-symbols/LICENSE"
+  },
+  "has-tostringtag@1.0.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/inspect-js/has-tostringtag",
+    "publisher": "Jordan Harband",
+    "email": "ljharb@gmail.com",
+    "url": "http://ljharb.codes",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/has-tostringtag",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/has-tostringtag/LICENSE"
+  },
+  "hasown@2.0.2": {
+    "licenses": "MIT",
+    "repository": "https://github.com/inspect-js/hasOwn",
+    "publisher": "Jordan Harband",
+    "email": "ljharb@gmail.com",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/hasown",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/hasown/LICENSE"
+  },
+  "hookable@5.5.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/unjs/hookable",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/hookable",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/hookable/LICENSE.md"
+  },
+  "is-what@5.5.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/mesqueeb/is-what",
+    "publisher": "Luca Ban - Mesqueeb",
+    "url": "https://cycraft.co",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/is-what",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/is-what/LICENSE"
+  },
+  "jquery@3.7.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jquery/jquery",
+    "publisher": "OpenJS Foundation and other contributors",
+    "url": "https://github.com/jquery/jquery/blob/3.7.1/AUTHORS.txt",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/jquery",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/jquery/LICENSE.txt"
+  },
+  "lodash-es@4.17.21": {
+    "licenses": "MIT",
+    "repository": "https://github.com/lodash/lodash",
+    "publisher": "John-David Dalton",
+    "email": "john.david.dalton@gmail.com",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/lodash-es",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/lodash-es/LICENSE"
+  },
+  "lodash-unified@1.0.3": {
+    "licenses": "MIT",
+    "publisher": "Jack Works",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/lodash-unified"
+  },
+  "lodash@4.17.21": {
+    "licenses": "MIT",
+    "repository": "https://github.com/lodash/lodash",
+    "publisher": "John-David Dalton",
+    "email": "john.david.dalton@gmail.com",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/lodash",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/lodash/LICENSE"
+  },
+  "magic-string@0.30.19": {
+    "licenses": "MIT",
+    "repository": "https://github.com/rich-harris/magic-string",
+    "publisher": "Rich Harris",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/magic-string",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/magic-string/LICENSE"
+  },
+  "math-intrinsics@1.1.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/es-shims/math-intrinsics",
+    "publisher": "Jordan Harband",
+    "email": "ljharb@gmail.com",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/math-intrinsics",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/math-intrinsics/LICENSE"
+  },
+  "memoize-one@6.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/alexreardon/memoize-one",
+    "publisher": "Alex Reardon",
+    "email": "alexreardon@gmail.com",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/memoize-one",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/memoize-one/LICENSE"
+  },
+  "mime-db@1.52.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jshttp/mime-db",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/mime-db",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/mime-db/LICENSE"
+  },
+  "mime-types@2.1.35": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jshttp/mime-types",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/mime-types",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/mime-types/LICENSE"
+  },
+  "mitt@3.0.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/developit/mitt",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/mitt",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/mitt/LICENSE"
+  },
+  "nanoid@3.3.11": {
+    "licenses": "MIT",
+    "repository": "https://github.com/ai/nanoid",
+    "publisher": "Andrey Sitnik",
+    "email": "andrey@sitnik.ru",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/nanoid",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/nanoid/LICENSE"
+  },
+  "normalize-wheel-es@1.2.0": {
+    "licenses": "BSD-3-Clause",
+    "repository": "https://github.com/sxzz/normalize-wheel-es",
+    "publisher": "Bas Stottelaar",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/normalize-wheel-es",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/normalize-wheel-es/LICENSE"
+  },
+  "perfect-debounce@1.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/unjs/perfect-debounce",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/pinia/node_modules/perfect-debounce",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/pinia/node_modules/perfect-debounce/LICENSE"
+  },
+  "picocolors@1.1.1": {
+    "licenses": "ISC",
+    "repository": "https://github.com/alexeyraspopov/picocolors",
+    "publisher": "Alexey Raspopov",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/picocolors",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/picocolors/LICENSE"
+  },
+  "pinia@3.0.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/vuejs/pinia",
+    "publisher": "Eduardo San Martin Morote",
+    "email": "posva13@gmail.com",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/pinia",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/pinia/LICENSE"
+  },
+  "postcss@8.5.6": {
+    "licenses": "MIT",
+    "repository": "https://github.com/postcss/postcss",
+    "publisher": "Andrey Sitnik",
+    "email": "andrey@sitnik.ru",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/postcss",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/postcss/LICENSE"
+  },
+  "proxy-from-env@1.1.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/Rob--W/proxy-from-env",
+    "publisher": "Rob Wu",
+    "email": "rob@robwu.nl",
+    "url": "https://robwu.nl/",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/proxy-from-env",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/proxy-from-env/LICENSE"
+  },
+  "rfdc@1.4.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/davidmarkclements/rfdc",
+    "publisher": "David Mark Clements",
+    "email": "david.clements@nearform.com",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/rfdc",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/rfdc/LICENSE"
+  },
+  "source-map-js@1.2.1": {
+    "licenses": "BSD-3-Clause",
+    "repository": "https://github.com/7rulnik/source-map-js",
+    "publisher": "Valentin 7rulnik Semirulnik",
+    "email": "v7rulnik@gmail.com",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/source-map-js",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/source-map-js/LICENSE"
+  },
+  "speakingurl@14.0.1": {
+    "licenses": "BSD-3-Clause",
+    "repository": "https://github.com/pid/speakingurl",
+    "publisher": "Sascha Droste",
+    "email": "pid@posteo.net",
+    "url": "https://twitter.com/SaschaDroste",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/speakingurl",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/speakingurl/LICENSE"
+  },
+  "style-mod@4.1.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/marijnh/style-mod",
+    "publisher": "Marijn Haverbeke",
+    "email": "marijn@haverbeke.berlin",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/style-mod",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/style-mod/LICENSE"
+  },
+  "summernote@0.9.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/summernote/summernote",
+    "publisher": "hackerwins",
+    "email": "susukang98@gmail.com",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/summernote",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/summernote/LICENSE"
+  },
+  "superjson@2.2.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/blitz-js/superjson",
+    "publisher": "Simon Knott",
+    "email": "info@simonknott.de",
+    "url": "https://simonknott.de",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/superjson",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/superjson/LICENSE"
+  },
+  "vue-demi@0.14.10": {
+    "licenses": "MIT",
+    "repository": "https://github.com/antfu/vue-demi",
+    "publisher": "Anthony Fu",
+    "email": "anthonyfu117@hotmail.com",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@vueuse/shared/node_modules/vue-demi",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/@vueuse/shared/node_modules/vue-demi/LICENSE"
+  },
+  "vue-router@4.6.3": {
+    "licenses": "MIT",
+    "repository": "https://github.com/vuejs/router",
+    "publisher": "Eduardo San Martin Morote",
+    "email": "posva13@gmail.com",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/vue-router",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/vue-router/LICENSE"
+  },
+  "vue@3.5.22": {
+    "licenses": "MIT",
+    "repository": "https://github.com/vuejs/core",
+    "publisher": "Evan You",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/vue",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/vue/LICENSE"
+  },
+  "w3c-keyname@2.2.8": {
+    "licenses": "MIT",
+    "repository": "https://github.com/marijnh/w3c-keyname",
+    "publisher": "Marijn Haverbeke",
+    "email": "marijn@haverbeke.berlin",
+    "path": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/w3c-keyname",
+    "licenseFile": "/Users/minji/Desktop/github/be19-ThreeGo/Algo-Frontend/node_modules/w3c-keyname/LICENSE"
+  }
+}
+

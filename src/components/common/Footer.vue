@@ -6,7 +6,7 @@
 
         <div class="footer-links">
           <a href="#" @click.prevent="openTerms">이용약관 및 개인정보처리방침</a>
-          <a href="#">오픈소스 라이선스</a>
+          <a href="#" @click.prevent="openLicense">오픈소스 라이선스</a>
         </div>
 
         <p class="footer-copyright">
@@ -47,6 +47,10 @@ const teamMembers = reactive([
 
 const openTerms = () => {
   window.open('/algo-terms', '_blank', 'noopener,noreferrer')
+}
+
+const openLicense = () => {
+  window.open('/open-source-license', '_blank', 'noopener,noreferrer')
 }
 </script>
 
