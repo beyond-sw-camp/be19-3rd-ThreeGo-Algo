@@ -3,7 +3,7 @@
     <!-- 왼쪽 프로필 -->
     <aside class="profile-section">
       <div class="profile-image">
-        <img src="@/assets/images/코신.png" alt="profile" />
+        <img :src="getRankImage(userInfo.rank)" alt="profile" />
       </div>
       <h2 class="nickname">{{ userInfo.nickname }}</h2>
       <p class="email">{{ userInfo.email }}</p>
@@ -54,15 +54,22 @@
       <div style="flex:1;">
         <h3 class="card-title">출석</h3>
         <div class="attendance-card">
-          <div class="attendance-body">
-            <img src="@/assets/images/point.png" alt="coin" />
-            <p>출석 완료하고<br /><b>1 포인트</b> 받아가세요!</p>
-            <button class="attend-btn" @click="handleAttendance" :disabled="isAttended">
-              {{ isAttended ? '출석 완료' : '출석하기' }}
-            </button>
-            <p class="sub-text">출석은 하루에 한 번만 가능합니다.</p>
-          </div>
-        </div>
+    <div class="attendance-body">
+      <img src="@/assets/images/point.png" alt="coin" />
+      <p>출석 완료하고<br /><b>1 포인트</b> 받아가세요!</p>
+      <button
+        class="attend-btn"
+        @click="handleAttendance"
+        :disabled="isAttended"
+      >
+        {{ isAttended ? '출석 완료' : '출석하기' }}
+      </button>
+      <p class="sub-text">출석은 하루에 한 번만 가능합니다.</p>
+    </div>
+
+    <!-- ✅ 출석 완료 팝업 -->
+    <AttendanceModal :visible="showModal" @close="showModal = false" />
+  </div>
       </div>
     </div>
 
@@ -108,6 +115,7 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import MiniProfile from '@/components/common/MiniProfile.vue'
+import AttendanceModal from '@/components/mypage/AttendanceModal.vue'
 import memberApi from '@/api/memberApi'
 import coreApi from '@/api/coreApi'
 
@@ -130,37 +138,74 @@ const ongoingStudies = ref([])
 
 // 출석 상태
 const isAttended = ref(false)
+const showModal = ref(false)
 
 // 프로필 정보 불러오기
 const fetchUserProfile = async () => {
   try {
-    // localStorage에서 기본 정보 가져오기
-    userInfo.value.nickname = localStorage.getItem('nickname') || '알코알라'
+    console.log('📝 내 정보 조회 (/member/me)...')
+    const response = await memberApi.get('/member/me')
+    const data = response.data
+
+    console.log('✅ /member/me API 응답:', data)
+
+    // API 응답 데이터 매핑 (null이면 localStorage 사용)
+    userInfo.value.nickname = data.nickname || localStorage.getItem('nickname') || '알코알라'
+    userInfo.value.email = data.email || localStorage.getItem('email') || '이메일 없음'
+    userInfo.value.rank = data.rank || data.rankName || localStorage.getItem('rank') || '코뉴비'
+    userInfo.value.memberId = data.id || data.memberId || localStorage.getItem('memberId')
+
+    // 이메일이 여전히 없으면 토큰에서 추출 시도
+    if (userInfo.value.email === '이메일 없음') {
+      const token = localStorage.getItem('accessToken')
+      if (token) {
+        try {
+          const payload = JSON.parse(atob(token.split('.')[1]))
+          userInfo.value.email = payload.email || payload.sub || '이메일 없음'
+        } catch (e) {
+          console.error('❌ 토큰 파싱 실패:', e)
+        }
+      }
+    }
+
+    // 포인트는 별도 API로 조회
+    if (data.point) {
+      userInfo.value.point = data.point
+    } else {
+      try {
+        console.log('📝 포인트 조회 (/member/point)...')
+        const pointRes = await memberApi.get('/member/point')
+        userInfo.value.point = pointRes.data.point || pointRes.data || 0
+        console.log('✅ 포인트 조회 성공:', userInfo.value.point)
+      } catch (error) {
+        console.log('⚠️ 포인트 API 실패, 기본값 0 사용')
+        userInfo.value.point = 0
+      }
+    }
+
+    console.log('📊 프로필 정보:', userInfo.value)
+  } catch (error) {
+    console.error('❌ 프로필 정보 로드 실패:', error)
+    console.error('에러 상세:', error.response?.data)
+
+    // API 실패 시 localStorage 기본값 사용
+    userInfo.value.nickname = localStorage.getItem('nickname') || '사용자'
     userInfo.value.rank = localStorage.getItem('rank') || '코뉴비'
     userInfo.value.memberId = localStorage.getItem('memberId')
+    userInfo.value.point = 0
 
-    // 이메일은 토큰에서 추출하거나 별도 API 호출
+    // 이메일은 토큰에서 추출
     const token = localStorage.getItem('accessToken')
     if (token) {
       try {
         const payload = JSON.parse(atob(token.split('.')[1]))
-        userInfo.value.email = payload.email || payload.sub || 'email@example.com'
+        userInfo.value.email = payload.email || payload.sub || '이메일 없음'
       } catch (e) {
-        console.error('토큰 파싱 실패:', e)
-        userInfo.value.email = 'email@example.com'
+        userInfo.value.email = '이메일 없음'
       }
+    } else {
+      userInfo.value.email = '이메일 없음'
     }
-
-    // 포인트 정보 가져오기 (API 있다면)
-    try {
-      const pointRes = await memberApi.get('/member/point')
-      userInfo.value.point = pointRes.data.point || 0
-    } catch (error) {
-      console.log('포인트 API 없음, 기본값 사용')
-      userInfo.value.point = 0
-    }
-  } catch (error) {
-    console.error('프로필 정보 로드 실패:', error)
   }
 }
 
@@ -169,8 +214,6 @@ const fetchLearningProgress = async () => {
   try {
     const response = await coreApi.get('/algo/progress')
     const data = response.data
-
-    console.log('✅ 학습 진도율 API 응답:', data)
 
     // progressRate가 소수점 형태 (0.4074 = 40.74%)
     if (data.progressRate !== undefined) {
@@ -245,11 +288,47 @@ const animateProgress = () => {
 // 출석 체크
 const checkAttendance = async () => {
   try {
+    // 먼저 localStorage에서 오늘 출석 여부 확인
+    const today = new Date().toISOString().split('T')[0] // YYYY-MM-DD
+    const lastAttendanceDate = localStorage.getItem('lastAttendanceDate')
+
+    console.log('🔍 출석 체크:', {
+      today,
+      lastAttendanceDate,
+      isMatched: lastAttendanceDate === today
+    })
+
+    if (lastAttendanceDate === today) {
+      // 오늘 이미 출석함
+      isAttended.value = true
+      console.log('✅ 출석 상태: 출석 완료 (로컬 저장)')
+      return
+    }
+
+    // API로 확인
     const response = await memberApi.get('/member/attendance/today')
     isAttended.value = response.data.attended || false
+
+    // API에서 출석 완료로 확인되면 localStorage에 저장
+    if (isAttended.value) {
+      localStorage.setItem('lastAttendanceDate', today)
+    }
+
+    console.log('✅ 출석 상태:', isAttended.value ? '출석 완료' : '미출석')
   } catch (error) {
-    console.log('출석 상태 확인 실패:', error)
-    isAttended.value = false
+    console.log('⚠️ 출석 상태 확인 실패 (API 미구현 가능성):', error.response?.status)
+    console.log('에러 상세:', error.response?.data)
+
+    // API 실패 시 localStorage만 확인
+    const today = new Date().toISOString().split('T')[0]
+    const lastAttendanceDate = localStorage.getItem('lastAttendanceDate')
+    isAttended.value = lastAttendanceDate === today
+
+    console.log('🔍 API 실패 후 localStorage 체크:', {
+      today,
+      lastAttendanceDate,
+      isAttended: isAttended.value
+    })
   }
 }
 
@@ -261,17 +340,56 @@ const handleAttendance = async () => {
   }
 
   try {
-    await memberApi.post('/member/attendance')
+    const memberId = localStorage.getItem('memberId')
+
+    const response = await memberApi.post('/member/attendance', null, {
+      headers: {
+        'Member-Id': memberId
+      }
+    })
+
+    console.log('✅ 출석 성공:', response.data)
+
+    // 출석 성공 시 상태 업데이트 및 localStorage에 저장
+    const today = new Date().toISOString().split('T')[0] // YYYY-MM-DD
+    localStorage.setItem('lastAttendanceDate', today) // 오늘 날짜 저장
+
     isAttended.value = true
     userInfo.value.point += 1
-    alert('출석이 완료되었습니다! 1 포인트가 지급되었습니다.')
+    showModal.value = true // 모달 표시
+
   } catch (error) {
-    console.error('출석 처리 실패:', error)
-    alert('출석 처리 중 오류가 발생했습니다.')
+    console.error('❌ 출석 실패:', error.response?.data || error.message)
+
+    // 409 Conflict = 이미 출석함
+    if (error.response?.status === 409) {
+      const today = new Date().toISOString().split('T')[0]
+      localStorage.setItem('lastAttendanceDate', today)
+      isAttended.value = true
+
+      alert('오늘 이미 출석하셨습니다!')
+      return
+    }
+
+    const errorMessage = error.response?.data?.message || '출석 처리 중 오류가 발생했습니다.'
+    alert(`출석 실패: ${errorMessage}`)
   }
 }
 
 const router = useRouter()
+
+// 등급별 이미지 가져오기
+const getRankImage = (rank) => {
+  const rankImages = {
+    '코뉴비': '/src/assets/images/코뉴비.png',
+    '코알못': '/src/assets/images/코알못.png',
+    '코좀알': '/src/assets/images/코좀알.png',
+    '코잘알': '/src/assets/images/코잘알.png',
+    '코신': '/src/assets/images/코신.png',
+  }
+
+  return rankImages[rank] || '/src/assets/images/코뉴비.png' // 기본값: 코뉴비
+}
 
 // 스터디 이동
 const goToStudy = (studyId) => {
