@@ -1,8 +1,8 @@
 <template>
   <OneButtonCommonPopup
     v-model="isVisible"
-    title="축하합니다!"
-    subtitle="새로운 등급으로 승급하셨습니다 🎉"
+    title="등급업!"
+    subtitle="앞으로도 계속 ALGO와 함께 성장해요! 🎉"
     image="/src/assets/images/level_up1_1.png"
     confirmText="확인"
     confirmVariant="primary"
