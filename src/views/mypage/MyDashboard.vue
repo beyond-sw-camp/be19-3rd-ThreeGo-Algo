@@ -333,47 +333,17 @@ const animateProgress = () => {
 // 출석 체크
 const checkAttendance = async () => {
   try {
-    // 먼저 localStorage에서 오늘 출석 여부 확인
-    const today = new Date().toISOString().split('T')[0] // YYYY-MM-DD
-    const lastAttendanceDate = localStorage.getItem('lastAttendanceDate')
-
-    console.log('🔍 출석 체크:', {
-      today,
-      lastAttendanceDate,
-      isMatched: lastAttendanceDate === today
-    })
-
-    if (lastAttendanceDate === today) {
-      // 오늘 이미 출석함
-      isAttended.value = true
-      console.log('✅ 출석 상태: 출석 완료 (로컬 저장)')
-      return
-    }
-
-    // API로 확인
+    // API로 출석 여부 확인
     const response = await memberApi.get('/member/attendance/today')
     isAttended.value = response.data.attended || false
 
-    // API에서 출석 완료로 확인되면 localStorage에 저장
-    if (isAttended.value) {
-      localStorage.setItem('lastAttendanceDate', today)
-    }
-
     console.log('✅ 출석 상태:', isAttended.value ? '출석 완료' : '미출석')
   } catch (error) {
-    console.log('⚠️ 출석 상태 확인 실패 (API 미구현 가능성):', error.response?.status)
+    console.log('⚠️ 출석 상태 확인 실패:', error.response?.status)
     console.log('에러 상세:', error.response?.data)
 
-    // API 실패 시 localStorage만 확인
-    const today = new Date().toISOString().split('T')[0]
-    const lastAttendanceDate = localStorage.getItem('lastAttendanceDate')
-    isAttended.value = lastAttendanceDate === today
-
-    console.log('🔍 API 실패 후 localStorage 체크:', {
-      today,
-      lastAttendanceDate,
-      isAttended: isAttended.value
-    })
+    // API 실패 시 미출석으로 기본 설정
+    isAttended.value = false
   }
 }
 
@@ -395,12 +365,12 @@ const handleAttendance = async () => {
 
     console.log('✅ 출석 성공:', response.data)
 
-    // 출석 성공 시 상태 업데이트 및 localStorage에 저장
-    const today = new Date().toISOString().split('T')[0] // YYYY-MM-DD
-    localStorage.setItem('lastAttendanceDate', today) // 오늘 날짜 저장
-
+    // 출석 성공 시 상태 업데이트
     isAttended.value = true
-    userInfo.value.point += 1
+
+    // 포인트 정보 다시 가져오기
+    await fetchUserProfile()
+
     showModal.value = true // 모달 표시
 
   } catch (error) {
@@ -408,10 +378,7 @@ const handleAttendance = async () => {
 
     // 409 Conflict = 이미 출석함
     if (error.response?.status === 409) {
-      const today = new Date().toISOString().split('T')[0]
-      localStorage.setItem('lastAttendanceDate', today)
       isAttended.value = true
-
       alert('오늘 이미 출석하셨습니다!')
       return
     }
