@@ -37,7 +37,7 @@ import SignupPage from '@/views/login/SignupPage.vue'
 import InputDemoPage from '@/views/demo/InputDemoPage.vue'
 import LoginPage from '@/views/login/LoginPage.vue'
 import AlgoTerms from '@/views/home/AlgoTerms.vue'
-import OpensourceLicense from '@/views/home/OpensourceLicense.vue'
+import OpensourceLicense from '@/views/home/OpenSourceLicense.vue'
 
 import StudyDemoPage from '@/views/demo/StudyDemoPage.vue'
 import StudyMainPage from '@/views/study/StudyMainPage.vue'
