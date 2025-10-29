@@ -6,8 +6,8 @@ import rank5 from '@/assets/images/코신.png';
 import admin from '@/assets/images/관리자.png';
 
 export const rankImages = {
-  '코뉴비': rank1,
-  '코알못': rank2,
+  '코알못': rank1,
+  '코뉴비': rank2,
   '코좀알': rank3,
   '코잘알': rank4,
   '코신': rank5,
