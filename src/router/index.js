@@ -71,7 +71,7 @@ const routes = [
   // 📘 스터디
   { path: '/study/home', component: StudyMainPage, meta: { requiresAuth: true } },
   { path: '/study/board', component: StudyBoardPage, meta: { requiresAuth: true } },
-  { path: '/study/settings', component: StudySettingPage, meta: { requiresAuth: true } },
+  { path: '/study/settings/member', component: StudySettingPage, meta: { requiresAuth: true } },
   { path: '/study/settings/roadmap', component: StudyRoadmapManagePage, meta: { requiresAuth: true } },
   { path: '/study/settings/delete', component: StudyDeletePage, meta: { requiresAuth: true } },
   { path: '/study/board/new', component: StudyPostCreate, meta: { requiresAuth: true } },
