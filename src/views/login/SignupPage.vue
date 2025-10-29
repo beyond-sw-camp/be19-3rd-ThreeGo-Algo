@@ -21,24 +21,39 @@
       <div class="form-container">
         <h2 class="title">회원가입</h2>
 
+        <!-- 이메일 입력 + 인증요청 -->
         <div class="input-group">
           <Input placeholder="이메일" icon="mail.svg" width="100%" v-model="email" />
-          <CustomButton height="sm" @click="handleRequestVerification">인증 요청</CustomButton>
+          <CustomButton height="sm" :disabled="(verificationTimer > 0 && !isVerified) || !email"
+            @click="handleRequestVerification">
+            {{ verificationTimer > 0 && !isVerified ? '재요청 불가' : '인증 요청' }}
+          </CustomButton>
         </div>
 
+        <!-- 인증번호 입력 -->
         <div class="input-group">
           <Input placeholder="인증번호" width="100%" v-model="verificationCode" />
-          <CustomButton height="sm" @click="handleVerifyCode">확인</CustomButton>
+          <CustomButton height="sm" @click="handleVerifyCode" :disabled="!email">
+            확인
+          </CustomButton>
         </div>
 
+        <!-- 타이머 표시 -->
+        <p v-if="verificationTimer > 0 && !isVerified" class="timer-text">
+          남은 시간: {{ formattedTime }}
+        </p>
+
+        <!-- 인증 관련 메시지 -->
         <p v-if="verificationMessage" :class="isVerificationError ? 'error-message' : 'message'">
           {{ verificationMessage }}
         </p>
 
+        <!-- 비밀번호 입력 -->
         <Input placeholder="비밀번호" icon="lock.svg" width="100%" v-model="password" type="password" />
         <Input placeholder="비밀번호 확인" icon="lock.svg" width="100%" v-model="passwordCheck" type="password" />
         <Input placeholder="닉네임" icon="user.svg" width="100%" v-model="nickname" />
 
+        <!-- 약관 동의 -->
         <div class="checkbox-container">
           <input type="checkbox" id="privacy" v-model="isAgreed" />
           <label for="privacy" class="privacyTxt">
@@ -50,11 +65,12 @@
           </label>
         </div>
 
-
+        <!-- 회원가입 메시지 -->
         <p v-if="signupMessage" :class="isSignupError ? 'error-message' : 'message'">
           {{ signupMessage }}
         </p>
 
+        <!-- 회원가입 버튼 -->
         <CustomButton width="100%" height="sm" :disabled="!isVerified || !isAgreed" @click="handleSignup">
           회원 가입
         </CustomButton>
@@ -69,7 +85,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import Input from '@/components/common/Input.vue'
 import CustomButton from '@/components/common/CustomButton.vue'
@@ -77,6 +93,7 @@ import memberApi from '@/api/memberApi'
 
 const router = useRouter()
 
+// 상태 관리
 const isVerified = ref(false)
 const isAgreed = ref(false)
 const isVerificationError = ref(false)
@@ -84,7 +101,6 @@ const isSignupError = ref(false)
 
 const email = ref('')
 const verificationCode = ref('')
-const correctCode = ref('')
 const password = ref('')
 const passwordCheck = ref('')
 const nickname = ref('')
@@ -92,11 +108,46 @@ const nickname = ref('')
 const verificationMessage = ref('')
 const signupMessage = ref('')
 
+// 타이머 관련
+const verificationTimer = ref(0)
+let timerInterval = null
+
+// 시간 포맷: mm:ss
+const formattedTime = computed(() => {
+  const min = Math.floor(verificationTimer.value / 60)
+  const sec = verificationTimer.value % 60
+  return `${min}:${sec < 10 ? '0' + sec : sec}`
+})
+
+// 타이머 시작
+const startTimer = () => {
+  clearInterval(timerInterval)
+  verificationTimer.value = 180 // 3분
+  timerInterval = setInterval(() => {
+    if (verificationTimer.value > 0) {
+      verificationTimer.value--
+    } else {
+      clearInterval(timerInterval)
+      verificationMessage.value = '인증번호가 만료되었습니다. 다시 요청해주세요.'
+      isVerificationError.value = true
+    }
+  }, 1000)
+}
+
+// 인증번호 요청
 const handleRequestVerification = async () => {
   try {
+    if (!email.value) {
+      verificationMessage.value = '이메일을 입력해주세요.'
+      isVerificationError.value = true
+      return
+    }
+
     await memberApi.post('/auth/email', { email: email.value })
-    verificationMessage.value = '인증번호가 이메일로 전송되었습니다.'
+    // verificationMessage.value = '인증번호가 이메일로 전송되었습니다.'
     isVerificationError.value = false
+    isVerified.value = false
+    startTimer() // 타이머 시작
   } catch (err) {
     verificationMessage.value = '이메일 전송 실패. 이미 가입된 이메일일 수 있습니다.'
     isVerificationError.value = true
@@ -114,8 +165,9 @@ const handleVerifyCode = async () => {
     verificationMessage.value = '이메일 인증 완료!'
     isVerified.value = true
     isVerificationError.value = false
+    clearInterval(timerInterval) // 인증 성공 시 타이머 종료
   } catch (err) {
-    verificationMessage.value = '인증번호가 일치하지 않습니다.'
+    verificationMessage.value = '❌ 인증번호가 일치하지 않습니다.'
     isVerificationError.value = true
     isVerified.value = false
   }
@@ -140,10 +192,8 @@ const handleSignup = async () => {
       password: password.value,
       nickname: nickname.value
     })
-    signupMessage.value = '회원가입이 완료되었습니다!'
+    signupMessage.value = '🎉 회원가입이 완료되었습니다!'
     isSignupError.value = false
-
-    // 1초 뒤 로그인 페이지 이동
     setTimeout(() => router.push('/login'), 1000)
   } catch (err) {
     signupMessage.value = '회원가입 실패. 다시 시도해주세요.'
@@ -152,17 +202,10 @@ const handleSignup = async () => {
 }
 
 const goHome = () => router.push('/')
-
-const goToLogin = () => {
-  router.push('/login')
-}
-
-const openTerms = () => {
-  window.open('/algo-terms', '_blank', 'noopener,noreferrer')
-}
-
-
+const goToLogin = () => router.push('/login')
+const openTerms = () => window.open('/algo-terms', '_blank', 'noopener,noreferrer')
 </script>
+
 <style scoped>
 .error-message {
   color: red;
@@ -276,11 +319,6 @@ const openTerms = () => {
   font-weight: 300;
 }
 
-.highlight {
-  font-weight: 500;
-  color: #0AA2EB;
-}
-
 .terms-link {
   font-size: 12px;
   color: #0AA2EB;
@@ -320,5 +358,13 @@ h2 {
 
 .login-line .login:hover {
   color: #0056b3;
+}
+
+.timer-text {
+  font-size: 13px;
+  color: #0aa2eb;
+  align-self: flex-start;
+  margin-top: -5px;
+  margin-bottom: 5px;
 }
 </style>

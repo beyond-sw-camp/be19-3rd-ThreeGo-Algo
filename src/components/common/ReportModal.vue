@@ -6,7 +6,7 @@
     :show-close="false"
     align-center
   >
-    <div class="modal-content">
+    
       <!-- 헤더 -->
       <div class="modal-header">
         <div class="header-icon">
@@ -69,9 +69,9 @@
           신고
         </CustomButton>
       </div>
-    </div>
+  </el-dialog>
 
-    <!-- 팝업 컴포넌트 -->
+  <!-- 팝업 컴포넌트 -->
     <OneButtonPopup
       v-model="popupVisible"
       title="신고 완료"
@@ -81,7 +81,6 @@
       cancelText="취소"
       @confirm="handleSubmit"
       @cancel="handlePopupCancel" />
-  </el-dialog>
 </template>
 
 <script setup>

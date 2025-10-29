@@ -7,7 +7,7 @@
     <main class="main-content">
       <router-view />
     </main>
-
+    <RankUpPopup v-model:visible="showRankUpPopup" :rankName="newRankName" />
     <Footer v-if="showFooter" />
   </div>
 </template>
@@ -18,6 +18,8 @@ import { useRoute } from 'vue-router'
 import Header from './components/common/Header.vue'
 import StudyHeader from './components/study/StudyHeader.vue'
 import Footer from './components/common/Footer.vue'
+import RankUpPopup from '@/components/common/RankUpPopup.vue'
+import { useRankWatcher } from '@/hooks/useRankWatcher'
 
 const route = useRoute()
 
@@ -45,6 +47,17 @@ const showFooter = computed(() => {
 watch(hideHeaderFooter, (val) => {
   document.body.style.paddingTop = val ? '0px' : '70px'
 }, { immediate: true })
+
+const memberId = localStorage.getItem('memberId')
+
+let showRankUpPopup = null
+let newRankName = null
+
+if (memberId) {
+  const watcher = useRankWatcher(memberId)
+  showRankUpPopup = watcher.showRankUpPopup
+  newRankName = watcher.newRankName
+}
 </script>
 
 <style scoped>
