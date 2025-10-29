@@ -85,7 +85,8 @@ const handleLogin = async () => {
 
       // 토큰에서 닉네임 추출
       const payload = JSON.parse(atob(token.split('.')[1]))
-      const nickname = payload.nickname || payload.sub || '사용자'
+      // const nickname = payload.nickname || payload.sub || '사용자'
+      const nickname = response.data.nickname;
 
       const memberId = payload.memberId || payload.id || payload.userId
       const rankName = payload.rankName || payload.rank || '코뉴비'
