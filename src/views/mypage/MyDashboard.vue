@@ -108,6 +108,33 @@
       </div>
 
     </main>
+    
+
+</div>
+<!-- 🔹 등급 및 포인트 설명 섹션 -->
+<div class="rank-info-section">
+  <div class="rank-info-header">
+    <h3>🎖️ 등급 및 포인트 안내</h3>
+    <p>활동을 통해 포인트를 얻고, 단계별로 등급이 상승합니다.</p>
+  </div>
+
+  <div class="rank-grid">
+    <div class="rank-card" v-for="(src, rank) in rankImages" :key="rank">
+      <img :src="src" :alt="rank" />
+      <h4>{{ rank }}</h4>
+      <p>{{ getPointRequirement(rank) }}</p>
+    </div>
+  </div>
+
+  <div class="rank-description">
+    <h4>💡 포인트는 어떻게 얻나요?</h4>
+    <ul>
+      <li>🧩 <b>알고리즘 퀴즈</b>를 풀면 포인트가 쌓여요.</li>
+      <li>💬 <b>기업별 정보공유 게시판</b>에 글을 작성하고 인증을 받아보세요.</li>
+      <li>💻 <b>코딩풀이 등록</b>을 통해 포인트를 얻을 수 있습니다.</li>
+    </ul>
+    <p class="note">* 포인트 기준: 0P(코뉴비) → 20P(코알못) → 100P(코좀알) → 500P(코잘알) → 2000P(코신)</p>
+  </div>
 </div>
 </template>
 
@@ -118,6 +145,35 @@ import MiniProfile from '@/components/common/MiniProfile.vue'
 import AttendanceModal from '@/components/mypage/AttendanceModal.vue'
 import memberApi from '@/api/memberApi'
 import coreApi from '@/api/coreApi'
+
+import rank1 from '@/assets/images/코뉴비.png'
+import rank2 from '@/assets/images/코알못.png'
+import rank3 from '@/assets/images/코좀알.png'
+import rank4 from '@/assets/images/코잘알.png'
+import rank5 from '@/assets/images/코신.png'
+import admin from '@/assets/images/관리자.png'
+
+const rankImages = {
+  '코뉴비': rank1,
+  '코알못': rank2,
+  '코좀알': rank3,
+  '코잘알': rank4,
+  '코신': rank5,
+  '관리자': admin
+}
+
+const getPointRequirement = (rank) => {
+  switch (rank) {
+    case '코뉴비': return '0 포인트 이상'
+    case '코알못': return '20 포인트 이상'
+    case '코좀알': return '100 포인트 이상'
+    case '코잘알': return '500 포인트 이상'
+    case '코신': return '2000 포인트 이상'
+    case '관리자': return '관리자 전용 등급'
+    default: return ''
+  }
+}
+
 
 // 사용자 정보
 const userInfo = ref({
@@ -810,6 +866,106 @@ onMounted(async () => {
   .top-section {
     flex-direction: column;
   }
+}
+
+/* ==============================
+   🔹 등급 및 포인트 설명 섹션
+============================== */
+.rank-info-section {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  margin-top: 30px;
+  width: 55%;        /* 폭 60% */
+  margin: 40px auto;
+}
+
+.rank-info-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.rank-info-header h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 8px;
+}
+
+.rank-info-header p {
+  color: #666;
+  font-size: 15px;
+}
+
+.rank-grid {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.rank-card {
+  flex: 1;
+  min-width: 150px;
+  text-align: center;
+  background: #f9fbff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease;
+}
+
+.rank-card:hover {
+  transform: translateY(-4px);
+}
+
+.rank-card img {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
+
+.rank-card h4 {
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 4px;
+}
+
+.rank-card p {
+  color: #555;
+  font-size: 14px;
+}
+
+.rank-description {
+  border-top: 2px solid #e0e0e0;
+  padding-top: 20px;
+}
+
+.rank-description h4 {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #222;
+}
+
+.rank-description ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 10px;
+}
+
+.rank-description li {
+  font-size: 14px;
+  margin: 6px 0;
+  color: #444;
+}
+
+.rank-description .note {
+  font-size: 13px;
+  color: #777;
 }
 
 </style>

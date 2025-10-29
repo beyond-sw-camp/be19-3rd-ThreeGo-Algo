@@ -34,7 +34,7 @@
 import { ref, reactive } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import Comment from '@/components/common/Comment.vue'
-import ReportModal from '@/components/common/reportModal.vue'
+import ReportModal from '@/components/common/ReportModal.vue'
 
 // 현재 로그인한 사용자
 const currentUser = ref({

@@ -24,7 +24,7 @@ export function useRankWatcher(memberId) {
 
   onMounted(async () => {
     await checkRank()
-    intervalId = setInterval(checkRank, 10000) // 5초마다 폴링
+    intervalId = setInterval(checkRank, 10000) // 10초마다 폴링
   })
 
   onBeforeUnmount(() => {
