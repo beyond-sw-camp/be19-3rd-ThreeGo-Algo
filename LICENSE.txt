@@ -1,0 +1,499 @@
+
+Algo Open Source Licenses
+© 2025 ThreeGo. All rights reserved.
+
+This software uses open source libraries distributed under various licenses.
+Details of each license are provided below.
+=====================================================
+
+Package: @babel/helper-string-parser@7.27.1
+License: MIT
+Repository: https://github.com/babel/babel
+Author: The Babel Team
+-----------------------------------------------------
+Package: @babel/helper-validator-identifier@7.27.1
+License: MIT
+Repository: https://github.com/babel/babel
+Author: The Babel Team
+-----------------------------------------------------
+Package: @babel/parser@7.28.4
+License: MIT
+Repository: https://github.com/babel/babel
+Author: The Babel Team
+-----------------------------------------------------
+Package: @babel/types@7.28.4
+License: MIT
+Repository: https://github.com/babel/babel
+Author: The Babel Team
+-----------------------------------------------------
+Package: @codemirror/autocomplete@6.19.1
+License: MIT
+Repository: https://github.com/codemirror/autocomplete
+Author: Marijn Haverbeke
+-----------------------------------------------------
+Package: @codemirror/commands@6.10.0
+License: MIT
+Repository: https://github.com/codemirror/commands
+Author: Marijn Haverbeke
+-----------------------------------------------------
+Package: @codemirror/language@6.11.3
+License: MIT
+Repository: https://github.com/codemirror/language
+Author: Marijn Haverbeke
+-----------------------------------------------------
+Package: @codemirror/lint@6.9.1
+License: MIT
+Repository: https://github.com/codemirror/lint
+Author: Marijn Haverbeke
+-----------------------------------------------------
+Package: @codemirror/search@6.5.11
+License: MIT
+Repository: https://github.com/codemirror/search
+Author: Marijn Haverbeke
+-----------------------------------------------------
+Package: @codemirror/state@6.5.2
+License: MIT
+Repository: https://github.com/codemirror/state
+Author: Marijn Haverbeke
+-----------------------------------------------------
+Package: @codemirror/view@6.38.6
+License: MIT
+Repository: https://github.com/codemirror/view
+Author: Marijn Haverbeke
+-----------------------------------------------------
+Package: @ctrl/tinycolor@3.6.1
+License: MIT
+Repository: https://github.com/scttcper/tinycolor
+Author: Scott Cooper
+-----------------------------------------------------
+Package: @element-plus/icons-vue@2.3.2
+License: MIT
+Repository: https://github.com/element-plus/element-plus-icons
+-----------------------------------------------------
+Package: @floating-ui/core@1.7.3
+License: MIT
+Repository: https://github.com/floating-ui/floating-ui
+Author: atomiks
+-----------------------------------------------------
+Package: @floating-ui/dom@1.7.4
+License: MIT
+Repository: https://github.com/floating-ui/floating-ui
+Author: atomiks
+-----------------------------------------------------
+Package: @floating-ui/utils@0.2.10
+License: MIT
+Repository: https://github.com/floating-ui/floating-ui
+Author: atomiks
+-----------------------------------------------------
+Package: @jridgewell/sourcemap-codec@1.5.5
+License: MIT
+Repository: https://github.com/jridgewell/sourcemaps
+Author: Justin Ridgewell
+-----------------------------------------------------
+Package: @lezer/common@1.3.0
+License: MIT
+Repository: https://github.com/lezer-parser/common
+Author: Marijn Haverbeke
+-----------------------------------------------------
+Package: @lezer/highlight@1.2.3
+License: MIT
+Repository: https://github.com/lezer-parser/highlight
+Author: Marijn Haverbeke
+-----------------------------------------------------
+Package: @lezer/lr@1.4.2
+License: MIT
+Repository: https://github.com/lezer-parser/lr
+Author: Marijn Haverbeke
+-----------------------------------------------------
+Package: @marijn/find-cluster-break@1.0.2
+License: MIT
+Repository: https://github.com/marijnh/find-cluster-break
+Author: Marijn Haverbeke
+-----------------------------------------------------
+Package: @sxzz/popperjs-es@2.11.7
+License: MIT
+Repository: https://github.com/popperjs/popper-core
+Author: Federico Zivolo
+-----------------------------------------------------
+Package: @types/lodash-es@4.17.12
+License: MIT
+Repository: https://github.com/DefinitelyTyped/DefinitelyTyped
+-----------------------------------------------------
+Package: @types/lodash@4.17.20
+License: MIT
+Repository: https://github.com/DefinitelyTyped/DefinitelyTyped
+-----------------------------------------------------
+Package: @types/web-bluetooth@0.0.16
+License: MIT
+Repository: https://github.com/DefinitelyTyped/DefinitelyTyped
+-----------------------------------------------------
+Package: @vue/compiler-core@3.5.22
+License: MIT
+Repository: https://github.com/vuejs/core
+Author: Evan You
+-----------------------------------------------------
+Package: @vue/compiler-dom@3.5.22
+License: MIT
+Repository: https://github.com/vuejs/core
+Author: Evan You
+-----------------------------------------------------
+Package: @vue/compiler-sfc@3.5.22
+License: MIT
+Repository: https://github.com/vuejs/core
+Author: Evan You
+-----------------------------------------------------
+Package: @vue/compiler-ssr@3.5.22
+License: MIT
+Repository: https://github.com/vuejs/core
+Author: Evan You
+-----------------------------------------------------
+Package: @vue/devtools-api@6.6.4
+License: MIT
+Repository: https://github.com/vuejs/vue-devtools
+Author: Guillaume Chau
+-----------------------------------------------------
+Package: @vue/devtools-api@7.7.7
+License: MIT
+Repository: https://github.com/vuejs/devtools
+Author: webfansplz
+-----------------------------------------------------
+Package: @vue/devtools-kit@7.7.7
+License: MIT
+Repository: https://github.com/vuejs/devtools
+Author: webfansplz
+-----------------------------------------------------
+Package: @vue/devtools-shared@7.7.7
+License: MIT
+Repository: https://github.com/vuejs/devtools
+Author: webfansplz
+-----------------------------------------------------
+Package: @vue/reactivity@3.5.22
+License: MIT
+Repository: https://github.com/vuejs/core
+Author: Evan You
+-----------------------------------------------------
+Package: @vue/runtime-core@3.5.22
+License: MIT
+Repository: https://github.com/vuejs/core
+Author: Evan You
+-----------------------------------------------------
+Package: @vue/runtime-dom@3.5.22
+License: MIT
+Repository: https://github.com/vuejs/core
+Author: Evan You
+-----------------------------------------------------
+Package: @vue/server-renderer@3.5.22
+License: MIT
+Repository: https://github.com/vuejs/core
+Author: Evan You
+-----------------------------------------------------
+Package: @vue/shared@3.5.22
+License: MIT
+Repository: https://github.com/vuejs/core
+Author: Evan You
+-----------------------------------------------------
+Package: @vueuse/core@9.13.0
+License: MIT
+Repository: https://github.com/vueuse/vueuse
+Author: Anthony Fu
+-----------------------------------------------------
+Package: @vueuse/metadata@9.13.0
+License: MIT
+Repository: https://github.com/vueuse/vueuse
+Author: Anthony Fu
+-----------------------------------------------------
+Package: @vueuse/shared@9.13.0
+License: MIT
+Repository: https://github.com/vueuse/vueuse
+Author: Anthony Fu
+-----------------------------------------------------
+Package: algo-frontend@0.0.0
+License: UNLICENSED
+-----------------------------------------------------
+Package: async-validator@4.2.5
+License: MIT
+Repository: https://github.com/yiminghe/async-validator
+-----------------------------------------------------
+Package: asynckit@0.4.0
+License: MIT
+Repository: https://github.com/alexindigo/asynckit
+Author: Alex Indigo
+-----------------------------------------------------
+Package: axios@1.12.2
+License: MIT
+Repository: https://github.com/axios/axios
+Author: Matt Zabriskie
+-----------------------------------------------------
+Package: birpc@2.6.1
+License: MIT
+Repository: https://github.com/antfu-collective/birpc
+Author: Anthony Fu
+-----------------------------------------------------
+Package: call-bind-apply-helpers@1.0.2
+License: MIT
+Repository: https://github.com/ljharb/call-bind-apply-helpers
+Author: Jordan Harband
+-----------------------------------------------------
+Package: canvas-confetti@1.9.4
+License: ISC
+Repository: https://github.com/catdad/canvas-confetti
+Author: Kiril Vatev
+-----------------------------------------------------
+Package: codemirror@6.0.2
+License: MIT
+Repository: https://github.com/codemirror/basic-setup
+Author: Marijn Haverbeke
+-----------------------------------------------------
+Package: combined-stream@1.0.8
+License: MIT
+Repository: https://github.com/felixge/node-combined-stream
+Author: Felix Geisendörfer
+-----------------------------------------------------
+Package: copy-anything@4.0.5
+License: MIT
+Repository: https://github.com/mesqueeb/copy-anything
+Author: Luca Ban - Mesqueeb
+-----------------------------------------------------
+Package: crelt@1.0.6
+License: MIT
+Repository: https://github.com/marijnh/crelt
+Author: Marijn Haverbeke
+-----------------------------------------------------
+Package: csstype@3.1.3
+License: MIT
+Repository: https://github.com/frenic/csstype
+Author: Fredrik Nicol
+-----------------------------------------------------
+Package: dayjs@1.11.18
+License: MIT
+Repository: https://github.com/iamkun/dayjs
+Author: iamkun
+-----------------------------------------------------
+Package: delayed-stream@1.0.0
+License: MIT
+Repository: https://github.com/felixge/node-delayed-stream
+Author: Felix Geisendörfer
+-----------------------------------------------------
+Package: dunder-proto@1.0.1
+License: MIT
+Repository: https://github.com/es-shims/dunder-proto
+Author: Jordan Harband
+-----------------------------------------------------
+Package: element-plus@2.11.5
+License: MIT
+Repository: https://github.com/element-plus/element-plus
+-----------------------------------------------------
+Package: entities@4.5.0
+License: BSD-2-Clause
+Repository: https://github.com/fb55/entities
+Author: Felix Boehm
+-----------------------------------------------------
+Package: es-define-property@1.0.1
+License: MIT
+Repository: https://github.com/ljharb/es-define-property
+Author: Jordan Harband
+-----------------------------------------------------
+Package: es-errors@1.3.0
+License: MIT
+Repository: https://github.com/ljharb/es-errors
+Author: Jordan Harband
+-----------------------------------------------------
+Package: es-object-atoms@1.1.1
+License: MIT
+Repository: https://github.com/ljharb/es-object-atoms
+Author: Jordan Harband
+-----------------------------------------------------
+Package: es-set-tostringtag@2.1.0
+License: MIT
+Repository: https://github.com/es-shims/es-set-tostringtag
+Author: Jordan Harband
+-----------------------------------------------------
+Package: estree-walker@2.0.2
+License: MIT
+Repository: https://github.com/Rich-Harris/estree-walker
+Author: Rich Harris
+-----------------------------------------------------
+Package: follow-redirects@1.15.11
+License: MIT
+Repository: https://github.com/follow-redirects/follow-redirects
+Author: Ruben Verborgh
+-----------------------------------------------------
+Package: form-data@4.0.4
+License: MIT
+Repository: https://github.com/form-data/form-data
+Author: Felix Geisendörfer
+-----------------------------------------------------
+Package: function-bind@1.1.2
+License: MIT
+Repository: https://github.com/Raynos/function-bind
+Author: Raynos
+-----------------------------------------------------
+Package: get-intrinsic@1.3.0
+License: MIT
+Repository: https://github.com/ljharb/get-intrinsic
+Author: Jordan Harband
+-----------------------------------------------------
+Package: get-proto@1.0.1
+License: MIT
+Repository: https://github.com/ljharb/get-proto
+Author: Jordan Harband
+-----------------------------------------------------
+Package: gopd@1.2.0
+License: MIT
+Repository: https://github.com/ljharb/gopd
+Author: Jordan Harband
+-----------------------------------------------------
+Package: has-symbols@1.1.0
+License: MIT
+Repository: https://github.com/inspect-js/has-symbols
+Author: Jordan Harband
+-----------------------------------------------------
+Package: has-tostringtag@1.0.2
+License: MIT
+Repository: https://github.com/inspect-js/has-tostringtag
+Author: Jordan Harband
+-----------------------------------------------------
+Package: hasown@2.0.2
+License: MIT
+Repository: https://github.com/inspect-js/hasOwn
+Author: Jordan Harband
+-----------------------------------------------------
+Package: hookable@5.5.3
+License: MIT
+Repository: https://github.com/unjs/hookable
+-----------------------------------------------------
+Package: is-what@5.5.0
+License: MIT
+Repository: https://github.com/mesqueeb/is-what
+Author: Luca Ban - Mesqueeb
+-----------------------------------------------------
+Package: jquery@3.7.1
+License: MIT
+Repository: https://github.com/jquery/jquery
+Author: OpenJS Foundation and other contributors
+-----------------------------------------------------
+Package: lodash-es@4.17.21
+License: MIT
+Repository: https://github.com/lodash/lodash
+Author: John-David Dalton
+-----------------------------------------------------
+Package: lodash-unified@1.0.3
+License: MIT
+Author: Jack Works
+-----------------------------------------------------
+Package: lodash@4.17.21
+License: MIT
+Repository: https://github.com/lodash/lodash
+Author: John-David Dalton
+-----------------------------------------------------
+Package: magic-string@0.30.19
+License: MIT
+Repository: https://github.com/rich-harris/magic-string
+Author: Rich Harris
+-----------------------------------------------------
+Package: math-intrinsics@1.1.0
+License: MIT
+Repository: https://github.com/es-shims/math-intrinsics
+Author: Jordan Harband
+-----------------------------------------------------
+Package: memoize-one@6.0.0
+License: MIT
+Repository: https://github.com/alexreardon/memoize-one
+Author: Alex Reardon
+-----------------------------------------------------
+Package: mime-db@1.52.0
+License: MIT
+Repository: https://github.com/jshttp/mime-db
+-----------------------------------------------------
+Package: mime-types@2.1.35
+License: MIT
+Repository: https://github.com/jshttp/mime-types
+-----------------------------------------------------
+Package: mitt@3.0.1
+License: MIT
+Repository: https://github.com/developit/mitt
+-----------------------------------------------------
+Package: nanoid@3.3.11
+License: MIT
+Repository: https://github.com/ai/nanoid
+Author: Andrey Sitnik
+-----------------------------------------------------
+Package: normalize-wheel-es@1.2.0
+License: BSD-3-Clause
+Repository: https://github.com/sxzz/normalize-wheel-es
+Author: Bas Stottelaar
+-----------------------------------------------------
+Package: perfect-debounce@1.0.0
+License: MIT
+Repository: https://github.com/unjs/perfect-debounce
+-----------------------------------------------------
+Package: picocolors@1.1.1
+License: ISC
+Repository: https://github.com/alexeyraspopov/picocolors
+Author: Alexey Raspopov
+-----------------------------------------------------
+Package: pinia@3.0.3
+License: MIT
+Repository: https://github.com/vuejs/pinia
+Author: Eduardo San Martin Morote
+-----------------------------------------------------
+Package: postcss@8.5.6
+License: MIT
+Repository: https://github.com/postcss/postcss
+Author: Andrey Sitnik
+-----------------------------------------------------
+Package: proxy-from-env@1.1.0
+License: MIT
+Repository: https://github.com/Rob--W/proxy-from-env
+Author: Rob Wu
+-----------------------------------------------------
+Package: rfdc@1.4.1
+License: MIT
+Repository: https://github.com/davidmarkclements/rfdc
+Author: David Mark Clements
+-----------------------------------------------------
+Package: source-map-js@1.2.1
+License: BSD-3-Clause
+Repository: https://github.com/7rulnik/source-map-js
+Author: Valentin 7rulnik Semirulnik
+-----------------------------------------------------
+Package: speakingurl@14.0.1
+License: BSD-3-Clause
+Repository: https://github.com/pid/speakingurl
+Author: Sascha Droste
+-----------------------------------------------------
+Package: style-mod@4.1.3
+License: MIT
+Repository: https://github.com/marijnh/style-mod
+Author: Marijn Haverbeke
+-----------------------------------------------------
+Package: summernote@0.9.1
+License: MIT
+Repository: https://github.com/summernote/summernote
+Author: hackerwins
+-----------------------------------------------------
+Package: superjson@2.2.3
+License: MIT
+Repository: https://github.com/blitz-js/superjson
+Author: Simon Knott
+-----------------------------------------------------
+Package: vue-demi@0.14.10
+License: MIT
+Repository: https://github.com/antfu/vue-demi
+Author: Anthony Fu
+-----------------------------------------------------
+Package: vue-router@4.6.3
+License: MIT
+Repository: https://github.com/vuejs/router
+Author: Eduardo San Martin Morote
+-----------------------------------------------------
+Package: vue@3.5.22
+License: MIT
+Repository: https://github.com/vuejs/core
+Author: Evan You
+-----------------------------------------------------
+Package: w3c-keyname@2.2.8
+License: MIT
+Repository: https://github.com/marijnh/w3c-keyname
+Author: Marijn Haverbeke
+-----------------------------------------------------

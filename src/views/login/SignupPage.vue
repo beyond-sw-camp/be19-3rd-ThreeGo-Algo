@@ -41,8 +41,15 @@
 
         <div class="checkbox-container">
           <input type="checkbox" id="privacy" v-model="isAgreed" />
-          <label for="privacy" class="privacyTxt">개인 정보 수집 및 이용에 동의합니다.</label>
+          <label for="privacy" class="privacyTxt">
+            (필수)
+            <a href="#" class="terms-link" @click.prevent="openTerms">
+              이용약관 및 개인정보처리방침
+            </a>
+            에 동의합니다.
+          </label>
         </div>
+
 
         <p v-if="signupMessage" :class="isSignupError ? 'error-message' : 'message'">
           {{ signupMessage }}
@@ -149,6 +156,12 @@ const goHome = () => router.push('/')
 const goToLogin = () => {
   router.push('/login')
 }
+
+const openTerms = () => {
+  window.open('/algo-terms', '_blank', 'noopener,noreferrer')
+}
+
+
 </script>
 <style scoped>
 .error-message {
@@ -251,21 +264,33 @@ const goToLogin = () => {
 
 .checkbox-container {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   align-self: flex-start;
-  gap: 8px;
+  gap: 6px;
   font-size: 12px;
   color: #383838;
-}
-
-.checkbox-container input {
-  width: 16px;
-  height: 16px;
-  cursor: pointer;
+  margin-bottom: 10px;
 }
 
 .privacyTxt {
-  font-weight: 200;
+  font-weight: 300;
+}
+
+.highlight {
+  font-weight: 500;
+  color: #0AA2EB;
+}
+
+.terms-link {
+  font-size: 12px;
+  color: #0AA2EB;
+  text-decoration: underline;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.terms-link:hover {
+  color: #0056b3;
 }
 
 h2 {

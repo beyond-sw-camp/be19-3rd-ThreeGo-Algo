@@ -3,22 +3,23 @@
     <div class="footer-grid">
       <div class="footer-column">
         <img :src="logo" class="footer-logo" />
+
         <div class="footer-links">
-          <!-- TODO 페이지 링크 추가 -->
-          <a href="#">이용약관</a>
-          <a href="#">개인정보처리방침</a>
-          <a href="#">오픈소스 라이선스</a>
+          <a href="#" @click.prevent="openTerms">이용약관 및 개인정보처리방침</a>
+          <a href="#" @click.prevent="openLicense">오픈소스 라이선스</a>
         </div>
+
         <p class="footer-copyright">
           © 2025 ThreeGo All rights reserved.
+        </p>
+        <p class="footer-icons">
+          Icons by <a href="https://icons8.com" target="_blank" rel="noopener noreferrer">Icons8</a>
         </p>
       </div>
 
       <div class="footer-column">
         <h4>Contact</h4>
-        <p class="footer-contact">
-          team.threego@gmail.com
-        </p>
+        <p class="footer-contact">team.threego@gmail.com</p>
       </div>
 
       <div class="footer-column">
@@ -36,8 +37,8 @@
 </template>
 
 <script setup>
-import logo from '@/assets/images/algo_logo.png';
-import { reactive } from 'vue';
+import logo from '@/assets/images/algo_logo.png'
+import { reactive } from 'vue'
 
 const teamMembers = reactive([
   { name: 'rosieisor', github: 'https://github.com/rosieisor' },
@@ -45,12 +46,20 @@ const teamMembers = reactive([
   { name: 'HoodRyan', github: 'https://github.com/HoodRyan' },
   { name: 'YujinJeong1006', github: 'https://github.com/YujinJeong1006' },
   { name: 'huni2', github: 'https://github.com/huni2' },
-]);
+])
+
+const openTerms = () => {
+  window.open('/algo-terms', '_blank', 'noopener,noreferrer')
+}
+
+const openLicense = () => {
+  window.open('/open-source-license', '_blank', 'noopener,noreferrer')
+}
 </script>
 
 <style scoped>
 .footer-container {
-  background-color: #F1EFEE;
+  background-color: #f1efee;
   padding: 40px;
   color: #383838;
   font-family: 'Noto Sans KR', sans-serif;
@@ -87,7 +96,7 @@ const teamMembers = reactive([
 .footer-links a:hover,
 .footer-team-list a:hover,
 .team-member a:hover {
-  color: #0AA2EB;
+  color: #0aa2eb;
 }
 
 .footer-links a {
