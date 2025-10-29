@@ -238,17 +238,16 @@ const startAiPolling = () => {
 
 /* 이벤트 */
 const handleWriteSolution = () => {
-  if (!problem.value) {
+  if (!problemTitle.value) {
     alert('문제 정보를 불러오는 중입니다.')
     return
   }
 
-  // problemId를 경로에 포함하여 전달
   router.push({
-    path: `/coding-problems/${problemId}/solutions/`,
-    // query: {
-    //   problemTitle: problem.value.problemTitle
-    // }
+    path: `/coding-problems/${problemId}/solutions/new`,
+    query: {
+      problemTitle: problemTitle.value, // 제목도 전달 가능
+    },
   })
 }
 

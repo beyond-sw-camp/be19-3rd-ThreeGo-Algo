@@ -62,9 +62,9 @@ const validateForm = () => {
 const handleBack = () => router.back()
 
 /* 문제 선택 버튼 (임시) */
-const handleSelectProblem = () => {
-  alert('문제 선택 기능은 추후 구현 예정입니다.')
-}
+// const handleSelectProblem = () => {
+//   alert('문제 선택 기능은 추후 구현 예정입니다.')
+// }
 
 /* 작성 완료 버튼 */
 const handleSubmit = () => {
@@ -164,7 +164,7 @@ const submitPost = async () => {
     <TwoButtonPopup
       v-model="isPopupVisible"
       title="풀이 등록"
-      subtitle="AI피드백 때문에 시간이 걸릴 수 있습니다."
+      subtitle="AI피드백이 나오고 5포인트를 획득하게 됩니다."
       image="/src/assets/images/robot.png"
       confirmText="등록"
       cancelText="취소"
