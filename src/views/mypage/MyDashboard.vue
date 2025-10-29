@@ -133,7 +133,7 @@
       <li>💬 <b>기업별 정보공유 게시판</b>에 글을 작성하고 인증을 받아보세요.</li>
       <li>💻 <b>코딩풀이 등록</b>을 통해 포인트를 얻을 수 있습니다.</li>
     </ul>
-    <p class="note">* 포인트 기준: 0P(코뉴비) → 20P(코알못) → 100P(코좀알) → 500P(코잘알) → 2000P(코신)</p>
+    <p class="note">* 포인트 기준: 0P(코알못) → 20P(코뉴비) → 100P(코좀알) → 500P(코잘알) → 2000P(코신)</p>
   </div>
 </div>
 </template>
@@ -154,8 +154,8 @@ import rank5 from '@/assets/images/코신.png'
 import admin from '@/assets/images/관리자.png'
 
 const rankImages = {
-  '코뉴비': rank1,
-  '코알못': rank2,
+  '코알못': rank1,
+  '코뉴비': rank2,
   '코좀알': rank3,
   '코잘알': rank4,
   '코신': rank5,
@@ -164,8 +164,8 @@ const rankImages = {
 
 const getPointRequirement = (rank) => {
   switch (rank) {
-    case '코뉴비': return '0 포인트 이상'
-    case '코알못': return '20 포인트 이상'
+    case '코알못': return '0 포인트 이상'
+    case '코뉴비': return '20 포인트 이상'
     case '코좀알': return '100 포인트 이상'
     case '코잘알': return '500 포인트 이상'
     case '코신': return '2000 포인트 이상'
@@ -180,7 +180,7 @@ const userInfo = ref({
   nickname: '',
   email: '',
   rank: '',
-  point: 0,
+  point: '',
   memberId: null
 })
 
@@ -210,6 +210,7 @@ const fetchUserProfile = async () => {
     userInfo.value.email = data.email || localStorage.getItem('email') || '이메일 없음'
     userInfo.value.rank = data.rank || data.rankName || localStorage.getItem('rank') || '코뉴비'
     userInfo.value.memberId = data.id || data.memberId || localStorage.getItem('memberId')
+    userInfo.value.point = data.point || 0
 
     // 이메일이 여전히 없으면 토큰에서 추출 시도
     if (userInfo.value.email === '이메일 없음') {
@@ -224,20 +225,8 @@ const fetchUserProfile = async () => {
       }
     }
 
-    // 포인트는 별도 API로 조회
-    if (data.point) {
-      userInfo.value.point = data.point
-    } else {
-      try {
-        console.log('📝 포인트 조회 (/member/point)...')
-        const pointRes = await memberApi.get('/member/point')
-        userInfo.value.point = pointRes.data.point || pointRes.data || 0
-        console.log('✅ 포인트 조회 성공:', userInfo.value.point)
-      } catch (error) {
-        console.log('⚠️ 포인트 API 실패, 기본값 0 사용')
-        userInfo.value.point = 0
-      }
-    }
+    // 포인트는 data에서 직접 가져오기 (0일 수도 있으므로 ?? 사용)
+    userInfo.value.point = data.point ?? 0
 
     console.log('📊 프로필 정보:', userInfo.value)
   } catch (error) {
@@ -437,8 +426,8 @@ const router = useRouter()
 // 등급별 이미지 가져오기
 const getRankImage = (rank) => {
   const rankImages = {
-    '코뉴비': '/src/assets/images/코뉴비.png',
-    '코알못': '/src/assets/images/코알못.png',
+    '코알못': '/src/assets/images/코뉴비.png',
+    '코뉴비': '/src/assets/images/코알못.png',
     '코좀알': '/src/assets/images/코좀알.png',
     '코잘알': '/src/assets/images/코잘알.png',
     '코신': '/src/assets/images/코신.png',

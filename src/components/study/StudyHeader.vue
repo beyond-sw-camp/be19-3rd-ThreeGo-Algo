@@ -114,7 +114,7 @@ const goHome = () => {
 // 마이페이지 이동
 const goMyPage = () => {
   console.log('➡️ 마이페이지 이동')
-  router.push('/mypage')
+  router.push('/mypage/dashboard')
 }
 
 const handleLogout = () => {
